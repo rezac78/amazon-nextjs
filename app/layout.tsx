@@ -32,7 +32,9 @@ export default function RootLayout({
    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
     <LanguageHtmlHandler />
     <Header />
-    <Providers>{children}</Providers>
+    <main className="min-h-[calc(100vh-120px)]">
+     <Providers>{children}</Providers>
+    </main>
     <Footer />
    </body>
   </html>

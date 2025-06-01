@@ -22,9 +22,64 @@ const sliderItems = [
   description: "اطلاعات مفید درباره محصول سوم",
  },
 ];
+const cards = [
+ {
+  id: 1,
+  lable: "Headphones",
+  title: "Headphones Wireless",
+  price: "$103.20",
+  image: "/pages/home/headphone-5.webp",
+  description:
+   "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
+ },
+ {
+  id: 2,
+  lable: "Headphones",
+  title: "Headphones Wireless",
+  price: "$103.20",
+  image: "/pages/home/headphone-5.webp",
+  description:
+   "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
+ },
+ {
+  id: 3,
+  lable: "Headphones",
+  title: "Headphones Wireless",
+  price: "$103.20",
+  image: "/pages/home/headphone-5.webp",
+  description:
+   "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
+ },
+ {
+  id: 4,
+  lable: "Headphones",
+  title: "Headphones Wireless",
+  price: "$103.20",
+  image: "/pages/home/headphone-5.webp",
+  description:
+   "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
+ },
+];
+import {Card, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import {Button} from "@/components/ui/button";
+import {useTranslation} from "react-i18next";
+import {useEffect, useState} from "react";
+
+function useHasMounted() {
+ const [hasMounted, setHasMounted] = useState(false);
+ useEffect(() => {
+  setHasMounted(true);
+ }, []);
+ return hasMounted;
+}
+
 export default function HomePage() {
+ const {t} = useTranslation();
+ const hasMounted = useHasMounted();
+ if (!hasMounted) return null;
+
  return (
-  <div className="">
+  <div className="relative">
    <Swiper modules={[Navigation, Autoplay]} navigation autoplay={{delay: 4000}} loop={true} className="mySwiper">
     {sliderItems.map((item) => (
      <SwiperSlide key={item.id}>
@@ -34,6 +89,25 @@ export default function HomePage() {
      </SwiperSlide>
     ))}
    </Swiper>
+   <div className="absolute top-96 w-full z-[999]">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2 md:px-6">
+     {cards.map((card) => (
+      <Card key={card.id} className="flex flex-col justify-between bg-background border border-border">
+       <CardHeader>
+        <Image src={card.image} alt={card.title} width={700} height={700} className="w-60 h-60 mx-auto" />
+        <hr className="pb-2 text-gray-200" />
+        <span className="text-16px font-weight-demibold text-card-foreground">{card.lable}</span>
+        <CardTitle>{card.title}</CardTitle>
+        <span className="text-16px font-weight-demibold text-card-foreground">{card.price}</span>
+        <CardDescription>{card.description}</CardDescription>
+       </CardHeader>
+       <CardFooter>
+        <Button className="w-full">{t("addcart")}</Button>
+       </CardFooter>
+      </Card>
+     ))}
+    </div>
+   </div>
   </div>
  );
 }

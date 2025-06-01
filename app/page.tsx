@@ -2,6 +2,8 @@ import HomePage from "./components/pages/home";
 
 export default function Home() {
  return (
- <HomePage/>
+  <div className="container mx-auto">
+   <HomePage />
+  </div>
  );
 }
