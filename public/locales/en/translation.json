@@ -5,5 +5,7 @@
   "login&Register": "Login/Register",
   "Cart": "Cart",
   "Search":"Search next_amazon_yt products",
-  "addcart":"add to cart"
+  "addcart":"add to cart",
+  "GoShop":"Go to shopping",
+  "GoShopDesc":"Nothing is available in the Favorite list"
 }

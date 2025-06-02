@@ -6,6 +6,7 @@ import "@/app/i18n/client";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import LanguageHtmlHandler from "./utils/LanguageHtmlHandler";
+import MountWrapper from "./components/common/MountWrapper";
 
 const geistSans = Geist({
  variable: "--font-geist-sans",
@@ -32,8 +33,10 @@ export default function RootLayout({
    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
     <LanguageHtmlHandler />
     <Header />
-    <main className="min-h-[calc(100vh-120px)]">
-     <Providers>{children}</Providers>
+    <main className="flex min-h-screen">
+     <Providers>
+      <MountWrapper>{children}</MountWrapper>
+     </Providers>
     </main>
     <Footer />
    </body>

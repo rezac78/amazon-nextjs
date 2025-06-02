@@ -60,10 +60,11 @@ const cards = [
    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
  },
 ];
-import {Card, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import {Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
+import {HeartIcon, ShoppingBag} from "lucide-react";
 
 function useHasMounted() {
  const [hasMounted, setHasMounted] = useState(false);
@@ -92,7 +93,7 @@ export default function HomePage() {
    <div className="absolute top-96 w-full z-[999]">
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2 md:px-6">
      {cards.map((card) => (
-      <Card key={card.id} className="flex flex-col justify-between bg-background border border-border">
+      <Card key={card.id} className="relative flex flex-col justify-between bg-background border border-border">
        <CardHeader>
         <Image src={card.image} alt={card.title} width={700} height={700} className="w-60 h-60 mx-auto" />
         <hr className="pb-2 text-gray-200" />
@@ -101,6 +102,15 @@ export default function HomePage() {
         <span className="text-16px font-weight-demibold text-card-foreground">{card.price}</span>
         <CardDescription>{card.description}</CardDescription>
        </CardHeader>
+       <CardAction className="absolute top-40 right-4 flex flex-col  border rounded-4">
+        <div className="transition duration-300 ease-in-out transform hover:bg-secondary rounded">
+         <HeartIcon className="m-2" />
+        </div>
+        <hr />
+        <div className="transition duration-300 ease-in-out transform hover:bg-secondary rounded">
+         <ShoppingBag className="m-2" />
+        </div>
+       </CardAction>
        <CardFooter>
         <Button className="w-full">{t("addcart")}</Button>
        </CardFooter>

@@ -9,28 +9,20 @@ import {
  DropdownMenuSeparator,
  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import i18n from "@/app/i18n/client";
+import Link from "next/link";
 
 const options = [
  {value: "fa", label: "Fa"},
  {value: "en", label: "En"},
 ];
 
-function useHasMounted() {
- const [hasMounted, setHasMounted] = useState(false);
- useEffect(() => {
-  setHasMounted(true);
- }, []);
- return hasMounted;
-}
-
 export default function Header() {
  const {t} = useTranslation();
  const [language, setLanguage] = useState(i18n.language || "en");
  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
- const hasMounted = useHasMounted();
 
  const changeLanguage = (lang: string) => {
   setLanguage(lang);
@@ -40,14 +32,14 @@ export default function Header() {
   localStorage.setItem("lang", lang);
  };
 
- if (!hasMounted) return null;
-
  return (
   <header className="w-full bg-primary text-primary-foreground shadow-md">
    <div className="flex items-center justify-between px-4 py-2">
     {/* Logo & Language */}
     <div className="flex items-center gap-4">
-     <div className="text-xl font-extrabold">amazon</div>
+     <div className="text-xl font-extrabold">
+      <Link href={"/"}>amazon</Link>
+     </div>
      <DropdownMenu>
       <DropdownMenuTrigger asChild>
        <Button variant="outline">{language.toUpperCase()}</Button>
@@ -82,9 +74,9 @@ export default function Header() {
      <div className="text-xs">
       <span className="block">{t("login&Register")}</span>
      </div>
-     <div className="text-xs">
+     <Link href={"/favorite"} className="text-xs">
       <span className="font-bold">{t("Favorite")}</span>
-     </div>
+     </Link>
      <div className="relative flex flex-col items-center">
       <ShoppingCart className="w-5 h-5" />
       <span className="absolute top-[-6px] right-[-2px] bg-secondary text-black text-xs w-5 h-5 rounded-full flex items-center justify-center">
