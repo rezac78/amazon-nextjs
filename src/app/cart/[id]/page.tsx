@@ -1,4 +1,4 @@
-import CartSinglePage from "@/app/components/pages/cartSinglePage";
+import CartSinglePage from "@/components/pages/cartSinglePage";
 
 export default function CartSingle() {
  return (

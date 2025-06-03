@@ -1,6 +1,5 @@
 "use client";
 import {Menu, Search, ShoppingCart} from "lucide-react";
-import {Button} from "@/components/ui/button";
 import {
  DropdownMenu,
  DropdownMenuContent,
@@ -8,9 +7,10 @@ import {
  DropdownMenuRadioItem,
  DropdownMenuSeparator,
  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../../../../components/ui/dropdown-menu";
 import {useState} from "react";
 import Link from "next/link";
+import {Button} from "../../../../components/ui/button";
 
 const options = [
  {value: "fa", label: "Fa"},

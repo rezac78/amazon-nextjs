@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import {Button} from "@/components/ui/button";
+import {Button} from "../../../../components/ui/button";
 import {
  Select,
  SelectContent,
@@ -9,12 +9,12 @@ import {
  SelectLabel,
  SelectTrigger,
  SelectValue,
-} from "@/components/ui/select";
+} from "../../../../components/ui/select";
 import {useEffect, useState} from "react";
 import {useParams} from "next/navigation";
-import {fetchProductById} from "@/app/utils/fetchProduct";
 import Loading from "../../common/Loading";
-import {Product} from "@/app/utils/types";
+import { fetchProductById } from "utils/fetchProduct";
+import { Product } from "utils/types";
 export default function CartSinglePage() {
  const {id} = useParams();
  const [selectedImage, setSelectedImage] = useState<string>("");

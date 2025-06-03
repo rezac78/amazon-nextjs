@@ -23,15 +23,15 @@ const sliderItems = [
   description: "اطلاعات مفید درباره محصول سوم",
  },
 ];
-import {Card, CardAction, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
+import {Card, CardAction, CardFooter, CardHeader, CardTitle} from "../../../../components/ui/card";
 import {HeartIcon, ShoppingBag} from "lucide-react";
 import {useEffect, useState} from "react";
 import PaginationComponent from "../../common/Pagination";
 import Link from "next/link";
 import ProductCardSkeleton from "../../common/ProductCardSkeleton";
-import {fetchProducts} from "@/app/utils/fetchProduct";
-import {Product} from "@/app/utils/types";
+import { fetchProducts } from "utils/fetchProduct";
+import { Product } from "utils/types";
+import { Button } from "../../../../components/ui/button";
 
 export default function HomePage() {
  const [products, setProducts] = useState<Product[]>([]);
