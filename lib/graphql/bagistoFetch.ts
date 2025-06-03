@@ -1,14 +1,23 @@
-export async function bagistoFetch({query, variables, headers}: {query: string; variables?: any; headers?: any}) {
+interface BagistoFetchParams<TVariables> {
+ query: string;
+ variables?: TVariables;
+ headers?: {
+  token?: string;
+ };
+}
+
+export async function bagistoFetch<TData = unknown, TVariables = Record<string, unknown>>({
+ query,
+ variables,
+ headers,
+}: BagistoFetchParams<TVariables>): Promise<TData> {
  const result = await fetch("/api/proxy/graphql", {
   method: "POST",
   headers: {
    "Content-Type": "application/json",
-   Authorization: `Bearer ${headers?.token}`, // یا هر جور توکن لازم داری
+   Authorization: headers?.token ? `Bearer ${headers.token}` : "",
   },
-  body: JSON.stringify({
-   query,
-   variables,
-  }),
+  body: JSON.stringify({query, variables}),
  });
 
  const json = await result.json();

@@ -5,6 +5,15 @@ export const GET_PRODUCT_QUERY = `
       name
       description
       price
+       relatedProducts {
+      id
+      images {
+        id
+        url
+      }
+      price
+      name
+    }
       images {
         url
       }

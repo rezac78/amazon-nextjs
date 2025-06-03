@@ -7,10 +7,10 @@ import {
  DropdownMenuRadioItem,
  DropdownMenuSeparator,
  DropdownMenuTrigger,
-} from "../../../../components/ui/dropdown-menu";
+} from "../../ui/dropdown-menu";
 import {useState} from "react";
 import Link from "next/link";
-import {Button} from "../../../../components/ui/button";
+import {Button} from "../../ui/button";
 
 const options = [
  {value: "fa", label: "Fa"},

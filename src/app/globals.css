@@ -11,8 +11,8 @@
  --popover: #f0fff9; /* Light green for popovers, matching cards */
  --popover-foreground: #333333; /* Dark text on popovers */
  --primary: #131921; /* Deep blue for primary actions (buttons, headers) */
- --primary-foreground: #F8F8FF; /* White text on primary elements */
- --secondary: #EDA857; /* Light green for secondary elements */
+ --primary-foreground: #f8f8ff; /* White text on primary elements */
+ --secondary: #eda857; /* Light green for secondary elements */
  --secondary-foreground: #333333; /* Dark text on secondary elements */
  --muted: #e6fff5; /* Subtle light green for muted areas */
  --muted-foreground: #555555; /* Medium gray for text on muted backgrounds */
@@ -128,4 +128,11 @@
  --text-28px: 28px;
  --text-30px: 30px;
  --text-32px: 32px;
+}
+.no-scrollbar::-webkit-scrollbar {
+ display: none;
+}
+.no-scrollbar {
+ -ms-overflow-style: none;
+ scrollbar-width: none;
 }

@@ -1,8 +1,8 @@
 import * as React from "react";
 import {ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon} from "lucide-react";
 
-import { cn } from "../../lib/utils";
-import { Button, buttonVariants } from "./button";
+import {cn} from "../../../lib/utils";
+import {Button, buttonVariants} from "./button";
 
 function Pagination({className, ...props}: React.ComponentProps<"nav">) {
  return (
@@ -54,7 +54,7 @@ function PaginationPrevious({className, title, ...props}: React.ComponentProps<t
    size="default"
    className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
    {...props}
-   >
+  >
    <span className="hidden sm:block">{title}</span>
    <ChevronRightIcon />
   </PaginationLink>

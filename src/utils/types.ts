@@ -5,6 +5,7 @@ export interface Product {
  price: number;
  images: ProductImage[];
  videos?: ProductVideo[];
+ relatedProducts?: ProductRelatedProducts[];
 }
 export interface ProductImage {
  url: string;
@@ -12,4 +13,10 @@ export interface ProductImage {
 
 export interface ProductVideo {
  url: string;
+}
+export interface ProductRelatedProducts {
+ url: string;
+ images: ProductImage[];
+ price: string;
+ name: string;
 }

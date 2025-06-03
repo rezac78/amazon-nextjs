@@ -1,24 +1,17 @@
 import axios from "axios";
 import {GET_PRODUCT_QUERY} from "../graphql/productId/products";
 import {PRODUCTS_QUERY} from "../graphql/queries/products";
-import { Product } from "./types";
-
+import {Product} from "./types";
+const isServer = typeof window === "undefined";
+const BASE_URL = isServer
+ ? "https://back-api.eleqra.ir/graphql" // سرور
+ : "/api/proxy/graphql"; // کلاینت
 export async function fetchProducts({page, limit}: {page: number; limit: number}) {
  try {
-  const response = await axios.post(
-   "/api/proxy/graphql",
-   {
-    query: PRODUCTS_QUERY,
-    variables: {page, limit},
-   },
-   {
-    headers: {
-     "Content-Type": "application/json",
-     Authorization: `Bearer YOUR_TOKEN_HERE`, // توکن معتبر
-    },
-   }
-  );
-
+  const response = await axios.post(BASE_URL, {
+   query: PRODUCTS_QUERY,
+   variables: {page, limit},
+  });
   return {
    data: response.data.data.products.data,
    pageInfo: response.data.data.products.paginatorInfo,
@@ -30,19 +23,10 @@ export async function fetchProducts({page, limit}: {page: number; limit: number}
 }
 export async function fetchProductById(id: number): Promise<Product | null> {
  try {
-  const response = await axios.post(
-   "/api/proxy/graphql",
-   {
-    query: GET_PRODUCT_QUERY,
-    variables: {id},
-   },
-   {
-    headers: {
-     "Content-Type": "application/json",
-     Authorization: `Bearer YOUR_TOKEN_HERE`, // توکن معتبر
-    },
-   }
-  );
+  const response = await axios.post(BASE_URL, {
+   query: GET_PRODUCT_QUERY,
+   variables: {id},
+  });
 
   return response.data.data.product;
  } catch (error) {
