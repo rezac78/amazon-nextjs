@@ -2,7 +2,6 @@
 import Image from "next/image";
 import {Navigation, Autoplay} from "swiper/modules";
 import {Swiper, SwiperSlide} from "swiper/react";
-import axios from "axios";
 
 const sliderItems = [
  {
@@ -24,89 +23,36 @@ const sliderItems = [
   description: "اطلاعات مفید درباره محصول سوم",
  },
 ];
-const cards = [
- {
-  id: 1,
-  lable: "Headphones",
-  title: "Headphones Wireless",
-  price: "$103.20",
-  image: "/pages/home/headphone-5.webp",
-  description:
-   "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
- },
- {
-  id: 2,
-  lable: "Headphones",
-  title: "Headphones Wireless",
-  price: "$103.20",
-  image: "/pages/home/headphone-5.webp",
-  description:
-   "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
- },
- {
-  id: 3,
-  lable: "Headphones",
-  title: "Headphones Wireless",
-  price: "$103.20",
-  image: "/pages/home/headphone-5.webp",
-  description:
-   "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
- },
- {
-  id: 4,
-  lable: "Headphones",
-  title: "Headphones Wireless",
-  price: "$103.20",
-  image: "/pages/home/headphone-5.webp",
-  description:
-   "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
- },
-];
 import {Card, CardAction, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {useTranslation} from "react-i18next";
 import {HeartIcon, ShoppingBag} from "lucide-react";
-import {PRODUCTS_QUERY} from "@/app/graphql/queries/products";
 import {useEffect, useState} from "react";
 import PaginationComponent from "../../common/Pagination";
 import Link from "next/link";
+import ProductCardSkeleton from "../../common/ProductCardSkeleton";
+import {fetchProducts} from "@/app/utils/fetchProduct";
+import {Product} from "@/app/utils/types";
 
 export default function HomePage() {
  const {t} = useTranslation();
- const [products, setProducts] = useState<any[]>([]);
+ const [products, setProducts] = useState<Product[]>([]);
  const [loading, setLoading] = useState(true);
  const [page, setPage] = useState(1);
  const [limit] = useState(12);
- const [pageInfo, setPageInfo] = useState({currentPage: 1, lastPage: 1}); // تعریف صحیح pageInfo
-
+ const [pageInfo, setPageInfo] = useState<{currentPage: number; lastPage: number}>({
+  currentPage: 1,
+  lastPage: 1,
+ });
  useEffect(() => {
-  axios
-   .post(
-    "/api/proxy/graphql",
-    {
-     query: PRODUCTS_QUERY,
-     variables: {page, limit},
-    },
-    {
-     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer YOUR_TOKEN_HERE`, // توکن معتبر رو بزار اینجا
-     },
-    }
-   )
-   .then((res) => {
-    setProducts(res.data.data.products.data);
-    setPageInfo(res.data.data.products.paginatorInfo);
-   })
-   .catch((err) => {
-    console.error("GraphQL Error:", err);
-   })
-   .finally(() => {
-    setLoading(false);
-   });
- }, [limit, page]);
+  fetchProducts({page, limit}).then(({data, pageInfo}) => {
+   setProducts(data);
+   setPageInfo(pageInfo);
+   setLoading(false);
+  });
+ }, [page, limit]);
 
- if (loading) return <div>در حال بارگذاری...</div>;
+ if (loading) return <ProductCardSkeleton count={8} />;
  return (
   <div className="relative">
    <Swiper modules={[Navigation, Autoplay]} navigation autoplay={{delay: 4000}} loop={true} className="mySwiper">
@@ -122,9 +68,15 @@ export default function HomePage() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2 md:px-6">
      {products.map((card) => (
       <Link href={`cart/${card.id}`} key={card.id} className="">
-       <Card className="relative flex flex-col justify-between bg-background border border-border">
-        <CardHeader>
-         <Image src={card?.images[0]?.url} alt={card.name} width={700} height={700} className="w-60 h-60 mx-auto" />
+       <Card className="relative flex flex-col justify-between bg-background border border-border min-h-[420px]">
+        <CardHeader className="flex-1">
+         <Image
+          src={card?.images[0]?.url}
+          alt={card.name}
+          width={700}
+          height={700}
+          className="w-52 h-52 object-contain mx-auto"
+         />
          <hr className="pb-2 text-gray-200" />
          <CardTitle>{card.name}</CardTitle>
          {card.price && (

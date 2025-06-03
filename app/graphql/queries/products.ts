@@ -10,6 +10,7 @@ export const PRODUCTS_QUERY = `
       data {
         id
         name
+        urlKey
         price
         images {
           id

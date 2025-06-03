@@ -10,46 +10,70 @@ import {
  SelectTrigger,
  SelectValue,
 } from "@/components/ui/select";
-import {useState} from "react";
-const thumbnails = [
- "/pages/home/slide1.webp",
- "/pages/home/slide2.webp",
- "/pages/home/slide3.webp",
- "/pages/home/headphone-5.webp",
-];
+import {useEffect, useState} from "react";
+import {useParams} from "next/navigation";
+import {fetchProductById} from "@/app/utils/fetchProduct";
+import Loading from "../../common/Loading";
+import {Product} from "@/app/utils/types";
 export default function CartSinglePage() {
- const [selectedImage, setSelectedImage] = useState(thumbnails[0]);
+ const {id} = useParams();
+ const [selectedImage, setSelectedImage] = useState<string>("");
+ const [product, setProduct] = useState<Product | null>(null);
 
+ useEffect(() => {
+  if (id) {
+   fetchProductById(Number(id)).then((res) => {
+    console.log(res);
+    setProduct(res);
+    if (res && res.images && res.images.length > 0) {
+     setSelectedImage(res.images[0].url);
+    }
+   });
+  }
+ }, [id]);
+ if (!product) return <Loading />;
  return (
   <div className="p-4 grid grid-cols-1 lg:grid-cols-5 gap-4">
    {/* Right: Product Info */}
-   <div className=" col-span-2 flex flex-row">
-    <div className="flex flex-col items-center w-[15%]  gap-2 overflow-y-auto max-h-[400px] pr-1 z-10">
-     {thumbnails.map((img, index) => (
+   <div className=" col-span-2 flex flex-row h-fit">
+    <div className="flex flex-col items-center w-[15%] gap-2 overflow-y-auto max-h-[400px] pr-1 z-10">
+     {/* تصاویر */}
+     {product?.images?.map((img, index) => (
       <div
        key={index}
        className={`relative w-14 h-14 cursor-pointer border-2 rounded-md overflow-hidden ${
-        selectedImage === img ? "border-blue-500" : "border-gray-200"
+        selectedImage === img.url ? "border-blue-500" : "border-gray-200"
        }`}
-       onMouseEnter={() => setSelectedImage(img)}
+       onMouseEnter={() => setSelectedImage(img.url)}
       >
-       <Image src={img} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
+       <Image src={img.url} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
       </div>
      ))}
+     {Array.isArray(product.videos) && product.videos.length > 0 && product.videos[0]?.url && (
+      <div
+       className={`relative w-14 h-14 cursor-pointer border-2 rounded-md overflow-hidden ${
+        selectedImage === product.videos[0].url ? "border-blue-500" : "border-gray-200"
+       }`}
+       onMouseEnter={() => setSelectedImage(product.videos![0].url)}
+      >
+       <video src={product.videos[0].url} muted preload="metadata" className="object-cover w-full h-full" />
+      </div>
+     )}
     </div>
-
     {/* Main image preview */}
     <div className="relative w-[85%] aspect-[16/10] rounded-lg overflow-hidden">
-     <Image src={selectedImage} alt="Main Product" fill className="object-contain" />
+     {selectedImage?.endsWith(".mp4") || selectedImage?.endsWith(".webm") ? (
+      <video src={selectedImage} controls autoPlay className="w-full h-full object-contain" />
+     ) : (
+      <Image src={selectedImage} alt="Main Product" fill className="object-contain" />
+     )}
     </div>
    </div>
    {/* center: Product Info */}
    <div className="col-span-2 flex flex-col gap-4">
-    <h1 className="text-2xl md:text-3xl font-semibold">
-     HP Victus 15.6 inch FHD 144Hz Gaming Laptop Intel Core i5-13420H NVIDIA RTX 4050 6GB - 16GB RAM - 512GB SSD
-    </h1>
-    <div className="text-yellow-500 font-medium text-sm">Amazon's Choice ✨</div>
-    <div className="text-3xl font-bold">$749.99</div>
+    <h1 className="text-2xl md:text-3xl font-semibold">{product.name}</h1>
+    <div className="text-yellow-500 font-medium text-sm">Amazon&apos;s Choice ✨</div>
+    <div className="text-3xl font-bold">{product.price} هزارتومان</div>
     <div className="text-sm text-gray-500">No Import Charges & $46.96 Shipping to Azerbaijan. Delivery June 17–27</div>
 
     <div className="grid grid-cols-2 gap-4 text-sm border-t border-b py-4">
@@ -60,7 +84,7 @@ export default function CartSinglePage() {
       <strong>Model:</strong> 15-fa1082wm
      </div>
      <div>
-      <strong>Screen Size:</strong> 15.6"
+      <strong>Screen Size:</strong> 15.6&quot;
      </div>
      <div>
       <strong>Color:</strong> Silver
@@ -80,9 +104,7 @@ export default function CartSinglePage() {
     </div>
 
     <div className="space-y-2 text-sm text-gray-700">
-     <p>• FHD 144Hz IPS micro-edge anti-glare display</p>
-     <p>• Windows 11 Home</p>
-     <p>• PCIe Gen4 NVMe M.2 SSD</p>
+     <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description}} />
     </div>
    </div>
    {/* Left: Image Gallery */}
