@@ -1,7 +1,22 @@
-import type { NextConfig } from "next";
+import type {NextConfig} from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+ async rewrites() {
+  return [
+   {
+    source: "/api/proxy/graphql",
+    destination: "https://back-api.eleqra.ir/graphql",
+   },
+  ];
+ },
+ images: {
+  remotePatterns: [
+   {
+    protocol: "https",
+    hostname: "back-api.eleqra.ir",
+   },
+  ],
+ },
 };
 
 export default nextConfig;

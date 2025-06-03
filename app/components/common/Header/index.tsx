@@ -21,7 +21,7 @@ const options = [
 
 export default function Header() {
  const {t} = useTranslation();
- const [language, setLanguage] = useState(i18n.language || "en");
+ const [language, setLanguage] = useState(i18n.language || "fa");
  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
  const changeLanguage = (lang: string) => {
@@ -77,13 +77,13 @@ export default function Header() {
      <Link href={"/favorite"} className="text-xs">
       <span className="font-bold">{t("Favorite")}</span>
      </Link>
-     <div className="relative flex flex-col items-center">
+     <Link href={"/cart"} className="relative flex flex-col items-center">
       <ShoppingCart className="w-5 h-5" />
       <span className="absolute top-[-6px] right-[-2px] bg-secondary text-black text-xs w-5 h-5 rounded-full flex items-center justify-center">
        0
       </span>
       <span className="text-sm font-bold ml-1">{t("Cart")}</span>
-     </div>
+     </Link>
     </div>
     <div className="md:hidden">
      <Button variant="ghost" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>

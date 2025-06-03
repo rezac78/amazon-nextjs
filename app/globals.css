@@ -10,9 +10,9 @@
  --card-foreground: #333333; /* Dark text on cards */
  --popover: #f0fff9; /* Light green for popovers, matching cards */
  --popover-foreground: #333333; /* Dark text on popovers */
- --primary: #024999; /* Deep blue for primary actions (buttons, headers) */
- --primary-foreground: #ffffff; /* White text on primary elements */
- --secondary: #6efacc; /* Light green for secondary elements */
+ --primary: #131921; /* Deep blue for primary actions (buttons, headers) */
+ --primary-foreground: #F8F8FF; /* White text on primary elements */
+ --secondary: #EDA857; /* Light green for secondary elements */
  --secondary-foreground: #333333; /* Dark text on secondary elements */
  --muted: #e6fff5; /* Subtle light green for muted areas */
  --muted-foreground: #555555; /* Medium gray for text on muted backgrounds */

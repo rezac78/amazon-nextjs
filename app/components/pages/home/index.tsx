@@ -2,6 +2,8 @@
 import Image from "next/image";
 import {Navigation, Autoplay} from "swiper/modules";
 import {Swiper, SwiperSlide} from "swiper/react";
+import axios from "axios";
+
 const sliderItems = [
  {
   id: 1,
@@ -60,25 +62,51 @@ const cards = [
    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla non magni facili blanditiis molestias soluta eveniet ill",
  },
 ];
-import {Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import {Card, CardAction, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {useTranslation} from "react-i18next";
-import {useEffect, useState} from "react";
 import {HeartIcon, ShoppingBag} from "lucide-react";
-
-function useHasMounted() {
- const [hasMounted, setHasMounted] = useState(false);
- useEffect(() => {
-  setHasMounted(true);
- }, []);
- return hasMounted;
-}
+import {PRODUCTS_QUERY} from "@/app/graphql/queries/products";
+import {useEffect, useState} from "react";
+import PaginationComponent from "../../common/Pagination";
+import Link from "next/link";
 
 export default function HomePage() {
  const {t} = useTranslation();
- const hasMounted = useHasMounted();
- if (!hasMounted) return null;
+ const [products, setProducts] = useState<any[]>([]);
+ const [loading, setLoading] = useState(true);
+ const [page, setPage] = useState(1);
+ const [limit] = useState(12);
+ const [pageInfo, setPageInfo] = useState({currentPage: 1, lastPage: 1}); // تعریف صحیح pageInfo
 
+ useEffect(() => {
+  axios
+   .post(
+    "/api/proxy/graphql",
+    {
+     query: PRODUCTS_QUERY,
+     variables: {page, limit},
+    },
+    {
+     headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer YOUR_TOKEN_HERE`, // توکن معتبر رو بزار اینجا
+     },
+    }
+   )
+   .then((res) => {
+    setProducts(res.data.data.products.data);
+    setPageInfo(res.data.data.products.paginatorInfo);
+   })
+   .catch((err) => {
+    console.error("GraphQL Error:", err);
+   })
+   .finally(() => {
+    setLoading(false);
+   });
+ }, [limit, page]);
+
+ if (loading) return <div>در حال بارگذاری...</div>;
  return (
   <div className="relative">
    <Swiper modules={[Navigation, Autoplay]} navigation autoplay={{delay: 4000}} loop={true} className="mySwiper">
@@ -90,34 +118,40 @@ export default function HomePage() {
      </SwiperSlide>
     ))}
    </Swiper>
-   <div className="absolute top-96 w-full z-[999]">
+   <div className="my-10">
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2 md:px-6">
-     {cards.map((card) => (
-      <Card key={card.id} className="relative flex flex-col justify-between bg-background border border-border">
-       <CardHeader>
-        <Image src={card.image} alt={card.title} width={700} height={700} className="w-60 h-60 mx-auto" />
-        <hr className="pb-2 text-gray-200" />
-        <span className="text-16px font-weight-demibold text-card-foreground">{card.lable}</span>
-        <CardTitle>{card.title}</CardTitle>
-        <span className="text-16px font-weight-demibold text-card-foreground">{card.price}</span>
-        <CardDescription>{card.description}</CardDescription>
-       </CardHeader>
-       <CardAction className="absolute top-40 right-4 flex flex-col  border rounded-4">
-        <div className="transition duration-300 ease-in-out transform hover:bg-secondary rounded">
-         <HeartIcon className="m-2" />
-        </div>
-        <hr />
-        <div className="transition duration-300 ease-in-out transform hover:bg-secondary rounded">
-         <ShoppingBag className="m-2" />
-        </div>
-       </CardAction>
-       <CardFooter>
-        <Button className="w-full">{t("addcart")}</Button>
-       </CardFooter>
-      </Card>
+     {products.map((card) => (
+      <Link href={`cart/${card.id}`} key={card.id} className="">
+       <Card className="relative flex flex-col justify-between bg-background border border-border">
+        <CardHeader>
+         <Image src={card?.images[0]?.url} alt={card.name} width={700} height={700} className="w-60 h-60 mx-auto" />
+         <hr className="pb-2 text-gray-200" />
+         <CardTitle>{card.name}</CardTitle>
+         {card.price && (
+          <div className="flex items-center justify-end gap-1 text-card-foreground">
+           <span className="text-18px font-bold">{card.price}</span>
+           <span className="text-14px font-semibold">هزارتومان</span>
+          </div>
+         )}
+        </CardHeader>
+        <CardAction className="absolute top-40 right-4 flex flex-col  border rounded-4">
+         <div className="transition duration-300 ease-in-out transform hover:bg-secondary rounded">
+          <HeartIcon className="m-2" />
+         </div>
+         <hr />
+         <div className="transition duration-300 ease-in-out transform hover:bg-secondary rounded">
+          <ShoppingBag className="m-2" />
+         </div>
+        </CardAction>
+        <CardFooter>
+         <Button className="w-full">{t("addcart")}</Button>
+        </CardFooter>
+       </Card>
+      </Link>
      ))}
     </div>
    </div>
+   <PaginationComponent setPage={setPage} page={page} pageInfo={pageInfo} />
   </div>
  );
 }

@@ -11,7 +11,7 @@ if (!i18n.isInitialized) {
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-   fallbackLng: "en",
+   fallbackLng: "fa",
    supportedLngs: ["en", "fa"],
    debug: true,
    interpolation: {
