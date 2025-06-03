@@ -1,11 +1,8 @@
 import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
-import Providers from "./providers";
-import "@/app/i18n/client";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
-import LanguageHtmlHandler from "./utils/LanguageHtmlHandler";
 import MountWrapper from "./components/common/MountWrapper";
 
 const geistSans = Geist({
@@ -29,14 +26,11 @@ export default function RootLayout({
  children: React.ReactNode;
 }>) {
  return (
-  <html>
+  <html dir="rtl" lang="fa">
    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-    <LanguageHtmlHandler />
     <Header />
     <main className="flex min-h-screen">
-     <Providers>
       <MountWrapper>{children}</MountWrapper>
-     </Providers>
     </main>
     <Footer />
    </body>

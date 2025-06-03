@@ -25,7 +25,6 @@ const sliderItems = [
 ];
 import {Card, CardAction, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
-import {useTranslation} from "react-i18next";
 import {HeartIcon, ShoppingBag} from "lucide-react";
 import {useEffect, useState} from "react";
 import PaginationComponent from "../../common/Pagination";
@@ -35,7 +34,6 @@ import {fetchProducts} from "@/app/utils/fetchProduct";
 import {Product} from "@/app/utils/types";
 
 export default function HomePage() {
- const {t} = useTranslation();
  const [products, setProducts] = useState<Product[]>([]);
  const [loading, setLoading] = useState(true);
  const [page, setPage] = useState(1);
@@ -96,7 +94,7 @@ export default function HomePage() {
          </div>
         </CardAction>
         <CardFooter>
-         <Button className="w-full">{t("addcart")}</Button>
+         <Button className="w-full">اضافه کردن به سبد</Button>
         </CardFooter>
        </Card>
       </Link>

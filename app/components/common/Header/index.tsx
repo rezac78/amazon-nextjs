@@ -10,8 +10,6 @@ import {
  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {useState} from "react";
-import {useTranslation} from "react-i18next";
-import i18n from "@/app/i18n/client";
 import Link from "next/link";
 
 const options = [
@@ -20,16 +18,11 @@ const options = [
 ];
 
 export default function Header() {
- const {t} = useTranslation();
- const [language, setLanguage] = useState(i18n.language || "fa");
+ const [language, setLanguage] = useState("fa");
  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
  const changeLanguage = (lang: string) => {
   setLanguage(lang);
-  i18n.changeLanguage(lang);
-  document.documentElement.lang = lang;
-  document.documentElement.dir = lang === "fa" ? "rtl" : "ltr";
-  localStorage.setItem("lang", lang);
  };
 
  return (
@@ -61,7 +54,7 @@ export default function Header() {
     <div className="hidden md:flex flex-1 mx-4">
      <input
       type="text"
-      placeholder={t("Search")}
+      placeholder="سرچ در محصولات ..."
       className="w-full px-4 py-2 ltr:rounded-l-md rtl:rounded-r-md bg-white text-black text-sm"
      />
      <Button variant="secondary" className="rtl:rounded-r-none ltr:rounded-l-none px-4">
@@ -72,17 +65,17 @@ export default function Header() {
     {/* Right Menu */}
     <div className="hidden md:flex items-center gap-6">
      <div className="text-xs">
-      <span className="block">{t("login&Register")}</span>
+      <span className="block">ورود/ثبت نام</span>
      </div>
      <Link href={"/favorite"} className="text-xs">
-      <span className="font-bold">{t("Favorite")}</span>
+      <span className="font-bold">موردعلاقه</span>
      </Link>
      <Link href={"/cart"} className="relative flex flex-col items-center">
       <ShoppingCart className="w-5 h-5" />
       <span className="absolute top-[-6px] right-[-2px] bg-secondary text-black text-xs w-5 h-5 rounded-full flex items-center justify-center">
        0
       </span>
-      <span className="text-sm font-bold ml-1">{t("Cart")}</span>
+      <span className="text-sm font-bold ml-1">سبد خرید</span>
      </Link>
     </div>
     <div className="md:hidden">
@@ -96,7 +89,7 @@ export default function Header() {
      <div className="flex">
       <input
        type="text"
-       placeholder={t("Search")}
+       placeholder="سرچ در محصولات ..."
        className="w-full px-4 py-2 ltr:rounded-l-md rtl:rounded-r-md bg-white text-black text-sm"
       />
       <Button variant="secondary" className="rtl:rounded-r-none ltr:rounded-l-none px-4">
@@ -104,9 +97,9 @@ export default function Header() {
       </Button>
      </div>
      <div className="flex flex-col gap-2">
-      <span className="text-xs">{t("login&Register")}</span>
-      <span className="text-xs font-bold">{t("Favorite")}</span>
-      <span className="text-xs font-bold">{t("Cart")}</span>
+      <span className="text-xs">ورود/ثبت نام</span>
+      <span className="text-xs font-bold">موردعلاقه</span>
+      <span className="text-xs font-bold">سبد خرید</span>
      </div>
     </div>
    )}

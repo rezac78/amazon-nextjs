@@ -1,15 +1,11 @@
 "use client";
 import {Button} from "@/components/ui/button";
-import {useTranslation} from "react-i18next";
-
 export default function FavoritePage() {
- const {t} = useTranslation();
-
  return (
   <div className="flex h-[50vh] w-1/2 mx-auto items-center justify-center bg-gray-100 mt-10">
    <div className="flex flex-col items-center gap-4">
-    <p>{t("GoShopDesc")}</p>
-    <Button >{t("GoShop")}</Button>
+    <p>چیزی در لیست علاقه‌مندی‌ها موجود نیست</p>
+    <Button>برو به فروشگاه</Button>
    </div>
   </div>
  );
