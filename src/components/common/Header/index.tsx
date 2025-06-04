@@ -68,9 +68,9 @@ export default function Header() {
 
     {/* Right Menu */}
     <div className="hidden md:flex items-center gap-6">
-     <div className="text-xs">
+     <Link href={"/signin"} className="text-xs">
       <span className="block">ورود/ثبت نام</span>
-     </div>
+     </Link>
      <Link href={"/favorite"} className="relative flex flex-col items-center text-xs">
       <span className="font-bold">موردعلاقه</span>
       <span className="absolute -top-[12px] -right-[12px] bg-red-400 text-black text-xs w-4 h-4 rounded-full flex items-center justify-center">
