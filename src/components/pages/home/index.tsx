@@ -28,8 +28,8 @@ import dynamic from "next/dynamic";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Product} from "@/utils/types";
 import {fetchProducts} from "@/utils/fetchProduct";
-const ProductCard = dynamic(() => import("@/components/common/ProductCard"));
-const PaginationComponent = dynamic(() => import("../../common/Pagination"), { ssr: false });
+const ProductCard = dynamic(() => import("@/components/common/ProductCard"), { ssr: false });
+const PaginationComponent = dynamic(() => import("../../common/Pagination"), {ssr: false});
 
 interface HomePageProps {
  data: Product[];

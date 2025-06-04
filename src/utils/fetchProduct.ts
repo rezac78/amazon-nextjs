@@ -1,4 +1,3 @@
-import axios from "axios";
 import {GET_PRODUCT_QUERY} from "../graphql/productId/products";
 import {PRODUCTS_QUERY} from "../graphql/queries/products";
 import {Product} from "./types";
@@ -8,13 +7,27 @@ const BASE_URL = isServer
  : "/api/proxy/graphql"; // کلاینت
 export async function fetchProducts({page, limit}: {page: number; limit: number}) {
  try {
-  const response = await axios.post(BASE_URL, {
-   query: PRODUCTS_QUERY,
-   variables: {page, limit},
+  const response = await fetch(BASE_URL, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json",
+    // Authorization: `Bearer ${token}`,
+   },
+   body: JSON.stringify({
+    query: PRODUCTS_QUERY,
+    variables: {page, limit},
+   }),
   });
+  if (!response.ok) {
+   throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  const result = await response.json();
   return {
-   data: response.data.data.products.data,
-   pageInfo: response.data.data.products.paginatorInfo,
+   data: result.data?.products?.data || [],
+   pageInfo: result.data?.products?.paginatorInfo || {
+    currentPage: 1,
+    lastPage: 1,
+   },
   };
  } catch (error) {
   console.error("Failed to fetch products:", error);
@@ -23,12 +36,22 @@ export async function fetchProducts({page, limit}: {page: number; limit: number}
 }
 export async function fetchProductById(id: number): Promise<Product | null> {
  try {
-  const response = await axios.post(BASE_URL, {
-   query: GET_PRODUCT_QUERY,
-   variables: {id},
+  const response = await fetch(BASE_URL, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json",
+    // Authorization: `Bearer ${token}`,
+   },
+   body: JSON.stringify({
+    query: GET_PRODUCT_QUERY,
+    variables: {id},
+   }),
   });
-
-  return response.data.data.product;
+  if (!response.ok) {
+   throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  const result = await response.json();
+  return result.data?.product ?? null;
  } catch (error) {
   console.error("Failed to fetch product:", error);
   return null;
