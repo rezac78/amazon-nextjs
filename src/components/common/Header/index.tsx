@@ -25,7 +25,7 @@ export default function Header() {
  const changeLanguage = (lang: string) => {
   setLanguage(lang);
  };
- const {cart} = useStore();
+ const {cart, favorites} = useStore();
 
  return (
   <header className="w-full bg-primary text-primary-foreground shadow-md">
@@ -69,8 +69,11 @@ export default function Header() {
      <div className="text-xs">
       <span className="block">ورود/ثبت نام</span>
      </div>
-     <Link href={"/favorite"} className="text-xs">
+     <Link href={"/favorite"} className="relative flex flex-col items-center text-xs">
       <span className="font-bold">موردعلاقه</span>
+      <span className="absolute -top-[12px] -right-[12px] bg-red-400 text-black text-xs w-4 h-4 rounded-full flex items-center justify-center">
+       {favorites.length}
+      </span>
      </Link>
      <Link href={"/cart"} className="relative flex flex-col items-center">
       <ShoppingCart className="w-5 h-5" />
