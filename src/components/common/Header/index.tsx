@@ -1,5 +1,4 @@
 "use client";
-import {Menu, Search, ShoppingCart} from "lucide-react";
 import {
  DropdownMenu,
  DropdownMenuContent,
@@ -12,6 +11,9 @@ import {useState} from "react";
 import Link from "next/link";
 import {Button} from "../../ui/button";
 import {useStore} from "@/store/useCounter";
+import MenuIcon from "@/public/icons/Menu";
+import SearchIcon from "@/public/icons/Search";
+import ShoppingCartIcon from "@/public/icons/ShoppingCart";
 
 const options = [
  {value: "fa", label: "Fa"},
@@ -60,7 +62,7 @@ export default function Header() {
       className="w-full px-4 py-2 ltr:rounded-l-md rtl:rounded-r-md bg-white text-black text-sm"
      />
      <Button variant="secondary" className="rtl:rounded-r-none ltr:rounded-l-none px-4">
-      <Search className="w-4 h-4" />
+      <SearchIcon className="w-4 h-4" />
      </Button>
     </div>
 
@@ -76,7 +78,7 @@ export default function Header() {
       </span>
      </Link>
      <Link href={"/cart"} className="relative flex flex-col items-center">
-      <ShoppingCart className="w-5 h-5" />
+      <ShoppingCartIcon className="w-5 h-5" />
       <span className="absolute top-[-6px] right-[-2px] bg-secondary text-black text-xs w-5 h-5 rounded-full flex items-center justify-center">
        {cart.length}
       </span>
@@ -85,7 +87,7 @@ export default function Header() {
     </div>
     <div className="md:hidden">
      <Button variant="ghost" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-      <Menu className="w-5 h-5" />
+      <MenuIcon className="w-5 h-5" />
      </Button>
     </div>
    </div>
@@ -98,7 +100,7 @@ export default function Header() {
        className="w-full px-4 py-2 ltr:rounded-l-md rtl:rounded-r-md bg-white text-black text-sm"
       />
       <Button variant="secondary" className="rtl:rounded-r-none ltr:rounded-l-none px-4">
-       <Search className="w-4 h-4" />
+       <SearchIcon className="w-4 h-4" />
       </Button>
      </div>
      <div className="flex flex-col gap-2">
@@ -110,7 +112,7 @@ export default function Header() {
    )}
    <div className="bg-[#232f3e] text-sm px-4 py-2 flex items-center gap-6 overflow-x-auto whitespace-nowrap">
     <div className="flex items-center gap-1 cursor-pointer">
-     <Menu className="w-4 h-4" /> <span>All</span>
+     <MenuIcon className="w-4 h-4" /> <span>All</span>
     </div>
     <span className="cursor-pointer">Todays Deals</span>
     <span className="cursor-pointer">Customer Service</span>

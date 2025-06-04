@@ -8,11 +8,12 @@ import {ProductRelatedProducts} from "@/utils/types";
 
 interface ProductCardProps {
  Data: ProductRelatedProducts[];
+ title: string;
 }
-export default function ProductSlider({Data}: ProductCardProps) {
+export default function ProductSlider({Data, title}: ProductCardProps) {
  return (
   <div className="w-[85%] md:w-full my-10 border-t-1 border-gray-200">
-   <h2 className="text-lg font-bold my-4">محصولات مرتبط</h2>
+   <h2 className="text-lg font-bold my-4">{title}</h2>
    <Carousel opts={{align: "start"}} className="w-full">
     <CarouselContent>
      {Data.map((product) => (

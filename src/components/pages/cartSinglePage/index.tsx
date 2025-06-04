@@ -28,6 +28,8 @@ export default function CartSinglePage() {
  }, [id]);
  if (!product) return <Loading />;
  const relatedProducts = product.relatedProducts ?? [];
+ const upSells = product.upSells ?? [];
+ const crossSells = product.crossSells ?? [];
  return (
   <>
    <BreadcrumbComponent Data={product} />
@@ -128,7 +130,9 @@ export default function CartSinglePage() {
      </div>
     </div>
    </div>
-   {relatedProducts.length > 0 && <ProductSlider Data={relatedProducts} />}
+   {relatedProducts.length > 0 && <ProductSlider title="محصولات مرتبط" Data={relatedProducts} />}
+   {upSells.length > 0 && <ProductSlider title="محصولات فروش بالا" Data={upSells} />}
+   {crossSells.length > 0 && <ProductSlider title="محصولات فروش متقابل" Data={crossSells} />}
   </>
  );
 }

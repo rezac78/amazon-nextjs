@@ -14,6 +14,25 @@ export const GET_PRODUCT_QUERY = `
       price
       name
     }
+       upSells {
+      id
+      name
+       images {
+        id
+        url
+      }
+      price
+    }
+
+    crossSells {
+      id
+      name
+       images {
+        id
+        url
+      }
+      price
+    }
       images {
         url
       }

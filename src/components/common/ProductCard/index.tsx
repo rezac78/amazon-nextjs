@@ -1,10 +1,11 @@
 import Link from "next/link";
 import {Card, CardAction, CardFooter, CardHeader, CardTitle} from "../../ui/card";
 import Image from "next/image";
-import {HeartIcon, ShoppingBag} from "lucide-react";
 import {Button} from "../../ui/button";
 import {Product} from "@/utils/types";
 import {useStore} from "@/store/useCounter";
+import HeartIcon from "@/public/icons/Heart";
+import ShoppingBagIcon from "@/public/icons/ShoppingBag";
 interface ProductCardProps {
  products: Product[];
  homePage?: boolean;
@@ -74,7 +75,7 @@ export default function ProductCard({products, homePage}: ProductCardProps) {
            isInCart ? "text-green-500" : "text-black"
           }`}
          >
-          <ShoppingBag className="m-2 cursor-pointer" />
+          <ShoppingBagIcon className="m-2 cursor-pointer" />
          </div>
         </CardAction>
         <CardFooter>

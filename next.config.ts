@@ -1,6 +1,17 @@
-import type {NextConfig} from "next";
+import withBundleAnalyzer from "@next/bundle-analyzer";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
+ compress: true,
+ images: {
+  remotePatterns: [
+   {
+    protocol: "https",
+    hostname: "back-api.eleqra.ir",
+    port: undefined,
+    pathname: "/**",
+   } as const, // ← ترفند مهم برای گذر از TS سختگیرانه
+  ],
+ },
  async rewrites() {
   return [
    {
@@ -9,14 +20,8 @@ const nextConfig: NextConfig = {
    },
   ];
  },
- images: {
-  remotePatterns: [
-   {
-    protocol: "https",
-    hostname: "back-api.eleqra.ir",
-   },
-  ],
- },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer({
+ enabled: process.env.ANALYZE === "true",
+})(nextConfig);

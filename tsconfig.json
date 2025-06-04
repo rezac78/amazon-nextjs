@@ -15,7 +15,12 @@
   "incremental": true,
   "plugins": [
    {
-    "name": "next"
+    "name": "next",
+    "modularizeImports": {
+     "lucide-react": {
+      "transform": "lucide-react/icons/{{member}}"
+     }
+    }
    }
   ],
   "baseUrl": ".",
