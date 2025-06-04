@@ -15,7 +15,7 @@ export default function BreadcrumbComponent({Data}: BreadcrumbComponentProps) {
  const categories = Data.categories ?? [];
 
  return (
-  <Breadcrumb>
+  <Breadcrumb className="my-4">
    <BreadcrumbList>
     <BreadcrumbItem>
      <BreadcrumbLink href="/">خانه</BreadcrumbLink>

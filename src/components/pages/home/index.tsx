@@ -27,8 +27,8 @@ import PaginationComponent from "../../common/Pagination";
 import ProductCardSkeleton from "../../common/ProductCardSkeleton";
 import dynamic from "next/dynamic";
 import {Swiper, SwiperSlide} from "swiper/react";
-import { Product } from "@/utils/types";
-import { fetchProducts } from "@/utils/fetchProduct";
+import {Product} from "@/utils/types";
+import {fetchProducts} from "@/utils/fetchProduct";
 const ProductCard = dynamic(() => import("@/components/common/ProductCard"));
 interface HomePageProps {
  data: Product[];
@@ -71,7 +71,7 @@ export default function HomePage({data, pageInfo}: HomePageProps) {
         width={1200}
         height={700}
         sizes="(max-width: 768px) 100vw, 1200px"
-        priority={idx === 0} // فقط اولی
+        priority={idx === 0}
         loading={idx === 0 ? "eager" : "lazy"}
         className="w-full h-full object-cover"
        />
@@ -79,7 +79,7 @@ export default function HomePage({data, pageInfo}: HomePageProps) {
      </SwiperSlide>
     ))}
    </Swiper>
-   <ProductCard products={products} />
+   <ProductCard homePage={true} products={products} />
    <PaginationComponent setPage={setPage} page={page} pageInfo={localPageInfo} />
   </div>
  );

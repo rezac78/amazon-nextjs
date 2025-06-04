@@ -11,6 +11,7 @@ import {
 import {useState} from "react";
 import Link from "next/link";
 import {Button} from "../../ui/button";
+import {useStore} from "@/store/useCounter";
 
 const options = [
  {value: "fa", label: "Fa"},
@@ -24,6 +25,7 @@ export default function Header() {
  const changeLanguage = (lang: string) => {
   setLanguage(lang);
  };
+ const {cart} = useStore();
 
  return (
   <header className="w-full bg-primary text-primary-foreground shadow-md">
@@ -73,7 +75,7 @@ export default function Header() {
      <Link href={"/cart"} className="relative flex flex-col items-center">
       <ShoppingCart className="w-5 h-5" />
       <span className="absolute top-[-6px] right-[-2px] bg-secondary text-black text-xs w-5 h-5 rounded-full flex items-center justify-center">
-       0
+       {cart.length}
       </span>
       <span className="text-sm font-bold ml-1">سبد خرید</span>
      </Link>
