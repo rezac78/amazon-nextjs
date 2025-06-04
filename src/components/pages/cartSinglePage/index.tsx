@@ -2,13 +2,14 @@
 import Image from "next/image";
 import {Button} from "../../ui/button";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "../../ui/select";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useParams} from "next/navigation";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
 import {fetchProductById} from "@/utils/fetchProduct";
 import {Product} from "@/utils/types";
+import BreadcrumbComponent from "@/components/common/Breadcrumb";
 export default function CartSinglePage() {
  const {id} = useParams();
  const [selectedImage, setSelectedImage] = useState<string>("");
@@ -29,6 +30,7 @@ export default function CartSinglePage() {
  const relatedProducts = product.relatedProducts ?? [];
  return (
   <>
+   <BreadcrumbComponent Data={product} />
    <div className="p-4 flex flex-col md:flex-row gap-6">
     <div className="flex flex-row md:w-[30%] min-w-[30%] h-fit">
      <div className="flex flex-col items-center w-[15%] gap-2 overflow-y-auto max-h-[400px] pr-1 z-10">

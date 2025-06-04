@@ -4,9 +4,10 @@ import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious}
 import {Card, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
-import {Product} from "@/utils/types";
+import {ProductRelatedProducts} from "@/utils/types";
+
 interface ProductCardProps {
- Data: Product[];
+ Data: ProductRelatedProducts[];
 }
 export default function ProductSlider({Data}: ProductCardProps) {
  return (
