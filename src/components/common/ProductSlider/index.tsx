@@ -1,129 +1,47 @@
 "use client";
 import Image from "next/image";
-import {ChevronLeft, ChevronRight} from "lucide-react";
-import {useRef} from "react";
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card"
-
-
-const products = [
- {
-  id: 1,
-  name: "ASUS TUF Gaming A15",
-  image: "/pages/home/headphone-5.webp",
-  price: "$599.99",
-  rating: 4.5,
-  reviewCount: 346,
-  discount: "-14%",
-  oldPrice: "$699.99",
-  tag: "Amazon's Choice",
- },
- {
-  id: 2,
-  name: "ASUS TUF Gaming A15",
-  image: "/pages/home/headphone-5.webp",
-  price: "$599.99",
-  rating: 4.5,
-  reviewCount: 346,
-  discount: "-14%",
-  oldPrice: "$699.99",
-  tag: "Amazon's Choice",
- },
- {
-  id: 3,
-  name: "ASUS TUF Gaming A15",
-  image: "/pages/home/headphone-5.webp",
-  price: "$599.99",
-  rating: 4.5,
-  reviewCount: 346,
-  discount: "-14%",
-  oldPrice: "$699.99",
-  tag: "Amazon's Choice",
- },
- {
-  id: 4,
-  name: "ASUS TUF Gaming A15",
-  image: "/pages/home/headphone-5.webp",
-  price: "$599.99",
-  rating: 4.5,
-  reviewCount: 346,
-  discount: "-14%",
-  oldPrice: "$699.99",
-  tag: "Amazon's Choice",
- },
- {
-  id: 5,
-  name: "ASUS TUF Gaming A15",
-  image: "/pages/home/headphone-5.webp",
-  price: "$599.99",
-  rating: 4.5,
-  reviewCount: 346,
-  discount: "-14%",
-  oldPrice: "$699.99",
-  tag: "Amazon's Choice",
- },
- {
-  id: 6,
-  name: "ASUS TUF Gaming A15",
-  image: "/pages/home/headphone-5.webp",
-  price: "$599.99",
-  rating: 4.5,
-  reviewCount: 346,
-  discount: "-14%",
-  oldPrice: "$699.99",
-  tag: "Amazon's Choice",
- },
- {
-  id: 7,
-  name: "ASUS TUF Gaming A15",
-  image: "/pages/home/headphone-5.webp",
-  price: "$599.99",
-  rating: 4.5,
-  reviewCount: 346,
-  discount: "-14%",
-  oldPrice: "$699.99",
-  tag: "Amazon's Choice",
- },
- {
-  id: 8,
-  name: "ASUS TUF Gaming A15",
-  image: "/pages/home/headphone-5.webp",
-  price: "$599.99",
-  rating: 4.5,
-  reviewCount: 346,
-  discount: "-14%",
-  oldPrice: "$699.99",
-  tag: "Amazon's Choice",
- },
-];
-
-export default function ProductSlider() {
- const sliderRef = useRef<HTMLDivElement>(null);
-
- const scroll = (direction: "left" | "right") => {
-  if (sliderRef.current) {
-   const scrollAmount = direction === "left" ? -300 : 300;
-   sliderRef.current.scrollBy({left: scrollAmount, behavior: "smooth"});
-  }
- };
-
+import {Card, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import Link from "next/link";
+import {Button} from "@/components/ui/button";
+import {Product} from "@/utils/types";
+interface ProductCardProps {
+ Data: Product[];
+}
+export default function ProductSlider({Data}: ProductCardProps) {
  return (
-  <div className="relative w-full px-4">
-   <div className="flex items-center justify-between mb-4">
-    <h2 className="text-lg font-bold">محصولات مرتبط</h2>
-    <span className="text-sm text-muted-foreground">Page 1 of 4</span>
-   </div>
-   <Carousel className="w-full max-w-xs">
+  <div className="w-[85%] md:w-full my-10 border-t-1 border-gray-200">
+   <h2 className="text-lg font-bold my-4">محصولات مرتبط</h2>
+   <Carousel opts={{align: "start"}} className="w-full">
     <CarouselContent>
-     {Array.from({length: 5}).map((_, index) => (
-      <CarouselItem key={index}>
-       <div className="p-1">
-        <Card>
-         <CardContent className="flex aspect-square items-center justify-center p-6">
-          <span className="text-4xl font-semibold">{index + 1}</span>
-         </CardContent>
+     {Data.map((product) => (
+      <CarouselItem key={product.id} className="md:basis-1/3 lg:basis-1/5">
+       <Link href={`/cart/${product.id}`} key={product.id} className="">
+        <Card className="group relative flex flex-col justify-between bg-background border border-border min-h-[300px]">
+         <CardHeader className="flex-1">
+          <Image
+           src={product?.images[0]?.url}
+           alt={product.name}
+           width={300}
+           height={300}
+           sizes="(max-width: 768px) 100vw, 300px"
+           className="object-contain w-40 h-40 mx-auto"
+          />
+
+          <hr className="pb-2 text-gray-200" />
+          <CardTitle>{product.name}</CardTitle>
+          {product.price && (
+           <div className="flex items-center justify-end gap-1 text-card-foreground">
+            <span className="text-18px font-bold">{product.price}</span>
+            <span className="text-14px font-semibold">هزارتومان</span>
+           </div>
+          )}
+         </CardHeader>
+         <CardFooter>
+          <Button className="w-full">اضافه کردن به سبد</Button>
+         </CardFooter>
         </Card>
-       </div>
+       </Link>
       </CarouselItem>
      ))}
     </CarouselContent>

@@ -5,9 +5,10 @@ import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigg
 import {useEffect, useState} from "react";
 import {useParams} from "next/navigation";
 import Loading from "../../common/Loading";
-import {fetchProductById} from "utils/fetchProduct";
-import {Product} from "utils/types";
+
 import ProductSlider from "@/components/common/ProductSlider";
+import {fetchProductById} from "@/utils/fetchProduct";
+import {Product} from "@/utils/types";
 export default function CartSinglePage() {
  const {id} = useParams();
  const [selectedImage, setSelectedImage] = useState<string>("");
@@ -25,10 +26,11 @@ export default function CartSinglePage() {
   }
  }, [id]);
  if (!product) return <Loading />;
+ const relatedProducts = product.relatedProducts ?? [];
  return (
   <>
-   <div className="p-4 grid grid-cols-1 lg:grid-cols-5 gap-4">
-    <div className=" col-span-2 flex flex-row h-fit">
+   <div className="p-4 flex flex-col md:flex-row gap-6">
+    <div className="flex flex-row md:w-[30%] min-w-[30%] h-fit">
      <div className="flex flex-col items-center w-[15%] gap-2 overflow-y-auto max-h-[400px] pr-1 z-10">
       {product?.images?.map((img, index) => (
        <div
@@ -60,7 +62,7 @@ export default function CartSinglePage() {
       )}
      </div>
     </div>
-    <div className="col-span-2 flex flex-col gap-4">
+    <div className="flex flex-grow flex-col gap-4">
      <h1 className="text-2xl md:text-3xl font-semibold">{product.name}</h1>
      <div className="text-yellow-500 font-medium text-sm">Amazon&apos;s Choice ✨</div>
      <div className="text-3xl font-bold">{product.price} هزارتومان</div>
@@ -97,7 +99,7 @@ export default function CartSinglePage() {
       <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description}} />
      </div>
     </div>
-    <div className="col-span-1 flex flex-col gap-4 border border-border rounded-2xl p-4 text-right h-fit">
+    <div className="flex flex-col md:w-[15%] min-w-[15%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">
      <h1 className="text-2xl md:text-3xl font-semibold">500 هزار تومان</h1>
      <span>در این قسمت توضیحات کوتاه قرار میگیره</span>
      <div className="flex flex-col gap-4 mt-4">
@@ -124,7 +126,7 @@ export default function CartSinglePage() {
      </div>
     </div>
    </div>
-   <ProductSlider />
+   {relatedProducts.length > 0 && <ProductSlider Data={relatedProducts} />}
   </>
  );
 }

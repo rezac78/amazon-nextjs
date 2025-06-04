@@ -3,7 +3,7 @@ import {Card, CardAction, CardFooter, CardHeader, CardTitle} from "../../ui/card
 import Image from "next/image";
 import {HeartIcon, ShoppingBag} from "lucide-react";
 import {Button} from "../../ui/button";
-import {Product} from "utils/types";
+import { Product } from "@/utils/types";
 interface ProductCardProps {
  products: Product[];
 }
