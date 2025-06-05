@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { registerCustomer } from "@/utils/authUsers";
+import { useRouter } from "next/navigation";
 export default function RegisterPage() {
   const [form, setForm] = useState({
     firstName: "",
@@ -17,6 +18,7 @@ export default function RegisterPage() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -62,7 +64,8 @@ export default function RegisterPage() {
           },
           body: JSON.stringify({ token: result.accessToken }),
         });
-        toast.success(result.message || "ثبت‌نام ناموفق بود.");
+        router.push("/auth/signup");
+        toast.success(result.message || "ثبت‌نام موفق بود.");
       } else {
         toast.error(result?.message || "ثبت‌نام ناموفق بود.");
       }

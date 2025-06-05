@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { loginCustomer } from "@/utils/authUsers";
+import { useRouter } from "next/navigation";
 export default function LoginPage() {
      const [form, setForm] = useState({
           email: "",
           password: "",
      });
+     const router = useRouter();
 
      const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -48,7 +50,8 @@ export default function LoginPage() {
                          },
                          body: JSON.stringify({ token: result.accessToken }),
                     });
-                    toast.success(result.message || "ورود ناموفق بود.");
+                    router.push("/");
+                    toast.success(result.message || "ورود موفق بود.");
                } else {
                     toast.error(result?.message || "ورود ناموفق بود.");
                }
