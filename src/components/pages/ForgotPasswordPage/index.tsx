@@ -4,11 +4,10 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { loginCustomer } from "@/utils/authUsers";
-export default function LoginPage() {
+import { forgotPassword } from "@/utils/authUsers";
+export default function ForgotPasswordPage() {
      const [form, setForm] = useState({
           email: "",
-          password: "",
      });
 
      const [errors, setErrors] = useState<Record<string, string>>({});
@@ -24,7 +23,6 @@ export default function LoginPage() {
           const newErrors: Record<string, string> = {};
 
           if (!form.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = "فرمت ایمیل معتبر نیست.";
-          if (form.password.length < 6) newErrors.password = "رمز عبور باید حداقل ۶ کاراکتر باشد.";
 
           return newErrors;
      };
@@ -36,25 +34,15 @@ export default function LoginPage() {
           if (Object.keys(validationErrors).length > 0) return;
 
           try {
-               const result = await loginCustomer({
-                    email: form.email,
-                    password: form.password,
-               });
-               if (result?.success) {
-                    await fetch("/api/auth/set-token", {
-                         method: "POST",
-                         headers: {
-                              "Content-Type": "application/json",
-                         },
-                         body: JSON.stringify({ token: result.accessToken }),
-                    });
-                    toast.success(result.message || "ورود ناموفق بود.");
+               const result = await forgotPassword(form.email);
+               if (result.success) {
+                    toast.success(result.message || "ایمیل بازیابی ارسال شد.");
                } else {
-                    toast.error(result?.message || "ورود ناموفق بود.");
+                    toast.error(result.message || "خطا در ارسال ایمیل بازیابی.");
                }
           } catch (err: unknown) {
                if (err instanceof Error) {
-                    toast.error(err.message || "خطا در ورود.");
+                    toast.error(err.message || "خطا در بازیابی رمز.");
                } else {
                     toast.error("خطای ناشناخته‌ای رخ داد.");
                }
@@ -64,7 +52,8 @@ export default function LoginPage() {
      return (
           <div className=" w-[550px] mx-auto flex items-center justify-center p-4">
                <div className="bg-primary/80 text-primary-foreground w-full rounded-xl shadow-md p-6">
-                    <h2 className="text-2xl font-semibold text-center mb-6">ورود کاربر</h2>
+                    <h2 className="text-2xl font-semibold text-center mb-6">بازیابی رمز عبور</h2>
+                    <span>اگر رمز عبور خود را فراموش کرده‌اید، با وارد کردن آدرس ایمیل خود آن را بازیابی کنید.</span>
                     <form onSubmit={handleRegister} className="space-y-4">
                          <div className="">
                               <Label className="block text-sm font-medium" htmlFor="email">
@@ -80,35 +69,15 @@ export default function LoginPage() {
                               />
                               {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
                          </div>
-                         <div className="">
-                              <Label className="block text-sm font-medium" htmlFor="password">
-                                   رمز عبور
-                              </Label>
-                              <Input
-                                   id="password"
-                                   type="password"
-                                   name="password"
-                                   onChange={handleChange}
-                                   value={form.password}
-                                   className="w-full px-3 py-2 border rounded-md bg-gray-100 mt-2 text-black"
-                              />
-                              {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
-                         </div>
                          {errors.agreement && <p className="text-sm text-red-600 mt-1">{errors.agreement}</p>}
                          <button type="submit" className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">
-                              ورود
+                              بازنشانی رمز عبور
                          </button>
                     </form>
-
                     <div className="mt-6 text-sm text-center text-gray-600">
-                         مشتری جدید ؟
+                         بازگشت به صفحه ورود؟
                          <a href="/auth/signup" className="text-blue-600 hover:underline">
-                              حساب کاربری خود را ایجاد کنید
-                         </a>
-                    </div>
-                    <div className="mt-6 text-sm text-center text-gray-600">
-                         <a href="/auth/forgot-password" className="text-blue-600 hover:underline">
-                              رمز عبور فراموش کردید؟
+                              ورود
                          </a>
                     </div>
                </div>

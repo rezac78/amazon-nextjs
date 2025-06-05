@@ -100,7 +100,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     />
     {leftIcon && <span className={cn(textColor, "absolute end-2 top-1/2 size-6 -translate-y-1/2")}>{leftIcon}</span>}
     {type === "password" && (
-     <button className="absolute end-2 top-1/2 -translate-y-1/2" onClick={() => setShowPassword(!showPassword)}>
+     <button type="button" className="absolute end-2 top-1/2 -translate-y-1/2" onClick={() => setShowPassword(!showPassword)}>
       {showPassword ? <EyeIcon className={"size-6"} /> : <EyeCloseIcon className={"size-6"} />}
      </button>
     )}
