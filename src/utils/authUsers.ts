@@ -2,11 +2,8 @@ import { FORGOT_PASSWORD } from "@/graphql/authCustomer/forgot/forgot";
 import { CUSTOMER_LOGIN } from "@/graphql/authCustomer/login/login";
 import { CUSTOMER_LOGOUT } from "@/graphql/authCustomer/logout/logout";
 import { REGISTER_CUSTOMER } from "@/graphql/authCustomer/register/register";
+import { BASE_URL } from "./config";
 
-const BASE_URL =
-  typeof window === "undefined"
-    ? "https://back-api.eleqra.ir/graphql" // سرور
-    : "/api/proxy/graphql"; // کلاینت
 
 export async function registerCustomer(input: {
   firstName: string;
@@ -105,7 +102,7 @@ export async function logoutCustomer(Token: string) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${Token}`
+        Authorization: `${Token}`,
       },
       body: JSON.stringify({
         query: CUSTOMER_LOGOUT,

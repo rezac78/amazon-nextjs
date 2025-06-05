@@ -1,9 +1,6 @@
 import { GET_CATEGORIESHOME_QUERY } from "@/graphql/categoriesHome/categoriesHome";
 
-const BASE_URL =
-  typeof window === "undefined"
-    ? "https://back-api.eleqra.ir/graphql" // سرور
-    : "/api/proxy/graphql"; // کلاینت
+import { BASE_URL } from "./config";
 
 export async function categories() {
   try {
