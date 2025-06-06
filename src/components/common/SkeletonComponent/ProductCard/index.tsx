@@ -1,10 +1,10 @@
-import { Skeleton } from "../../ui/skeleton";
+import { Skeleton } from "../../../ui/skeleton";
 
 export default function ProductCardSkeleton({ count = 4, homePage = false }: { count?: number, homePage?: boolean }) {
         return (
                 <div
-                        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2 md:px-6 ${homePage && "-mt-48"
-                                }  relative z-10`}
+                        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2 md:px-6 mt-10 ${homePage && ""
+                                }`}
                 >                        {Array.from({ length: count }).map((_, i) => (
                         <div
                                 key={i}

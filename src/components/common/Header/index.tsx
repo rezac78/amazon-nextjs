@@ -16,7 +16,7 @@ import SearchIcon from "@/public/icons/Search";
 import ShoppingCartIcon from "@/public/icons/ShoppingCart";
 import dynamic from "next/dynamic";
 import { CategoryHome } from "@/utils/types";
-import HomeCategorisSkeleton from "../homeCategorisSkeleton";
+import HomeCategorisSkeleton from "../SkeletonComponent/homeCategoris";
 const HomeCategoris = dynamic(() => import("../homeCategoris"), { ssr: false, loading: () => <HomeCategorisSkeleton count={4}/>, });
 
 const options = [
@@ -120,7 +120,7 @@ export default function Header({ isLogin, categorie }: HeaderProps) {
           </div>
         </div>
       )}
-      <HomeCategoris Data={categorie} />
+      <HomeCategoris Data={categorie} useIn="HomeHeader"/>
     </header>
   );
 }
