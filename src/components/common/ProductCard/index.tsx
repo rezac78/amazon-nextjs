@@ -18,22 +18,25 @@ export default function ProductCard({products, homePage}: ProductCardProps) {
     {products.map((card) => {
      const isFavorite = favorites.some((item) => item.id === card.id);
      const isInCart = cart.some((item) => item.id === card.id);
-     console.log(card);
-
+     const originalUrl = card?.images?.[0]?.large_image_url || "";
+     const imageUrl = originalUrl.replace("/cache/large/", "/storage/");
      return (
       <Link href={`cart/${card.id}`} key={card.id} className="">
-       <Card className="group relative flex flex-col justify-between bg-background border border-border min-h-[420px]">
+       <Card
+        className={`group relative flex flex-col justify-between bg-background border border-border ${
+         !homePage ? "min-h-[420px]" : "min-h-[250px]"
+        } `}
+       >
         <CardHeader className="flex-1">
          <Image
-          src={card?.images[0]?.url || "/defult.avif"}
+          src={imageUrl ?? "/default.avif"}
           alt={card.name}
-          width={300}
-          height={300}
-          sizes="(max-width: 768px) 100vw, 300px"
-          className="object-contain w-52 h-52 mx-auto"
+          width={!homePage ? 150 : 300}
+          height={!homePage ? 150 : 300}
+          sizes={`(max-width: 768px) 100vw, ${!homePage ? "300px" : "150px"}`}
+          className={`object-contain ${!homePage ? "w-52 h-52" : "w-36 h-36"} mx-auto`}
          />
-
-         <hr className="pb-2 text-gray-200" />
+         {!homePage && <hr className="pb-2 text-gray-200" />}
          <CardTitle>{card.name}</CardTitle>
          {card.price && (
           <div className="flex items-center justify-end gap-1 text-card-foreground">
@@ -42,7 +45,11 @@ export default function ProductCard({products, homePage}: ProductCardProps) {
           </div>
          )}
         </CardHeader>
-        <CardAction className="absolute top-40 right-4 flex flex-col border rounded-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <CardAction
+         className={`absolute ${
+          !homePage ? "top-40" : "top-10"
+         } right-4 flex flex-col border rounded-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+        >
          <div
           onClick={(e) => {
            e.preventDefault();
@@ -75,9 +82,11 @@ export default function ProductCard({products, homePage}: ProductCardProps) {
           <ShoppingBagIcon className="m-2 cursor-pointer" />
          </div>
         </CardAction>
-        <CardFooter>
-         <Button className="w-full">اضافه کردن به سبد</Button>
-        </CardFooter>
+        {!homePage && (
+         <CardFooter>
+          <Button className="w-full">اضافه کردن به سبد</Button>
+         </CardFooter>
+        )}
        </Card>
       </Link>
      );

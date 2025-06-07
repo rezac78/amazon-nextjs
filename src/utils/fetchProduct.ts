@@ -1,63 +1,84 @@
-import { GET_PRODUCT_QUERY } from "../graphql/productId/products";
-import { PRODUCTS_QUERY } from "../graphql/queries/products";
-import { Product } from "./types";
-import { BASE_URL } from "./config";
+import {GET_PRODUCT_QUERY} from "../graphql/productId/products";
+import {PRODUCTS_QUERY} from "../graphql/queries/products";
+import {Product} from "./types";
+import {BASE_URL} from "./config";
 
-export async function fetchProducts({
-  page,
-  limit,
-}: {
-  page: number;
-  limit: number;
-}) {
-  try {
-    const response = await fetch(BASE_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        query: PRODUCTS_QUERY,
-        variables: { page, limit },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const result = await response.json();
-    return {
-      data: result.data?.products?.data || [],
-      pageInfo: result.data?.products?.paginatorInfo || {
-        currentPage: 1,
-        lastPage: 1,
-      },
-    };
-  } catch (error) {
-    console.error("Failed to fetch products:", error);
-    return { data: [], pageInfo: { currentPage: 1, lastPage: 1 } };
+export async function fetchProducts({page, limit}: {page: number; limit: number}) {
+ try {
+  const response = await fetch(BASE_URL, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json",
+    // Authorization: `Bearer ${token}`,
+   },
+   body: JSON.stringify({
+    query: PRODUCTS_QUERY,
+    variables: {page, limit},
+   }),
+  });
+  if (!response.ok) {
+   throw new Error(`HTTP error! Status: ${response.status}`);
   }
+  const result = await response.json();
+  return {
+   data: result.data?.products?.data || [],
+   pageInfo: result.data?.products?.paginatorInfo || {
+    currentPage: 1,
+    lastPage: 1,
+   },
+  };
+ } catch (error) {
+  console.error("Failed to fetch products:", error);
+  return {data: [], pageInfo: {currentPage: 1, lastPage: 1}};
+ }
 }
 export async function fetchProductById(id: number): Promise<Product | null> {
-  try {
-    const response = await fetch(BASE_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        query: GET_PRODUCT_QUERY,
-        variables: { id },
-      }),
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const result = await response.json();
-    return result.data?.product ?? null;
-  } catch (error) {
-    console.error("Failed to fetch product:", error);
-    return null;
+ try {
+  const response = await fetch(BASE_URL, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json",
+    // Authorization: `Bearer ${token}`,
+   },
+   body: JSON.stringify({
+    query: GET_PRODUCT_QUERY,
+    variables: {id},
+   }),
+  });
+  if (!response.ok) {
+   throw new Error(`HTTP error! Status: ${response.status}`);
   }
+  const result = await response.json();
+  return result.data?.product ?? null;
+ } catch (error) {
+  console.error("Failed to fetch product:", error);
+  return null;
+ }
+}
+export async function fetchProductAll(params: Record<string, string | number>): Promise<Product[]> {
+ try {
+  const queryString = new URLSearchParams(
+   Object.entries(params).reduce((acc, [key, val]) => {
+    acc[key] = String(val);
+    return acc;
+   }, {} as Record<string, string>)
+  ).toString();
+
+  const response = await fetch(`https://back-api.eleqra.ir/api/products?${queryString}`, {
+   method: "GET",
+   headers: {
+    Accept: "application/json",
+   },
+  });
+
+  if (!response.ok) {
+   throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const result = await response.json();
+  return result.data || [];
+ } catch (error) {
+  console.error("Failed to fetch products:", error);
+  return [];
+ }
 }

@@ -17,38 +17,40 @@ import ProductCard from "@/components/common/ProductCard";
 interface SearchProps {
  Data: CategoryAttributeFilter[];
 }
+
 export default function Search({Data}: SearchProps) {
  const searchParams = useSearchParams();
  const query = searchParams.get("query") || "";
- const [viewMode, setViewMode] = useState("grid");
- const [limit] = useState(12);
- const [sort] = useState("price-desc");
- const [products, setProducts] = useState([]);
+ const router = useRouter();
 
+ const [viewMode,] = useState(searchParams.get("mode") || "grid");
+ const [products, setProducts] = useState([]);
+ const [priceRange, setPriceRange] = useState<[number, number]>(() => {
+  const priceParam = searchParams.get("price");
+  if (priceParam && priceParam.includes(",")) {
+   const [min, max] = priceParam.split(",").map(Number);
+   return [min, max];
+  }
+  return [0, 999999999];
+ });
+
+ // فچ داینامیک محصولات بر اساس همه پارامترهای URL
  useEffect(() => {
-  const params: Record<string, string> = {
-   query,
-   sort,
-   limit: limit.toString(),
-   mode: viewMode,
-   currency: "OMR",
-  };
-  const color = searchParams.get("color");
-  const size = searchParams.get("size");
-  const brand = searchParams.get("brand");
-  const price = searchParams.get("price");
-  if (color) params.color = color;
-  if (size) params.size = size;
-  if (brand) params.brand = brand;
-  if (price) params.price = price;
+  const currentParams = new URLSearchParams(searchParams.toString());
+  const params: Record<string, string> = {};
+
+  currentParams.forEach((value, key) => {
+   params[key] = value;
+  });
+
+  params.currency = "OMR";
 
   getProducts(params)
    .then((res) => setProducts(res.data || []))
    .catch((err) => console.error("Product fetch error:", err));
- }, [query, sort, limit, viewMode, searchParams]);
+ }, [searchParams]);
 
- const [priceRange, setPriceRange] = useState<[number, number]>([0, 999999999]);
- const router = useRouter();
+ // آپدیت پارامترها و push به URL
  const updateFilter = (key: string, value: string) => {
   const current = new URLSearchParams(searchParams.toString());
   if (value) {
@@ -58,6 +60,7 @@ export default function Search({Data}: SearchProps) {
   }
   router.push(`/search?${current.toString()}`);
  };
+
  return (
   <div className="flex flex-col lg:flex-row container mx-auto px-4 py-6 gap-6">
    {/* Sidebar Filters */}
@@ -68,7 +71,14 @@ export default function Search({Data}: SearchProps) {
 
     <div className="flex justify-between border-b border-gray-100 pb-4">
      <h2 className="font-bold text-lg">فیلترها:</h2>
-     <Button variant="ghost">پاک کردن همه</Button>
+     <Button
+      variant="ghost"
+      onClick={() => {
+       router.push("/search");
+      }}
+     >
+      پاک کردن همه
+     </Button>
     </div>
 
     {Data.map((filter) => {
@@ -76,7 +86,7 @@ export default function Search({Data}: SearchProps) {
       return (
        <div key={filter.id}>
         <Slider
-         defaultValue={priceRange}
+         value={priceRange}
          min={0}
          max={999999999}
          step={100000}
@@ -84,7 +94,6 @@ export default function Search({Data}: SearchProps) {
           setPriceRange([val[0], val[1] ?? val[0]]);
           updateFilter("price", `${val[0]},${val[1] ?? val[0]}`);
          }}
-         value={priceRange}
          className="mb-2"
         />
         <div className="flex justify-between">
@@ -127,7 +136,7 @@ export default function Search({Data}: SearchProps) {
     <div className="flex items-center justify-between">
      <Select onValueChange={(val) => updateFilter("sort", val)}>
       <SelectTrigger className="w-40">
-       <SelectValue placeholder="گران‌ترین اول" />
+       <SelectValue placeholder={searchParams.get("sort") || "گران‌ترین اول"} />
       </SelectTrigger>
       <SelectContent>
        <SelectItem value="price-desc">گران‌ترین اول</SelectItem>
@@ -137,7 +146,7 @@ export default function Search({Data}: SearchProps) {
      <div className="flex items-center gap-2">
       <Select onValueChange={(val) => updateFilter("limit", val)}>
        <SelectTrigger className="w-24">
-        <SelectValue placeholder={limit} />
+        <SelectValue placeholder={searchParams.get("limit") || "12"} />
        </SelectTrigger>
        <SelectContent>
         {[12, 24, 48].map((n) => (
@@ -147,14 +156,23 @@ export default function Search({Data}: SearchProps) {
         ))}
        </SelectContent>
       </Select>
-      <Button size="icon" variant={viewMode === "grid" ? "default" : "ghost"} onClick={() => setViewMode("grid")}>
-       <GridIcon className="w-4 h-4" />{" "}
+      <Button
+       size="icon"
+       variant={viewMode === "grid" ? "default" : "ghost"}
+       onClick={() => updateFilter("mode", "grid")}
+      >
+       <GridIcon className="w-4 h-4" />
       </Button>
-      <Button size="icon" variant={viewMode === "list" ? "default" : "ghost"} onClick={() => setViewMode("list")}>
+      <Button
+       size="icon"
+       variant={viewMode === "list" ? "default" : "ghost"}
+       onClick={() => updateFilter("mode", "list")}
+      >
        <ListIcon className="w-4 h-4" />
       </Button>
      </div>
     </div>
+
     {/* Products */}
     {products.length > 0 ? (
      <ProductCard homePage={true} products={products} />

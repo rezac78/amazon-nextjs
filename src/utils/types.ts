@@ -11,7 +11,8 @@ export interface Product {
  categories?: Category[];
 }
 export interface ProductImage {
- url: string;
+ url?: string;
+ large_image_url?: string;
 }
 
 export interface ProductVideo {
@@ -62,7 +63,7 @@ export interface ChildCategory {
  name: string;
  slug: string;
 }
-export type FilterType = "price" | "select"; 
+export type FilterType = "price" | "select";
 
 export interface CategoryAttributeFilter {
  id: number;
@@ -75,3 +76,4 @@ export interface FilterOption {
  id: number;
  name: string;
 }
+export type ProductSliderItem = Product | ProductRelatedProducts;

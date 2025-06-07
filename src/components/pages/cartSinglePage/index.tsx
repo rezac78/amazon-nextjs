@@ -20,8 +20,8 @@ export default function CartSinglePage() {
    fetchProductById(Number(id)).then((res) => {
     console.log(res);
     setProduct(res);
-    if (res && res.images && res.images.length > 0) {
-     setSelectedImage(res.images[0].url);
+    if (res && res.images && res.images.length > 0 && res.images[0].url) {
+     setSelectedImage(res.images[0].url ?? "");
     }
    });
   }
@@ -42,9 +42,9 @@ export default function CartSinglePage() {
         className={`relative w-14 h-14 cursor-pointer border-2 rounded-md overflow-hidden ${
          selectedImage === img.url ? "border-blue-500" : "border-gray-200"
         }`}
-        onMouseEnter={() => setSelectedImage(img.url)}
+        onMouseEnter={() => setSelectedImage(img.url ?? "")}
        >
-        <Image src={img.url} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
+        <Image src={img.url ?? ""} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
        </div>
       ))}
       {Array.isArray(product.videos) && product.videos.length > 0 && product.videos[0]?.url && (
