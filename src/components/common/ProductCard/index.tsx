@@ -2,26 +2,38 @@ import Link from "next/link";
 import {Card, CardAction, CardFooter, CardHeader, CardTitle} from "../../ui/card";
 import Image from "next/image";
 import {Button} from "../../ui/button";
-import {Product} from "@/utils/types";
+import {ProductSliderItem} from "@/utils/types";
 import {useStore} from "@/store/useCounter";
 import HeartIcon from "@/public/icons/Heart";
 import ShoppingBagIcon from "@/public/icons/ShoppingBag";
+import {removeProductFromWishlist} from "@/utils/fetchProduct";
+import {toast} from "sonner";
+import {useState} from "react";
 interface ProductCardProps {
- products: Product[];
+ products: ProductSliderItem[];
  homePage?: boolean;
+ Token?: string;
 }
-export default function ProductCard({products, homePage}: ProductCardProps) {
- const {favorites, cart, addToFavorites, removeFromFavorites, addToCart, removeFromCart} = useStore();
+export default function ProductCard({products, homePage, Token}: ProductCardProps) {
+ const {cart} = useStore();
+ const [wishlistProducts, setWishlistProducts] = useState(products);
+ const handleToggleWishlist = async (productId: number) => {
+  if (!Token) return toast.warning("برای مدیریت علاقه‌مندی‌ها وارد شوید");
+
+  const success = await removeProductFromWishlist(productId, Token);
+  if (success) {
+   setWishlistProducts((prev) => prev.filter((p) => p.id !== productId));
+  } else {
+   toast.error("خطا در حذف از لیست علاقه‌مندی‌ها");
+  }
+ };
  return (
   <div className="my-10">
    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2 md:px-6 ${homePage && ""}`}>
-    {products.map((card) => {
-     const isFavorite = favorites.some((item) => item.id === card.id);
+    {wishlistProducts.map((card) => {
      const isInCart = cart.some((item) => item.id === card.id);
-     const originalUrl = card?.images?.[0]?.large_image_url || "";
-     const imageUrl = originalUrl.replace("/cache/large/", "/storage/");
      return (
-      <Link href={`cart/${card.id}`} key={card.id} className="">
+      <Link href={`/${card.id}`} key={card.id} className="">
        <Card
         className={`group relative flex flex-col justify-between bg-background border border-border ${
          !homePage ? "min-h-[420px]" : "min-h-[250px]"
@@ -29,7 +41,11 @@ export default function ProductCard({products, homePage}: ProductCardProps) {
        >
         <CardHeader className="flex-1">
          <Image
-          src={imageUrl ?? "/default.avif"}
+          src={
+           card?.images?.[0]?.large_image_url
+            ? card.images[0].large_image_url.replace("/cache/large/", "/storage/")
+            : card?.images?.[0]?.url || "/default.avif"
+          }
           alt={card.name}
           width={!homePage ? 150 : 300}
           height={!homePage ? 150 : 300}
@@ -53,28 +69,16 @@ export default function ProductCard({products, homePage}: ProductCardProps) {
          <div
           onClick={(e) => {
            e.preventDefault();
-           if (isFavorite) {
-            removeFromFavorites(card.id);
-           } else {
-            addToFavorites(card);
-           }
+           handleToggleWishlist(card.id);
           }}
           className={`transition duration-300 ease-in-out transform hover:bg-secondary hover:text-white ${
-           isFavorite ? "text-red-500" : "text-black"
+           card.isInWishlist ? "text-red-500" : "text-black"
           }`}
          >
           <HeartIcon className="m-2 cursor-pointer" />
          </div>
          <hr />
          <div
-          onClick={(e) => {
-           e.preventDefault();
-           if (isInCart) {
-            removeFromCart(card.id);
-           } else {
-            addToCart(card);
-           }
-          }}
           className={`transition duration-300 transform hover:bg-secondary hover:text-white ${
            isInCart ? "text-green-500" : "text-black"
           }`}

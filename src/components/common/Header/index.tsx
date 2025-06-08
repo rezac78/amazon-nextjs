@@ -36,7 +36,7 @@ export default function Header({isLogin, categorie}: HeaderProps) {
  const changeLanguage = (lang: string) => {
   setLanguage(lang);
  };
- const {cart, favorites} = useStore();
+ const {cart} = useStore();
  const handleSearch = useMemo(() => {
   return () => {
    if (!searchText.trim()) return;
@@ -96,9 +96,6 @@ export default function Header({isLogin, categorie}: HeaderProps) {
      )}
      <Link href={"/favorite"} className="relative flex flex-col items-center text-xs">
       <span className="font-bold">موردعلاقه</span>
-      <span className="absolute -top-[12px] -right-[12px] bg-red-400 text-black text-xs w-4 h-4 rounded-full flex items-center justify-center">
-       {favorites.length}
-      </span>
      </Link>
      <Link href={"/cart"} className="relative flex flex-col items-center">
       <ShoppingCartIcon className="w-5 h-5" />

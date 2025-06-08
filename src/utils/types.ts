@@ -3,6 +3,8 @@ export interface Product {
  name: string;
  description: string;
  price: number;
+ isInWishlist: boolean;
+ shareURL: string;
  images: ProductImage[];
  videos?: ProductVideo[];
  relatedProducts?: ProductRelatedProducts[];
@@ -24,6 +26,7 @@ export interface ProductRelatedProducts {
  images: ProductImage[];
  price: string;
  name: string;
+ isInWishlist?: string;
 }
 export interface UpSellsProducts {
  id: number;

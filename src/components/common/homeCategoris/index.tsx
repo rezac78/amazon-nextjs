@@ -33,7 +33,7 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
             {category.children.map((child) => (
              <li key={child.id}>
               <NavigationMenuLink asChild>
-               <Link href={`/category/${child.slug}`} className="block hover:text-black hover:bg-transparent">
+               <Link href={`/main/${category.slug}?category_id=${category.id}`} className="block hover:text-black hover:bg-transparent">
                 {child.name}
                </Link>
               </NavigationMenuLink>
@@ -58,7 +58,8 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
      <h2 className="text-xl md:text-2xl font-semibold text-center mb-8">خرید بر اساس دسته‌بندی</h2>
      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-y-6 gap-x-2 justify-items-center">
       {Data.map((cat, index) => (
-       <div
+       <Link
+        href={`/main/${cat.slug}?category_id=${cat.id}`}
         key={index}
         className="flex flex-col items-center justify-center text-center space-y-2 group cursor-pointer"
        >
@@ -66,7 +67,7 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
          <Image src={cat.logoUrl ?? ""} alt={cat.name} width={80} height={80} className="object-contain" />
         </div>
         <p className="text-xs md:text-sm font-medium">{cat.name}</p>
-       </div>
+       </Link>
       ))}
      </div>
     </section>

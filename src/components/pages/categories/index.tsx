@@ -5,7 +5,6 @@ interface SearchProps {
  Data: CategoryAttributeFilter[];
 }
 
-export default function Search({Data}: SearchProps) {
-
+export default function Categories({Data}: SearchProps) {
  return <SearchAndFilter data={Data} />;
 }

@@ -7,19 +7,21 @@ import {useParams} from "next/navigation";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
-import {fetchProductById} from "@/utils/fetchProduct";
+import {fetchProductById, fetchProductLike, removeProductFromWishlist} from "@/utils/fetchProduct";
 import {Product} from "@/utils/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
-export default function CartSinglePage() {
+import ShareSection from "@/components/common/ShareSection";
+import {toast} from "sonner";
+export default function CartSinglePage({Token}: {Token: string}) {
  const {id} = useParams();
  const [selectedImage, setSelectedImage] = useState<string>("");
  const [product, setProduct] = useState<Product | null>(null);
-
+ const [wishlisted, setWishlisted] = useState(false);
  useEffect(() => {
   if (id) {
    fetchProductById(Number(id)).then((res) => {
-    console.log(res);
     setProduct(res);
+    if (res?.isInWishlist) setWishlisted(true);
     if (res && res.images && res.images.length > 0 && res.images[0].url) {
      setSelectedImage(res.images[0].url ?? "");
     }
@@ -30,12 +32,40 @@ export default function CartSinglePage() {
  const relatedProducts = product.relatedProducts ?? [];
  const upSells = product.upSells ?? [];
  const crossSells = product.crossSells ?? [];
+ const handleToggleWishlist = async () => {
+  if (!product) return;
+  if (wishlisted) {
+   setWishlisted(false);
+   if (!Token) {
+    toast.warning("برای حذف از لیست علاقه‌مندی‌ها وارد شوید");
+    return;
+   }
+   await removeProductFromWishlist(product.id, Token);
+  } else {
+   setWishlisted(true);
+   if (!Token) {
+    toast.warning("برای افزودن به لیست علاقه‌مندی‌ها وارد شوید");
+    return;
+   }
+   await fetchProductLike(product.id, Token);
+  }
+ };
  return (
   <>
    <BreadcrumbComponent Data={product} />
-   <div className="p-4 flex flex-col md:flex-row gap-6">
-    <div className="flex flex-row md:w-[30%] min-w-[30%] h-fit">
-     <div className="flex flex-col items-center w-[15%] gap-2 overflow-y-auto max-h-[400px] pr-1 z-10">
+   <div className="flex flex-col md:flex-row gap-1">
+    <div className="flex flex-col md:w-[35%] min-w-[35%] h-fit">
+     <div className="flex">
+      <ShareSection onLike={handleToggleWishlist} isLiked={wishlisted} shareURL={product.shareURL} />
+      <div className="relative w-[90%] h-[500px] aspect-[16/10] rounded-lg overflow-hidden">
+       {selectedImage?.endsWith(".mp4") || selectedImage?.endsWith(".webm") ? (
+        <video src={selectedImage} controls autoPlay className="w-full h-full object-contain" />
+       ) : (
+        <Image src={selectedImage} alt="Main Product" fill className="object-contain" />
+       )}
+      </div>
+     </div>
+     <div className="flex flex-row items-center w-full gap-2 overflow-y-auto max-h-[400px] pr-1 z-10">
       {product?.images?.map((img, index) => (
        <div
         key={index}
@@ -56,13 +86,6 @@ export default function CartSinglePage() {
        >
         <video src={product.videos[0].url} muted preload="metadata" className="object-cover w-full h-full" />
        </div>
-      )}
-     </div>
-     <div className="relative w-[85%] aspect-[16/10] rounded-lg overflow-hidden">
-      {selectedImage?.endsWith(".mp4") || selectedImage?.endsWith(".webm") ? (
-       <video src={selectedImage} controls autoPlay className="w-full h-full object-contain" />
-      ) : (
-       <Image src={selectedImage} alt="Main Product" fill className="object-contain" />
       )}
      </div>
     </div>
@@ -103,7 +126,7 @@ export default function CartSinglePage() {
       <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description}} />
      </div>
     </div>
-    <div className="flex flex-col md:w-[15%] min-w-[15%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">
+    <div className="flex flex-col md:w-[19%] min-w-[19%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">
      <h1 className="text-2xl md:text-3xl font-semibold">500 هزار تومان</h1>
      <span>در این قسمت توضیحات کوتاه قرار میگیره</span>
      <div className="flex flex-col gap-4 mt-4">

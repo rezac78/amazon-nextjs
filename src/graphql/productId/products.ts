@@ -4,6 +4,8 @@ export const GET_PRODUCT_QUERY = `
       id
       name
       description
+      isInWishlist
+      shareURL
       price
        relatedProducts {
       id
