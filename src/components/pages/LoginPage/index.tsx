@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { loginCustomer } from "@/utils/authUsers";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 export default function LoginPage() {
      const [form, setForm] = useState({
           email: "",
@@ -105,14 +106,14 @@ export default function LoginPage() {
 
                     <div className="mt-6 text-sm text-center text-gray-600">
                          مشتری جدید ؟
-                         <a href="/auth/signup" className="text-blue-600 hover:underline">
+                         <Link href="/auth/signup" className="text-blue-600 hover:underline">
                               حساب کاربری خود را ایجاد کنید
-                         </a>
+                         </Link>
                     </div>
                     <div className="mt-6 text-sm text-center text-gray-600">
-                         <a href="/auth/forgot-password" className="text-blue-600 hover:underline">
+                         <Link href="/auth/forgot-password" className="text-blue-600 hover:underline">
                               رمز عبور فراموش کردید؟
-                         </a>
+                         </Link>
                     </div>
                </div>
           </div>

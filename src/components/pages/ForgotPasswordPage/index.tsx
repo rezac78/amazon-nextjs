@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { forgotPassword } from "@/utils/authUsers";
+import Link from "next/link";
 export default function ForgotPasswordPage() {
      const [form, setForm] = useState({
           email: "",
@@ -76,9 +77,9 @@ export default function ForgotPasswordPage() {
                     </form>
                     <div className="mt-6 text-sm text-center text-gray-600">
                          بازگشت به صفحه ورود؟
-                         <a href="/auth/signup" className="text-blue-600 hover:underline">
+                         <Link href="/auth/signup" className="text-blue-600 hover:underline">
                               ورود
-                         </a>
+                         </Link>
                     </div>
                </div>
           </div>

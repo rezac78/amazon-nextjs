@@ -5,7 +5,7 @@ import {Card, CardHeader, CardTitle} from "@/components/ui/card";
 import Link from "next/link";
 import {buttonVariants} from "@/components/ui/button";
 import {cn} from "lib/utils";
-import { ProductSliderItem } from "@/utils/types";
+import {ProductSliderItem} from "@/utils/types";
 
 interface ProductCardProps {
  Data: ProductSliderItem[];
@@ -42,6 +42,7 @@ export default function ProductSlider({Data, title, link}: ProductCardProps) {
             height={150}
             sizes="(max-width: 768px) 100vw, 150px"
             className="object-contain w-[150px] h-[150px] mx-auto"
+            loading="lazy"
            />
 
            <CardTitle>{product.name}</CardTitle>

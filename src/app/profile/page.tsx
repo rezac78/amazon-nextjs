@@ -1,12 +1,11 @@
 import Profile from "@/components/pages/profile";
-import { cookies } from "next/headers";
+import {getAuthToken} from "@/utils/checkCookies";
 
 export default async function ProfilePage() {
-        const cookieStore = await cookies();
-        const Token = cookieStore.get("access_token")?.value;
-        return (
-                <div className="container mx-auto">
-                        <Profile Token={Token || ""} />
-                </div>
-        );
+ const Token = await getAuthToken();
+ return (
+  <div className="container mx-auto">
+   <Profile Token={Token || ""} />
+  </div>
+ );
 }

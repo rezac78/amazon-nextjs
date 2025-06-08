@@ -1,17 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
+import {NextRequest, NextResponse} from "next/server";
+import {getAuthToken} from "./utils/checkCookies";
+export async function middleware(request: NextRequest) {
+ const token = await getAuthToken();
+ const {pathname} = request.nextUrl;
+ if (token && ["/login", "/register", "/auth"].some((path) => pathname.startsWith(path))) {
+  return NextResponse.redirect(new URL("/profile", request.url));
+ }
+ if (!token && pathname.startsWith("/profile")) {
+  return NextResponse.redirect(new URL("/auth/signup", request.url));
+ }
 
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get("access_token")?.value;
-  const { pathname } = request.nextUrl;
-  if (
-    token &&
-    ["/login", "/register", "/auth"].some((path) => pathname.startsWith(path))
-  ) {
-    return NextResponse.redirect(new URL("/profile", request.url));
-  }
-  if (!token && pathname.startsWith("/profile")) {
-    return NextResponse.redirect(new URL("/auth/signup", request.url));
-  }
-
-  return NextResponse.next();
+ return NextResponse.next();
 }

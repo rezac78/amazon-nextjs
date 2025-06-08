@@ -1,11 +1,11 @@
 "use client";
 import dynamic from "next/dynamic";
 import {CategoryHome, Product} from "@/utils/types";
-import SwiperSkeleton from "@/components/common/SkeletonComponent/SwiperSkeleton";
 import HomeCategorisMainSkeleton from "@/components/common/SkeletonComponent/homeCategorisMain";
 import SkeletonProducts from "@/components/common/SkeletonComponent/SkeletonProducts";
 import React, {useRef, useState, useEffect} from "react";
 import {fetchProductAll} from "@/utils/fetchProduct";
+import SwiperSkeleton from "@/components/common/SkeletonComponent/SwiperSkeleton";
 const ProductSlider = dynamic(() => import("@/components/common/ProductSlider"), {
  ssr: false,
  loading: () => <SkeletonProducts count={8} />,
@@ -14,7 +14,7 @@ const HomeCategoris = dynamic(() => import("@/components/common/homeCategoris"),
  ssr: false,
  loading: () => <HomeCategorisMainSkeleton count={8} />,
 });
-const SwiperCommon = dynamic(() => import("./common/Swiper"), {
+const SwiperWrapper = dynamic(() => import("./common/SwiperWrapper"), {
  ssr: false,
  loading: () => <SwiperSkeleton />,
 });
@@ -105,7 +105,7 @@ export default function HomePage({NewProducts, categorie}: HomePageProps) {
 
  return (
   <div className="relative mt-6">
-   <SwiperCommon />
+   <SwiperWrapper />
    <HomeCategoris Data={categorie} useIn="HomeMain" />
    {/* <div className="border rounded-12 pt-4 border-border text-center my-10">
     <h2 className="font-bold text-3xl">محصولات جدید </h2>

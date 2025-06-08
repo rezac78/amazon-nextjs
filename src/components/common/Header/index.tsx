@@ -7,22 +7,16 @@ import {
  DropdownMenuSeparator,
  DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import Link from "next/link";
 import {Button} from "../../ui/button";
 import {useStore} from "@/store/useCounter";
 import MenuIcon from "@/public/icons/Menu";
 import SearchIcon from "@/public/icons/Search";
 import ShoppingCartIcon from "@/public/icons/ShoppingCart";
-import dynamic from "next/dynamic";
 import {CategoryHome} from "@/utils/types";
-import HomeCategorisSkeleton from "../SkeletonComponent/homeCategoris";
 import {useRouter} from "next/navigation";
-
-const HomeCategoris = dynamic(() => import("../homeCategoris"), {
- ssr: false,
- loading: () => <HomeCategorisSkeleton count={4} />,
-});
+import HomeCategorisWrapper from "../homeCategoris/HomeCategorisWrapper";
 
 const options = [
  {value: "fa", label: "Fa"},
@@ -43,10 +37,12 @@ export default function Header({isLogin, categorie}: HeaderProps) {
   setLanguage(lang);
  };
  const {cart, favorites} = useStore();
- const handleSearch = () => {
-  if (!searchText.trim()) return;
-  router.push(`/search?query=${encodeURIComponent(searchText)}&sort=price-desc&limit=12&mode=grid`);
- };
+ const handleSearch = useMemo(() => {
+  return () => {
+   if (!searchText.trim()) return;
+   router.push(`/search?query=${encodeURIComponent(searchText)}&sort=price-desc&limit=12&mode=grid`);
+  };
+ }, [searchText, router]);
  return (
   <header className="w-full bg-primary text-primary-foreground shadow-md">
    <div className="flex items-center justify-between px-4 py-2">
@@ -137,7 +133,7 @@ export default function Header({isLogin, categorie}: HeaderProps) {
      </div>
     </div>
    )}
-   <HomeCategoris Data={categorie} useIn="HomeHeader" />
+   <HomeCategorisWrapper Data={categorie} useIn="HomeHeader" />
   </header>
  );
 }
