@@ -4,15 +4,9 @@ import {
  REMOVE_ALL_COMPARE_MUTATION,
  REMOVE_FROM_COMPARE_MUTATION,
 } from "./../graphql/productLike/productLike";
-import {GET_PRODUCT_QUERY} from "../graphql/productId/products";
 import {PRODUCTS_QUERY} from "../graphql/queries/products";
 import {Product} from "./types";
 import {BASE_URL} from "./config";
-import {
- ADD_TO_WISHLIST_MUTATION,
- GET_WISHLIST_QUERY,
- REMOVE_FROM_WISHLIST_MUTATION,
-} from "@/graphql/productLike/productLike";
 import {toast} from "sonner";
 
 export async function fetchProducts({page, limit}: {page: number; limit: number}) {
@@ -46,22 +40,17 @@ export async function fetchProducts({page, limit}: {page: number; limit: number}
 }
 export async function fetchProductById(id: number): Promise<Product | null> {
  try {
-  const response = await fetch(BASE_URL, {
-   method: "POST",
+  const response = await fetch(process.env.BASE_URL_API + `products/${id}`, {
+   method: "GET",
    headers: {
     "Content-Type": "application/json",
-    // Authorization: `Bearer ${token}`,
    },
-   body: JSON.stringify({
-    query: GET_PRODUCT_QUERY,
-    variables: {id},
-   }),
   });
   if (!response.ok) {
    throw new Error(`HTTP error! Status: ${response.status}`);
   }
   const result = await response.json();
-  return result.data?.product ?? null;
+  return result.data ?? null;
  } catch (error) {
   console.error("Failed to fetch product:", error);
   return null;
@@ -82,7 +71,6 @@ export async function fetchProductAll(params: Record<string, string | number>): 
     Accept: "application/json",
    },
   });
-
   if (!response.ok) {
    throw new Error(`HTTP error! Status: ${response.status}`);
   }
@@ -96,18 +84,15 @@ export async function fetchProductAll(params: Record<string, string | number>): 
 }
 export async function fetchProductLike(productId: number, token: string): Promise<boolean> {
  try {
-  const response = await fetch(BASE_URL, {
+  const response = await fetch(process.env.BASE_URL_API + `customer/wishlist/${productId}`, {
    method: "POST",
    headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: `${token}`,
+    Authorization: `Bearer ${token}`, // اطمینان از "Bearer"
    },
    body: JSON.stringify({
-    query: ADD_TO_WISHLIST_MUTATION,
-    variables: {
-     productId: productId.toString(),
-    },
+    product_id: productId,
    }),
   });
 
@@ -116,60 +101,26 @@ export async function fetchProductLike(productId: number, token: string): Promis
   }
 
   const result = await response.json();
-  toast.success(result.data.addToWishlist.message);
+  toast.success(result.message || "محصول با موفقیت به لیست علاقه‌مندی‌ها اضافه شد");
   if (result.errors) {
    console.error("GraphQL errors:", result.errors);
    return false;
   }
 
-  return result.data?.addToWishlist?.success ?? false;
+  return result.success ?? true;
  } catch (error) {
   console.error("Failed to add product to wishlist:", error);
   return false;
  }
 }
-export async function removeProductFromWishlist(productId: number, token: string): Promise<boolean> {
- try {
-  const response = await fetch(BASE_URL, {
-   method: "POST",
-   headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    Authorization: `${token}`,
-   },
-   body: JSON.stringify({
-    query: REMOVE_FROM_WISHLIST_MUTATION,
-    variables: {
-     productId: productId.toString(),
-    },
-   }),
-  });
-
-  const result = await response.json();
-  toast.success(result.data.removeFromWishlist.message);
-
-  if (result.errors) {
-   console.error("GraphQL errors:", result.errors);
-   return false;
-  }
-
-  return result.data?.removeFromWishlist?.success ?? false;
- } catch (error) {
-  console.error("Failed to remove product from wishlist:", error);
-  return false;
- }
-}
 export async function fetchWishlist(token: string) {
  try {
-  const response = await fetch(BASE_URL, {
-   method: "POST",
+  const response = await fetch(`${process.env.BASE_URL_API}customer/wishlist`, {
+   method: "GET",
    headers: {
-    "Content-Type": "application/json",
-    Authorization: `${token}`,
+    Accept: "application/json",
+    Authorization: `Bearer ${token}`,
    },
-   body: JSON.stringify({
-    query: GET_WISHLIST_QUERY,
-   }),
   });
 
   const result = await response.json();
@@ -178,7 +129,7 @@ export async function fetchWishlist(token: string) {
    console.error("GraphQL Error:", result.errors);
    return [];
   }
-  const items = result.data?.wishlists?.data ?? [];
+  const items = result.data ?? [];
   return items.map((item: {product: unknown}) => item.product);
  } catch (error) {
   console.error("Failed to fetch wishlist:", error);

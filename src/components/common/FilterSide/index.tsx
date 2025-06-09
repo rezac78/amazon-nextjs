@@ -66,32 +66,26 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
       پاک کردن همه
      </Button>
     </div>
-
-    {data.map((filter) => {
-     if (filter.code === "price") {
-      return (
-       <div key={filter.id}>
-        <Slider
-         value={priceRange}
-         min={0}
-         max={999999999}
-         step={100000}
-         onValueChange={(val) => {
-          setPriceRange([val[0], val[1] ?? val[0]]);
-          updateFilter("price", `${val[0]},${val[1] ?? val[0]}`);
-         }}
-         className="mb-2"
-        />
-        <div className="flex justify-between">
-         <h3 className="font-semibold">{filter.name}</h3>
-         <p className="text-sm">
-          QAR {priceRange[0]} - QAR {priceRange[1]}
-         </p>
-        </div>
-       </div>
-      );
-     }
-
+    <div>
+     <Slider
+      value={priceRange}
+      min={0}
+      max={999999999}
+      step={100000}
+      onValueChange={(val) => {
+       setPriceRange([val[0], val[1] ?? val[0]]);
+       updateFilter("price", `${val[0]},${val[1] ?? val[0]}`);
+      }}
+      className="mb-2"
+     />
+     <div className="flex justify-between">
+      <h3 className="font-semibold">قیمت</h3>
+      <p className="text-sm">
+       QAR {priceRange[0]} - QAR {priceRange[1]}
+      </p>
+     </div>
+    </div>
+    {data?.map((filter) => {
      if (filter.type === "select") {
       return (
        <div key={filter.id}>
@@ -99,13 +93,13 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
         {filter.options.map((option, i) => (
          <div className="flex items-center gap-2 py-1" key={i}>
           <Checkbox
-           id={`${filter.code}-${option.id}`}
+           id={`${option.id}`}
            checked={searchParams.get(filter.code) === String(option.id)}
            onCheckedChange={(checked) => {
-            updateFilter(filter.code, checked ? String(option.id) : "");
+            updateFilter(filter?.code, checked ? String(option.id) : "");
            }}
           />
-          <label htmlFor={`${filter.code}-${option.id}`}>{option.name ?? option}</label>
+          <label htmlFor={`${option.id}`}>{option.admin_name ?? ""}</label>
          </div>
         ))}
        </div>

@@ -102,7 +102,6 @@ export default function HomePage({NewProducts, categorie}: HomePageProps) {
    }
   };
  }, [hasLoadedAll, isLoadingAll]);
-
  return (
   <div className="relative mt-6">
    <SwiperWrapper />

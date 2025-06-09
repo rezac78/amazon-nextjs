@@ -2,7 +2,7 @@ import Categories from "@/components/pages/categories";
 import {getCategoryAttributes} from "@/utils/fetchSearch";
 
 export default async function CategoriesPage() {
- const {data} = await getCategoryAttributes("0");
+ const {data} = await getCategoryAttributes();
 
  return (
   <div className="container mx-auto">

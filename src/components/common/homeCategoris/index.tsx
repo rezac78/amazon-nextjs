@@ -70,7 +70,7 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
         className="flex flex-col items-center justify-center text-center space-y-2 group cursor-pointer"
        >
         <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden bg-gray-100 shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
-         <Image src={cat.logoUrl ?? ""} alt={cat.name} width={80} height={80} className="object-contain" />
+         <Image src={cat?.logo_url ?? "/defult.avif"} alt={cat.name} width={80} height={80} className="object-contain" />
         </div>
         <p className="text-xs md:text-sm font-medium">{cat.name}</p>
        </Link>

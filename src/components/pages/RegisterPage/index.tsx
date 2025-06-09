@@ -57,7 +57,7 @@ export default function RegisterPage() {
     subscribedToNewsLetter: false,
     agreement: form.agreement,
    });
-   if (result?.success) {
+   if (result) {
     await fetch("/api/auth/set-token", {
      method: "POST",
      headers: {

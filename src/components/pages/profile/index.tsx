@@ -1,16 +1,16 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { logoutCustomer } from "@/utils/authUsers";
+import {useRouter} from "next/navigation";
+import {logoutCustomer} from "@/utils/authUsers";
 import {useState} from "react";
-import { toast } from "sonner";
+import {toast} from "sonner";
 // import {UserIcon, MapPin, Calendar, Download, Star, Heart, Trash2, Edit} from "lucide-react";
 
 interface ProfileProps {
-  Token: string;
+ Token: string;
 }
 
-export default function Profile({ Token }: ProfileProps) {
+export default function Profile({Token}: ProfileProps) {
  const [profile] = useState({
   firstName: "Reza",
   lastName: "adcdac",
@@ -20,24 +20,23 @@ export default function Profile({ Token }: ProfileProps) {
  });
  const router = useRouter();
  const handleLogout = async () => {
-        try {
-         const result = await logoutCustomer(Token);
-       
-         if (result.success) {
-          await fetch("/api/auth/remove-token", { method: "POST" });
-          toast.success(result.message || "خروج موفق بود.");
-          router.push("/auth/signin");
-         } else {
-          toast.error(result.message || "خروج با خطا مواجه شد.");
-         }
-        } catch (err: unknown) {
-                if (err instanceof Error) {
-                     toast.error(err.message || "خطا در خروج.");
-                } else {
-                     toast.error("خطای ناشناخته‌ای رخ داد.");
-                }
-        }
-       };
+  try {
+   const result = await logoutCustomer(Token);
+   if (result) {
+    await fetch("/api/auth/remove-token", {method: "POST"});
+    toast.success(result || "خروج موفق بود.");
+    router.push("/auth/signin");
+   } else {
+    toast.error(result || "خروج با خطا مواجه شد.");
+   }
+  } catch (err: unknown) {
+   if (err instanceof Error) {
+    toast.error(err.message || "خطا در خروج.");
+   } else {
+    toast.error("خطای ناشناخته‌ای رخ داد.");
+   }
+  }
+ };
  return (
   <div className="flex flex-col lg:flex-row gap-6 container mx-auto p-4">
    {/* Sidebar */}
@@ -75,8 +74,8 @@ export default function Profile({ Token }: ProfileProps) {
      </li>
      <li onClick={handleLogout} className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
       {/* <Heart size={18} /> */}
-     خروج
-           </li>
+      خروج
+     </li>
     </ul>
    </aside>
 
@@ -84,9 +83,7 @@ export default function Profile({ Token }: ProfileProps) {
    <section className="flex-1 bg-white shadow-md rounded-xl p-6">
     <div className="flex justify-between items-center mb-6">
      <h2 className="text-xl font-bold">پروفایل</h2>
-     <button className="px-4 py-1 rounded-md border hover:bg-gray-100">
-      ویرایش
-     </button>
+     <button className="px-4 py-1 rounded-md border hover:bg-gray-100">ویرایش</button>
     </div>
 
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-10 text-sm">

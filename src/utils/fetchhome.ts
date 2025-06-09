@@ -1,28 +1,21 @@
-import { GET_CATEGORIESHOME_QUERY } from "@/graphql/categoriesHome/categoriesHome";
-
-import { BASE_URL } from "./config";
-
 export async function categories() {
-  try {
-    const response = await fetch(BASE_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: GET_CATEGORIESHOME_QUERY,
-      }),
-    });
+ try {
+  const response = await fetch(process.env.BASE_URL_API + `categories`, {
+   method: "GET",
+   headers: {
+    "Content-Type": "application/json",
+   },
+  });
 
-    const resData = await response.json();
+  const resData = await response.json();
 
-    if (resData.errors) {
-      throw resData.errors[0];
-    }
-
-    return resData.data.homeCategories;
-  } catch (err) {
-    console.error("Gategories Error:", err);
-    throw err;
+  if (!response.ok) {
+    throw new Error(resData.message || "خطا در دریافت دسته‌بندی‌ها");
   }
+  
+  return resData.data || resData; // بسته به ساختار خروجی
+ } catch (err) {
+  console.error("Categories Error:", err);
+  throw err;
+ }
 }

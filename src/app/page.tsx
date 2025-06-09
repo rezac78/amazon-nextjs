@@ -11,7 +11,6 @@ export default async function Home() {
   sort: "name-asc",
   limit: 12,
  });
-
  return (
   <div className="container mx-auto">
    <HomePage isLogin={!!token} NewProducts={NewProducts} categorie={categorie} />

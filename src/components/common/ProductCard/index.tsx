@@ -6,7 +6,7 @@ import {ProductSliderItem} from "@/utils/types";
 import {useStore} from "@/store/useCounter";
 import HeartIcon from "@/public/icons/Heart";
 import ShoppingBagIcon from "@/public/icons/ShoppingBag";
-import {removeProductFromWishlist} from "@/utils/fetchProduct";
+import {fetchProductLike} from "@/utils/fetchProduct";
 import {toast} from "sonner";
 import {useState} from "react";
 interface ProductCardProps {
@@ -20,7 +20,7 @@ export default function ProductCard({products, homePage, Token}: ProductCardProp
  const handleToggleWishlist = async (productId: number) => {
   if (!Token) return toast.warning("برای مدیریت علاقه‌مندی‌ها وارد شوید");
 
-  const success = await removeProductFromWishlist(productId, Token);
+  const success = await fetchProductLike(productId, Token);
   if (success) {
    setWishlistProducts((prev) => prev.filter((p) => p.id !== productId));
   } else {

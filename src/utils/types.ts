@@ -53,7 +53,7 @@ export interface CategoryHome {
  name: string;
  slug: string;
  description: string;
- logoUrl: string | null;
+ logo_url: string | null;
  bannerUrl: string | null;
  position: number | null;
  metaTitle: string | null;
@@ -78,6 +78,6 @@ export interface CategoryAttributeFilter {
 }
 export interface FilterOption {
  id: number;
- name: string;
+ admin_name: string;
 }
 export type ProductSliderItem = Product | ProductRelatedProducts;

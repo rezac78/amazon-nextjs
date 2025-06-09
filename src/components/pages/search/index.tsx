@@ -7,5 +7,5 @@ interface SearchProps {
 
 export default function Search({Data}: SearchProps) {
 
- return <SearchAndFilter data={Data} />;
+ return <SearchAndFilter data={Data ?? []} />;
 }

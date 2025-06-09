@@ -7,7 +7,7 @@ import {useParams} from "next/navigation";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
-import {addToCompareProduct, fetchProductById, fetchProductLike, removeProductFromWishlist} from "@/utils/fetchProduct";
+import {addToCompareProduct, fetchProductById, fetchProductLike} from "@/utils/fetchProduct";
 import {Product} from "@/utils/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
 import ShareSection from "@/components/common/ShareSection";
@@ -40,7 +40,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
     toast.warning("برای حذف از لیست علاقه‌مندی‌ها وارد شوید");
     return;
    }
-   await removeProductFromWishlist(product.id, Token);
+   await fetchProductLike(product.id, Token);
   } else {
    setWishlisted(true);
    if (!Token) {
@@ -57,7 +57,6 @@ export default function CartSinglePage({Token}: {Token: string}) {
    toast.error("افزودن به لیست مقایسه انجام نشد");
   }
  };
-
  return (
   <>
    <BreadcrumbComponent Data={product} />

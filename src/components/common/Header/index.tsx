@@ -17,7 +17,7 @@ import ShoppingCartIcon from "@/public/icons/ShoppingCart";
 import {CategoryHome} from "@/utils/types";
 import {useRouter} from "next/navigation";
 import HomeCategorisWrapper from "../homeCategoris/HomeCategorisWrapper";
-import CompareIcon from "@/public/icons/Compare";
+// import CompareIcon from "@/public/icons/Compare";
 
 const options = [
  {value: "fa", label: "Fa"},
@@ -86,11 +86,11 @@ export default function Header({isLogin, categorie}: HeaderProps) {
 
     {/* Right Menu */}
     <div className="hidden md:flex items-center gap-6">
-     <Link href={"/compare"} className="relative flex flex-col items-center text-xs">
+     {/* <Link href={"/compare"} className="relative flex flex-col items-center text-xs">
       <span className="font-bold">
        <CompareIcon />
       </span>
-     </Link>
+     </Link> */}
      {isLogin ? (
       <Link href={"/profile"} className="text-xs">
        <span className="block">پروفایل</span>
