@@ -33,7 +33,10 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
             {category.children.map((child) => (
              <li key={child.id}>
               <NavigationMenuLink asChild>
-               <Link href={`/main/${category.slug}?category_id=${category.id}`} className="block hover:text-black hover:bg-transparent">
+               <Link
+                href={`/main/${category.slug}?category_id=${category.id}`}
+                className="block hover:text-black hover:bg-transparent"
+               >
                 {child.name}
                </Link>
               </NavigationMenuLink>
@@ -44,7 +47,10 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
          </>
         ) : (
          <NavigationMenuLink asChild>
-          <Link href={`/category/${category.slug}`} className="px-2 py-1 text-sm hover:underline hover:bg-transparent">
+          <Link
+           href={`/main/${category.slug}?category_id=${category.id}`}
+           className="px-2 py-1 text-sm hover:underline hover:bg-transparent"
+          >
            {category.name}
           </Link>
          </NavigationMenuLink>
