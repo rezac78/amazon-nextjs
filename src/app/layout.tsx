@@ -33,7 +33,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
     <link rel="preload" as="image" href="/pages/home/slide1.webp" />
    </head>
    <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-dvh`}>
-    <HeaderWrapper isLogin={!!token} categorie={categorie} />
+    <HeaderWrapper isLogin={!!token} categorie={categorie}  />
     <main className="flex flex-grow">
      <MountWrapper>{children}</MountWrapper>
     </main>

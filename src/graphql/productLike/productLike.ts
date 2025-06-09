@@ -30,5 +30,53 @@ export const GET_WISHLIST_QUERY = `
     }
   }
 }
-
+`;
+export const ADD_TO_COMPARE_MUTATION = `
+mutation AddToCompare($productId: ID!) {
+    addToCompare(productId: $productId) {
+      success
+      message
+    }
+  }
+`;
+export const LIST_COMPARE_QUERY = `
+  query GetCompareProducts($page: Int, $first: Int) {
+    compareProducts(page: $page, first: $first) {
+      data {
+        product {
+      id
+        name
+        description
+        price
+        weight
+        images {
+          id
+          url
+        }
+      }
+      }
+      paginatorInfo {
+        currentPage
+        lastPage
+        total
+        hasMorePages
+      }
+    }
+  }
+`;
+export const REMOVE_FROM_COMPARE_MUTATION = `
+  mutation RemoveProductFromCompare($productId: ID!) {
+    removeFromCompareProduct(productId: $productId) {
+      success
+      message
+    }
+  }
+`;
+export const REMOVE_ALL_COMPARE_MUTATION = `
+  mutation {
+    removeAllCompareProducts {
+      success
+      message
+    }
+  }
 `;

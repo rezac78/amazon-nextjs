@@ -4,6 +4,7 @@ export interface Product {
  description: string;
  price: number;
  isInWishlist: boolean;
+ weight?: number;
  shareURL: string;
  images: ProductImage[];
  videos?: ProductVideo[];

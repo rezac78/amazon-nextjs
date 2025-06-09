@@ -7,7 +7,7 @@ import {useParams} from "next/navigation";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
-import {fetchProductById, fetchProductLike, removeProductFromWishlist} from "@/utils/fetchProduct";
+import {addToCompareProduct, fetchProductById, fetchProductLike, removeProductFromWishlist} from "@/utils/fetchProduct";
 import {Product} from "@/utils/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
 import ShareSection from "@/components/common/ShareSection";
@@ -50,13 +50,26 @@ export default function CartSinglePage({Token}: {Token: string}) {
    await fetchProductLike(product.id, Token);
   }
  };
+ const handleAddToCompare = async () => {
+  if (!product) return;
+  const success = await addToCompareProduct(product.id, Token);
+  if (!success) {
+   toast.error("افزودن به لیست مقایسه انجام نشد");
+  }
+ };
+
  return (
   <>
    <BreadcrumbComponent Data={product} />
    <div className="flex flex-col md:flex-row gap-1">
     <div className="flex flex-col md:w-[35%] min-w-[35%] h-fit">
      <div className="flex">
-      <ShareSection onLike={handleToggleWishlist} isLiked={wishlisted} shareURL={product.shareURL} />
+      <ShareSection
+       onLike={handleToggleWishlist}
+       isLiked={wishlisted}
+       shareURL={product.shareURL}
+       AddToCompare={handleAddToCompare}
+      />
       <div className="relative w-[90%] h-[500px] aspect-[16/10] rounded-lg overflow-hidden">
        {selectedImage?.endsWith(".mp4") || selectedImage?.endsWith(".webm") ? (
         <video src={selectedImage} controls autoPlay className="w-full h-full object-contain" />

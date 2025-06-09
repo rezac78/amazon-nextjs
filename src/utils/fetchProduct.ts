@@ -1,3 +1,9 @@
+import {
+ ADD_TO_COMPARE_MUTATION,
+ LIST_COMPARE_QUERY,
+ REMOVE_ALL_COMPARE_MUTATION,
+ REMOVE_FROM_COMPARE_MUTATION,
+} from "./../graphql/productLike/productLike";
 import {GET_PRODUCT_QUERY} from "../graphql/productId/products";
 import {PRODUCTS_QUERY} from "../graphql/queries/products";
 import {Product} from "./types";
@@ -177,5 +183,158 @@ export async function fetchWishlist(token: string) {
  } catch (error) {
   console.error("Failed to fetch wishlist:", error);
   return [];
+ }
+}
+export async function addToCompareProduct(productId: number, token?: string): Promise<boolean> {
+ try {
+  const response = await fetch(BASE_URL, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    ...(token ? {Authorization: `${token}`} : {}),
+   },
+   body: JSON.stringify({
+    query: ADD_TO_COMPARE_MUTATION,
+    variables: {
+     productId: productId.toString(),
+    },
+   }),
+  });
+
+  const result = await response.json();
+
+  if (result.errors) {
+   toast.error(result.errors?.[0]?.message || "خطا در افزودن به لیست مقایسه");
+   console.error("GraphQL Error:", result.errors);
+   return false;
+  }
+
+  toast.success(result.data?.addToCompare?.message || "به لیست مقایسه افزوده شد");
+  return result.data?.addToCompare?.success ?? false;
+ } catch (error) {
+  toast.error("خطای اتصال به سرور");
+  console.error("Failed to add product to compare list:", error);
+  return false;
+ }
+}
+export async function fetchCompareProducts(token: string, page: number = 1, first: number = 10) {
+ try {
+  const response = await fetch(BASE_URL, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    ...(token ? {Authorization: `${token}`} : {}),
+   },
+   body: JSON.stringify({
+    query: LIST_COMPARE_QUERY,
+    variables: {
+     page,
+     first,
+    },
+   }),
+  });
+
+  const result = await response.json();
+
+  if (result.errors) {
+   console.error("GraphQL errors:", result.errors);
+   return {
+    data: [],
+    paginatorInfo: {
+     currentPage: 1,
+     lastPage: 1,
+     total: 0,
+     hasMorePages: false,
+    },
+   };
+  }
+
+  const rawData = result.data.compareProducts?.data ?? [];
+  const products = rawData
+   .map((item: {product: Product | null}) => item.product)
+   .filter((p: Product | null): p is Product => p !== null);
+
+  return products;
+ } catch (error) {
+  console.error("Error fetching compare products:", error);
+  return {
+   data: [],
+   paginatorInfo: {
+    currentPage: 1,
+    lastPage: 1,
+    total: 0,
+    hasMorePages: false,
+   },
+  };
+ }
+}
+export async function removeFromCompareProduct(productId: number, token?: string): Promise<boolean> {
+ try {
+  const response = await fetch(BASE_URL, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    ...(token ? {Authorization: `${token}`} : {}),
+   },
+   body: JSON.stringify({
+    query: REMOVE_FROM_COMPARE_MUTATION,
+    variables: {
+     productId: productId.toString(),
+    },
+   }),
+  });
+
+  const result = await response.json();
+
+  if (result.errors) {
+   console.error("GraphQL errors:", result.errors);
+   return false;
+  }
+
+  const status = result.data?.removeFromCompareProduct;
+  if (status?.success) {
+   toast.success(status.message || "محصول از مقایسه حذف شد");
+  } else {
+   toast.error(status?.message || "حذف از مقایسه موفق نبود");
+  }
+
+  return !!status?.success;
+ } catch (error) {
+  console.error("Error removing from compare list:", error);
+  return false;
+ }
+}
+
+export async function removeAllCompareProducts(token?: string): Promise<boolean> {
+ try {
+  const response = await fetch(BASE_URL, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    ...(token ? {Authorization: `${token}`} : {}),
+   },
+   body: JSON.stringify({
+    query: REMOVE_ALL_COMPARE_MUTATION,
+   }),
+  });
+
+  const result = await response.json();
+  const status = result.data?.removeAllCompareProducts;
+
+  if (result.errors || !status?.success) {
+   toast.error(status?.message || "حذف همه محصولات از مقایسه ناموفق بود");
+   return false;
+  }
+
+  toast.success(status.message || "همه محصولات از مقایسه حذف شدند");
+  return true;
+ } catch (error) {
+  console.error("Error removing all compare products:", error);
+  toast.error("خطا در حذف همه محصولات از مقایسه");
+  return false;
  }
 }

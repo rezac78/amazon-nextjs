@@ -7,10 +7,12 @@ export default function ShareSection({
  onLike,
  isLiked,
  shareURL,
+ AddToCompare,
 }: {
  onLike?: () => void;
  isLiked?: boolean;
  shareURL: string;
+ AddToCompare?: () => void;
 }) {
  const handleShare = async () => {
   try {
@@ -25,7 +27,7 @@ export default function ShareSection({
   <div className="flex flex-col gap-4 z-[999] mt-20 ml-2 cursor-pointer">
    <HeartIcon className={`hover:text-red-400 ${isLiked ? "text-red-500" : "text-gray-400"}`} onClick={onLike} />
    <ShareIcon onClick={handleShare} className="hover:text-blue-400" />
-   <CompareIcon className="hover:text-gray-400" />
+   <CompareIcon className="hover:text-gray-400" onClick={AddToCompare} />
   </div>
  );
 }
