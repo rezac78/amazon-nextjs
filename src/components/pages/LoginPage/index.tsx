@@ -4,7 +4,7 @@ import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {toast} from "sonner";
-import {loginCustomer} from "@/utils/authUsers";
+import {loginCustomer} from "@/utils/profile/proFileInfo/profile";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
 export default function LoginPage() {

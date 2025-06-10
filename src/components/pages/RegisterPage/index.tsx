@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Checkbox} from "@/components/ui/checkbox";
 import {toast} from "sonner";
-import {registerCustomer} from "@/utils/authUsers";
+import {registerCustomer} from "@/utils/profile/proFileInfo/profile";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
 export default function RegisterPage() {

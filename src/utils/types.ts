@@ -81,3 +81,16 @@ export interface FilterOption {
  admin_name: string;
 }
 export type ProductSliderItem = Product | ProductRelatedProducts;
+export interface CustomerInfo {
+ id: number;
+ first_name: string;
+ last_name: string;
+ email: string;
+ gender: string;
+ phone: string;
+ status: string;
+ subscribed_to_news_letter: string;
+ date_of_birth?: string;
+ image: string;
+ notes: string;
+}

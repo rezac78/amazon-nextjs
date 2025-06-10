@@ -1,13 +1,14 @@
-import ProfileInfo from "@/components/pages/profile/profileInfo";
+import Profile from "@/components/pages/profile";
+import ProfileAddress from "@/components/pages/profile/ProfileAddress";
 import {getAuthToken} from "@/utils/checkCookies";
 import {ProfileCustomer} from "@/utils/profile/proFileInfo/profile";
 
 export default async function ProfilePage() {
  const Token = await getAuthToken();
- const ProfileInfoData = await ProfileCustomer(Token ?? "");
+//  const ProfileInfo = await ProfileCustomer(Token ?? "");
  return (
   <div className="container mx-auto">
-   <ProfileInfo Data={ProfileInfoData} Token={Token} />
+   <ProfileAddress Token={Token || ""} />
   </div>
  );
 }
