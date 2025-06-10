@@ -7,7 +7,7 @@ export default async function ProfilePage() {
  const ProfileInfoData = await ProfileCustomer(Token ?? "");
  return (
   <div className="container mx-auto">
-   <ProfileInfo Data={ProfileInfoData} Token={Token} />
+   <ProfileInfo Data={ProfileInfoData} Token={Token ?? ""} />
   </div>
  );
 }

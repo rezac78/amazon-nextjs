@@ -13,7 +13,7 @@ export default async function Layout({children}: LayoutProps) {
  const ProfileInfo = await ProfileCustomer(Token ?? "");
  return (
   <div className="flex flex-col lg:flex-row gap-6 container mx-auto p-4">
-   <ProfileLayoutComponent Token={Token} ProfileInfoData={ProfileInfo} />
+   <ProfileLayoutComponent Token={Token ?? ""} ProfileInfoData={ProfileInfo} />
    <section className="flex-1 bg-white shadow-md rounded-xl p-6">{children}</section>
   </div>
  );

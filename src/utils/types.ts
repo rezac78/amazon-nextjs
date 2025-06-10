@@ -94,3 +94,21 @@ export interface CustomerInfo {
  image: string;
  notes: string;
 }
+export interface Address {
+ id: number;
+ first_name: string;
+ last_name: string;
+ company_name: string;
+ vat_id: string;
+ address1: string;
+ address2: string;
+ address: string;
+ country: string;
+ country_name: string;
+ state: string;
+ city: string;
+ postcode: number;
+ phone: string;
+ email: string;
+ is_default: string;
+}

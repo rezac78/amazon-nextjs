@@ -29,7 +29,19 @@ interface FormErrors {
 export default function ProfileInfo({Data, Token}: ProfileProps) {
  const [open, setOpen] = useState(false);
  const [errors, setErrors] = useState<FormErrors>({});
- const [formData, setFormData] = useState({
+ const [formData, setFormData] = useState<{
+  first_name: string;
+  last_name: string;
+  gender: string;
+  date_of_birth: string;
+  phone: string;
+  email: string;
+  current_password: string;
+  new_password: string;
+  new_password_confirmation: string;
+  subscribed_to_news_letter: boolean;
+  image: File | null;
+ }>({
   first_name: Data.first_name || "",
   last_name: Data.last_name || "",
   gender: Data.gender || "",
@@ -39,7 +51,7 @@ export default function ProfileInfo({Data, Token}: ProfileProps) {
   current_password: "",
   new_password: "",
   new_password_confirmation: "",
-  subscribed_to_news_letter: Data.subscribed_to_news_letter || false,
+  subscribed_to_news_letter: false,
   image: null,
  });
  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

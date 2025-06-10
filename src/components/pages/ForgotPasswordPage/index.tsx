@@ -4,8 +4,8 @@ import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {toast} from "sonner";
-import {forgotPassword} from "@/utils/profile/proFileInfo/profile";
 import Link from "next/link";
+import { forgotPassword } from "@/utils/authUsers";
 export default function ForgotPasswordPage() {
  const [form, setForm] = useState({
   email: "",
