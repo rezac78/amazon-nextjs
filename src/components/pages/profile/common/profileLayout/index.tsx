@@ -4,6 +4,7 @@ import CalendarIcon from "@/public/icons/Calendar";
 import HeartIcon from "@/public/icons/Heart";
 import LogOutIcon from "@/public/icons/LogOut";
 import UsersIcon from "@/public/icons/Users";
+import { useAuth } from "@/store/useAuth";
 import {logoutCustomer} from "@/utils/authUsers";
 import {CustomerInfo} from "@/utils/types";
 import Link from "next/link";
@@ -22,6 +23,7 @@ export default function ProfileLayoutComponent({ProfileInfoData, Token}: Profile
    if (result) {
     await fetch("/api/auth/remove-token", {method: "POST"});
     toast.success(result || "خروج موفق بود.");
+    useAuth.getState().setLoggedIn(false);
     router.push("/auth/signin");
    } else {
     toast.error(result || "خروج با خطا مواجه شد.");

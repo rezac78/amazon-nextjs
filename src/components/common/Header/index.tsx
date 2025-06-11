@@ -7,7 +7,7 @@ import {
  DropdownMenuSeparator,
  DropdownMenuTrigger,
 } from "../../ui/dropdown-menu";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import Link from "next/link";
 import {Button} from "../../ui/button";
 import {useStore} from "@/store/useCounter";
@@ -17,6 +17,7 @@ import ShoppingCartIcon from "@/public/icons/ShoppingCart";
 import {CategoryHome} from "@/utils/types";
 import {useRouter} from "next/navigation";
 import HomeCategorisWrapper from "../homeCategoris/HomeCategorisWrapper";
+import {useAuth} from "@/store/useAuth";
 // import CompareIcon from "@/public/icons/Compare";
 
 const options = [
@@ -25,16 +26,17 @@ const options = [
 ];
 
 interface HeaderProps {
- isLogin: boolean;
  categorie: CategoryHome[];
+ isLogin: boolean;
 }
 
-export default function Header({isLogin, categorie}: HeaderProps) {
+export default function Header({categorie, isLogin}: HeaderProps) {
  const [language, setLanguage] = useState("fa");
  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
  const [loading, setLoading] = useState(false);
  const [searchText, setSearchText] = useState("");
  const router = useRouter();
+ const {isLoggedIn} = useAuth();
  const changeLanguage = (lang: string) => {
   setLanguage(lang);
  };
@@ -47,6 +49,9 @@ export default function Header({isLogin, categorie}: HeaderProps) {
    setTimeout(() => setLoading(false), 1500);
   };
  }, [searchText, router]);
+ useEffect(() => {
+  useAuth.getState().setLoggedIn(isLogin);
+ }, [isLogin]);
  return (
   <header className="w-full bg-primary text-primary-foreground shadow-md">
    <div className="flex items-center justify-between px-4 py-2">
@@ -99,13 +104,13 @@ export default function Header({isLogin, categorie}: HeaderProps) {
        <CompareIcon />
       </span>
      </Link> */}
-     {isLogin ? (
-      <Link href={"/profile"} className="text-xs">
-       <span className="block">پروفایل</span>
+     {isLoggedIn ? (
+      <Link href="/profile" className="text-xs">
+       پروفایل
       </Link>
      ) : (
-      <Link href={"/auth/signin"} className="text-xs">
-       <span className="block">ورود/ثبت نام</span>
+      <Link href="/auth/signin" className="text-xs">
+       ورود/ثبت نام
       </Link>
      )}
      <Link href={"/favorite"} className="relative flex flex-col items-center text-xs">

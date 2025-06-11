@@ -6,7 +6,8 @@ import {Label} from "@/components/ui/label";
 import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
-import { loginCustomer } from "@/utils/authUsers";
+import {loginCustomer} from "@/utils/authUsers";
+import {useAuth} from "@/store/useAuth";
 export default function LoginPage() {
  const [form, setForm] = useState({
   email: "",
@@ -52,6 +53,7 @@ export default function LoginPage() {
      },
      body: JSON.stringify({token: result.token}),
     });
+    useAuth.getState().setLoggedIn(true);
     router.push("/");
     toast.success(result.message || "ورود موفق بود.");
    } else {

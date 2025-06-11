@@ -7,7 +7,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
-import { registerCustomer } from "@/utils/authUsers";
+import {registerCustomer} from "@/utils/authUsers";
 export default function RegisterPage() {
  const [form, setForm] = useState({
   firstName: "",
