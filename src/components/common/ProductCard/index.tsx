@@ -33,7 +33,14 @@ export default function ProductCard({products, homePage, Token}: ProductCardProp
     {wishlistProducts.map((card) => {
      const isInCart = cart.some((item) => item.id === card.id);
      return (
-      <Link href={`/${card.id}`} key={card.id} className="">
+      <Link
+       onClick={() => {
+        localStorage.setItem("lastProductId", String(card.id));
+       }}
+       href={`/${card.url_key}`}
+       key={card.id}
+       className=""
+      >
        <Card
         className={`group relative flex flex-col justify-between bg-background border border-border ${
          !homePage ? "min-h-[420px]" : "min-h-[250px]"

@@ -81,7 +81,6 @@ export async function DeletedProfileAddress(id: number, Token: string) {
   });
 
   const resData = await response.json();
-  console.log(resData);
   if (resData.errors) throw resData.errors[0];
   return resData.data;
  } catch (err) {

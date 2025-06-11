@@ -3,7 +3,6 @@ import Image from "next/image";
 import {Button} from "../../ui/button";
 import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from "../../ui/select";
 import React, {useEffect, useState} from "react";
-import {useParams} from "next/navigation";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
@@ -14,12 +13,12 @@ import ShareSection from "@/components/common/ShareSection";
 import {toast} from "sonner";
 import getColorCodeFromLabel from "@/utils/getColorCodeFromLabel";
 export default function CartSinglePage({Token}: {Token: string}) {
- const {id} = useParams();
  const [selectedImage, setSelectedImage] = useState<string>("");
  const [product, setProduct] = useState<Product | null>(null);
  const [wishlisted, setWishlisted] = useState(false);
  const [selectedColor, setSelectedColor] = useState<string>("");
  const [selectedSize, setSelectedSize] = useState<string>("");
+ const [productId, setProductId] = useState<number | null>(null);
  const [variantPrice, setVariantPrice] = useState<string | number>("");
  const colorOptions = product?.super_attributes?.find((attr) => attr.code === "color")?.options || [];
  const sizeOptions = product?.super_attributes?.find((attr) => attr.code === "size")?.options || [];
@@ -35,18 +34,20 @@ export default function CartSinglePage({Token}: {Token: string}) {
    }
   }
  }, [selectedColor, selectedSize, product?.variants]);
-
  useEffect(() => {
-  if (id) {
-   fetchProductById(Number(id)).then((res) => {
+  const storedId = localStorage.getItem("lastProductId");
+  if (storedId) {
+   setProductId(Number(storedId));
+  }
+ }, []);
+ useEffect(() => {
+  if (productId) {
+   fetchProductById(productId).then((res) => {
     setProduct(res);
-    if (res?.isInWishlist) setWishlisted(true);
-    if (res && res.images && res.images.length > 0 && res.images[0].url) {
-     setSelectedImage(res.images[0].url ?? "");
-    }
+    if (res?.images?.[0]?.url) setSelectedImage(res.images[0].url);
    });
   }
- }, [id]);
+ }, [productId]);
  if (!product) return <Loading />;
  const relatedProducts = product.relatedProducts ?? [];
  const upSells = product.upSells ?? [];
@@ -76,7 +77,6 @@ export default function CartSinglePage({Token}: {Token: string}) {
    toast.error("افزودن به لیست مقایسه انجام نشد");
   }
  };
- console.log(product);
  return (
   <>
    <BreadcrumbComponent Data={product} />
@@ -86,7 +86,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
       <ShareSection
        onLike={handleToggleWishlist}
        isLiked={wishlisted}
-       shareURL={product.shareURL}
+       shareURL={product.url_key ?? ""}
        AddToCompare={handleAddToCompare}
       />
       <div className="relative w-[90%] h-[500px] aspect-[16/10] rounded-lg overflow-hidden">

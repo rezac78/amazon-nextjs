@@ -5,7 +5,7 @@ export interface Product {
  price: number;
  isInWishlist: boolean;
  weight?: number;
- shareURL: string;
+ url_key?: string;
  super_attributes?: SuperAttribute[];
  variants?: ProductVariant[];
  images: ProductImage[];
@@ -52,6 +52,7 @@ export interface ProductRelatedProducts {
  price: string;
  name: string;
  isInWishlist?: string;
+ url_key?: string;
 }
 export interface UpSellsProducts {
  id: number;

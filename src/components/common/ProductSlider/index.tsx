@@ -40,7 +40,13 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
      <CarouselContent>
       {Data.map((product) => (
        <CarouselItem key={product.id}>
-        <Link href={`/${product.id}`} className="p-0">
+        <Link
+         onClick={() => {
+          localStorage.setItem("lastProductId", String(product.id));
+         }}
+         href={`/${product.url_key}`}
+         className="p-0"
+        >
          <Card className="group relative flex flex-col justify-between bg-background border border-border w-[250px] min-h-[350px]">
           <CardHeader className="flex-1">
            <div className="w-[150px] h-[150px] mx-auto relative">
