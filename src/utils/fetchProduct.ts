@@ -89,7 +89,7 @@ export async function fetchProductLike(productId: number, token: string): Promis
    headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: `Bearer ${token}`, // اطمینان از "Bearer"
+    Authorization: `Bearer ${token}`,
    },
    body: JSON.stringify({
     product_id: productId,
@@ -102,6 +102,34 @@ export async function fetchProductLike(productId: number, token: string): Promis
 
   const result = await response.json();
   toast.success(result.message || "محصول با موفقیت به لیست علاقه‌مندی‌ها اضافه شد");
+  if (result.errors) {
+   console.error("GraphQL errors:", result.errors);
+   return false;
+  }
+
+  return result.success ?? true;
+ } catch (error) {
+  console.error("Failed to add product to wishlist:", error);
+  return false;
+ }
+}
+export async function fetchProductLikeDelete(token: string): Promise<boolean> {
+ try {
+  const response = await fetch(process.env.BASE_URL_API + `customer/wishlist/all`, {
+   method: "DELETE",
+   headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    Authorization: `Bearer ${token}`,
+   },
+  });
+
+  if (!response.ok) {
+   throw new Error(`HTTP Error: ${response.status}`);
+  }
+
+  const result = await response.json();
+  toast.success(result.message || "محصول با موفقیت از لیست علاقه‌مندی‌ها حذف شد");
   if (result.errors) {
    console.error("GraphQL errors:", result.errors);
    return false;

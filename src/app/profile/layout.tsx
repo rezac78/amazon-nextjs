@@ -5,7 +5,6 @@ import {ProfileCustomer} from "@/utils/profile/proFileInfo/profile";
 
 interface LayoutProps {
  children: ReactNode;
- onLogout: () => void;
 }
 
 export default async function Layout({children}: LayoutProps) {

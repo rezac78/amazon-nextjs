@@ -1,5 +1,8 @@
 "use client";
 import AddressIcon from "@/public/icons/Address";
+import CalendarIcon from "@/public/icons/Calendar";
+import HeartIcon from "@/public/icons/Heart";
+import LogOutIcon from "@/public/icons/LogOut";
 import UsersIcon from "@/public/icons/Users";
 import {logoutCustomer} from "@/utils/authUsers";
 import {CustomerInfo} from "@/utils/types";
@@ -51,24 +54,20 @@ export default function ProfileLayoutComponent({ProfileInfoData, Token}: Profile
       <AddressIcon /> آدرس‌ها
      </li>
     </Link>
-    <li className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
-     {/* <Calendar size={18} /> */}
-     سفارش‌ها
-    </li>
-    <li className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
-     {/* <Download size={18} /> */}
-     محصولات قابل دانلود
-    </li>
-    <li className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
-     {/* <Star size={18} /> */}
-     نظرات
-    </li>
-    <li className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
-     {/* <Heart size={18} /> */}
-     لیست علاقه‌مندی‌ها
-    </li>
+    <Link href={"/profile/calendar"}>
+     <li className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
+      <CalendarIcon />
+      سفارش‌ها
+     </li>
+    </Link>
+    <Link href={"/profile/favorite"}>
+     <li className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
+      <HeartIcon />
+      لیست علاقه‌مندی‌ها
+     </li>
+    </Link>
     <li onClick={handleLogout} className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
-     {/* <Heart size={18} /> */}
+     <LogOutIcon />
      خروج
     </li>
    </ul>
