@@ -1,6 +1,6 @@
-import { Address } from "@/utils/types";
+import {BASE_URL_API} from "@/config";
+import {Address} from "@/utils/types";
 
-const BASE_URL_API = process.env.BASE_URL_API;
 export async function ProfileAddressFetch(Data: Address, Token: string) {
  const preparedData = {
   ...Data,

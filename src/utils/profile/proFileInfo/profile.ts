@@ -1,4 +1,5 @@
-const BASE_URL_API = process.env.BASE_URL_API;
+import {BASE_URL_API} from "@/config";
+
 export async function ProfileCustomer(Token: string) {
  try {
   const response = await fetch(BASE_URL_API + "v1/customer/get", {

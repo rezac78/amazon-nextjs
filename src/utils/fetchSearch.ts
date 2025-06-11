@@ -1,6 +1,8 @@
+import {BASE_URL_API} from "@/config";
+
 export async function getCategoryAttributes() {
  try {
-  const res = await fetch(`${process.env.BASE_URL_API}attributes?sort=id`, {
+  const res = await fetch(`${BASE_URL_API}attributes?sort=id`, {
    method: "GET",
    headers: {
     Accept: "application/json",
@@ -25,7 +27,7 @@ export async function getProducts(params: Record<string, string | number | boole
     }, {} as Record<string, string>)
   ).toString();
 
-  const res = await fetch(`${process.env.BASE_URL_API}v1/products?${queryString}`, {
+  const res = await fetch(`${BASE_URL_API}v1/products?${queryString}`, {
    method: "GET",
    headers: {
     Accept: "application/json",

@@ -1,6 +1,8 @@
+import {BASE_URL_API} from "@/config";
+
 export async function categories() {
  try {
-  const response = await fetch(process.env.BASE_URL_API + `categories`, {
+  const response = await fetch(BASE_URL_API + `categories`, {
    method: "GET",
    headers: {
     "Content-Type": "application/json",
@@ -10,9 +12,9 @@ export async function categories() {
   const resData = await response.json();
 
   if (!response.ok) {
-    throw new Error(resData.message || "خطا در دریافت دسته‌بندی‌ها");
+   throw new Error(resData.message || "خطا در دریافت دسته‌بندی‌ها");
   }
-  
+
   return resData.data || resData; // بسته به ساختار خروجی
  } catch (err) {
   console.error("Categories Error:", err);
