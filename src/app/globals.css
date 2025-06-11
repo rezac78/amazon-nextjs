@@ -1,8 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "swiper/css";
-@import "swiper/css/navigation";
-@import "swiper/css/pagination";
 :root {
  --background: #ffffff; /* White for a clean, bright store background */
  --foreground: #333333; /* Dark gray for readable text */

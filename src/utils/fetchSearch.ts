@@ -25,7 +25,7 @@ export async function getProducts(params: Record<string, string | number | boole
     }, {} as Record<string, string>)
   ).toString();
 
-  const res = await fetch(`${process.env.BASE_URL_API}products?${queryString}`, {
+  const res = await fetch(`${process.env.BASE_URL_API}v1/products?${queryString}`, {
    method: "GET",
    headers: {
     Accept: "application/json",

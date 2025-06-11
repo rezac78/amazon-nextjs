@@ -1,7 +1,7 @@
 const BASE_URL_API = process.env.BASE_URL_API;
 export async function ProfileCustomer(Token: string) {
  try {
-  const response = await fetch(BASE_URL_API + "customer/get", {
+  const response = await fetch(BASE_URL_API + "v1/customer/get", {
    method: "GET",
    headers: {
     "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export async function ProfileCustomer(Token: string) {
 }
 export async function ProfileCustomerUpdate(Data: FormData, Token: string) {
  try {
-  const response = await fetch(BASE_URL_API + "customer/profile", {
+  const response = await fetch(BASE_URL_API + "v1/customer/profile", {
    method: "POST",
    headers: {
     "Content-Type": "application/json",

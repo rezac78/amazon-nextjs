@@ -40,7 +40,7 @@ export async function fetchProducts({page, limit}: {page: number; limit: number}
 }
 export async function fetchProductById(id: number): Promise<Product | null> {
  try {
-  const response = await fetch(process.env.BASE_URL_API + `products/${id}`, {
+  const response = await fetch(process.env.BASE_URL_API + `v1/products/${id}`, {
    method: "GET",
    headers: {
     "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export async function fetchProductAll(params: Record<string, string | number>): 
    }, {} as Record<string, string>)
   ).toString();
 
-  const response = await fetch(process.env.BASE_URL_API + `products?${queryString}`, {
+  const response = await fetch(process.env.BASE_URL_API + `v1/products?${queryString}`, {
    method: "GET",
    headers: {
     Accept: "application/json",
@@ -84,7 +84,7 @@ export async function fetchProductAll(params: Record<string, string | number>): 
 }
 export async function fetchProductLike(productId: number, token: string): Promise<boolean> {
  try {
-  const response = await fetch(process.env.BASE_URL_API + `customer/wishlist/${productId}`, {
+  const response = await fetch(process.env.BASE_URL_API + `v1/customer/wishlist/${productId}`, {
    method: "POST",
    headers: {
     "Content-Type": "application/json",
@@ -115,7 +115,7 @@ export async function fetchProductLike(productId: number, token: string): Promis
 }
 export async function fetchProductLikeDelete(token: string): Promise<boolean> {
  try {
-  const response = await fetch(process.env.BASE_URL_API + `customer/wishlist/all`, {
+  const response = await fetch(process.env.BASE_URL_API + `v1/customer/wishlist/all`, {
    method: "DELETE",
    headers: {
     "Content-Type": "application/json",
@@ -143,7 +143,7 @@ export async function fetchProductLikeDelete(token: string): Promise<boolean> {
 }
 export async function fetchWishlist(token: string) {
  try {
-  const response = await fetch(`${process.env.BASE_URL_API}customer/wishlist`, {
+  const response = await fetch(`${process.env.BASE_URL_API}v1/customer/wishlist`, {
    method: "GET",
    headers: {
     Accept: "application/json",

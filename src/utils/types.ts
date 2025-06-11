@@ -50,6 +50,7 @@ export interface Category {
 }
 export interface CategoryHome {
  id: number;
+ parent_id: number | null; 
  name: string;
  slug: string;
  description: string;

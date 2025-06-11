@@ -26,7 +26,7 @@ export default function AddressList({
        <p className="font-bold text-base">
         {item.first_name} {item.last_name} - {item.company_name}
        </p>
-       <p>{item.address.join(" , ")}</p>
+       <p>{Array.isArray(item.address) ? item.address.join(" , ") : item.address}</p>
        <p>
         {item.city}, {item.state}, {item.country_name}, {item.postcode}
        </p>

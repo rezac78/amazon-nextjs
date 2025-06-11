@@ -8,7 +8,7 @@ export async function ProfileAddressFetch(Data: Address, Token: string) {
  };
 
  try {
-  const response = await fetch(`${BASE_URL_API}customer/addresses`, {
+  const response = await fetch(`${BASE_URL_API}v1/customer/addresses`, {
    method: "POST",
    headers: {
     accept: "application/json",
@@ -28,7 +28,7 @@ export async function ProfileAddressFetch(Data: Address, Token: string) {
 }
 export async function ProfileAddressAll(Token: string) {
  try {
-  const response = await fetch(BASE_URL_API + "customer/addresses", {
+  const response = await fetch(BASE_URL_API + "v1/customer/addresses", {
    method: "GET",
    headers: {
     "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export async function ProfileAddressAll(Token: string) {
 }
 export async function UpdateProfileAddress(id: number, Data: Address, Token: string) {
  try {
-  const response = await fetch(`${BASE_URL_API}customer/addresses/${id}`, {
+  const response = await fetch(`${BASE_URL_API}v1/customer/addresses/${id}`, {
    method: "PUT",
    headers: {
     "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export async function UpdateProfileAddress(id: number, Data: Address, Token: str
 }
 export async function DeletedProfileAddress(id: number, Token: string) {
  try {
-  const response = await fetch(`${BASE_URL_API}customer/addresses/${id}`, {
+  const response = await fetch(`${BASE_URL_API}v1/customer/addresses/${id}`, {
    method: "DELETE",
    headers: {
     "Content-Type": "application/json",

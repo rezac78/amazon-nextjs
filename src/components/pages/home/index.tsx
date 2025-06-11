@@ -14,7 +14,7 @@ const HomeCategoris = dynamic(() => import("@/components/common/homeCategoris"),
  ssr: false,
  loading: () => <HomeCategorisMainSkeleton count={8} />,
 });
-const SwiperWrapper = dynamic(() => import("./common/SwiperWrapper"), {
+const Slider = dynamic(() => import("@/components/common/Slider/Slider"), {
  ssr: false,
  loading: () => <SwiperSkeleton />,
 });
@@ -102,9 +102,13 @@ export default function HomePage({NewProducts, categorie}: HomePageProps) {
    }
   };
  }, [hasLoadedAll, isLoadingAll]);
+
+ const images = ["/pages/home/slide1.webp", "/pages/home/slide2.webp", "/pages/home/slide3.webp"];
  return (
   <div className="relative mt-6">
-   <SwiperWrapper />
+   <section className="w-full max-w-screen-xl mx-auto my-10 px-4">
+    <Slider images={images} interval={4000} />
+   </section>
    <HomeCategoris Data={categorie} useIn="HomeMain" />
    {/* <div className="border rounded-12 pt-4 border-border text-center my-10">
     <h2 className="font-bold text-3xl">محصولات جدید </h2>

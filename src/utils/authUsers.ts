@@ -8,7 +8,7 @@ export async function registerCustomer(input: {
  agreement?: boolean;
 }) {
  try {
-  const response = await fetch(process.env.BASE_URL_API + "customer/register", {
+  const response = await fetch(process.env.BASE_URL_API + "v1/customer/register", {
    method: "POST",
    headers: {
     "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export async function loginCustomer(input: {
  device_name?: string;
 }) {
  try {
-  const response = await fetch(process.env.BASE_URL_API + `customer/login`, {
+  const response = await fetch(process.env.BASE_URL_API + `v1/customer/login`, {
    method: "POST",
    headers: {
     "Content-Type": "application/json",
@@ -67,7 +67,7 @@ export async function loginCustomer(input: {
 // process.env.BASE_URL_API
 export async function forgotPassword(email: string) {
  try {
-  const response = await fetch(process.env.BASE_URL_API + "customer/forget-password", {
+  const response = await fetch(process.env.BASE_URL_API + "v1/customer/forget-password", {
    method: "POST",
    headers: {
     "Content-Type": "application/json",
@@ -89,7 +89,7 @@ export async function forgotPassword(email: string) {
 }
 export async function logoutCustomer(Token: string) {
  try {
-  const response = await fetch(process.env.BASE_URL_API + "customer/logout", {
+  const response = await fetch(process.env.BASE_URL_API + "v1/customer/logout", {
    method: "POST",
    headers: {
     "Content-Type": "application/json",

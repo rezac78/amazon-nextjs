@@ -66,8 +66,24 @@ export default function ProfileAddress({Token, Data}: {Token: string; Data: Addr
   e.preventDefault();
   try {
    setLoading(true);
-   const formData = {...dataForm, address: [dataForm.address], country_name: dataForm.country};
-
+   const formData: Address = {
+    id: 0, 
+    company_name: dataForm.company_name,
+    first_name: dataForm.first_name,
+    last_name: dataForm.last_name,
+    vat_id: dataForm.vat_id,
+    address: dataForm.address, 
+    address1: dataForm.address,
+    address2: "",
+    country: dataForm.country,
+    country_name: dataForm.country,
+    state: dataForm.state,
+    city: dataForm.city,
+    postcode: dataForm.postcode,
+    phone: dataForm.phone,
+    email: dataForm.email,
+    is_default: "0", 
+   };
    if (editMode && editId !== null) {
     const updatedAddress = await UpdateProfileAddress(editId, formData, Token);
     // Update the address in the state
@@ -95,7 +111,6 @@ export default function ProfileAddress({Token, Data}: {Token: string; Data: Addr
    setLoading(false);
   }
  };
-
  const handleDelete = async (id: number) => {
   try {
    await DeletedProfileAddress(id, Token);

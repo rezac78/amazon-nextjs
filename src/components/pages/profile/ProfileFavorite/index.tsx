@@ -2,7 +2,7 @@
 
 import {Button} from "@/components/ui/button";
 import TrashIcon from "@/public/icons/Trash";
-import {Product, ProductSliderItem} from "@/utils/types";
+import { ProductSliderItem} from "@/utils/types";
 import Image from "next/image";
 import {
  AlertDialog,
@@ -25,7 +25,7 @@ export default function ProfileFavorite({Data, Token}: ProductCardProps) {
  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
  const [deleteAllDialogOpen, setDeleteAllDialogOpen] = useState(false);
  const [favoriteToDelete, setFavoriteToDelete] = useState<number | null>(null);
- const [addresses, setAddresses] = useState<Product[]>(Data);
+ const [addresses, setAddresses] = useState<ProductSliderItem[]>(Data);
 
  const handleDelete = async (id: number) => {
   try {
