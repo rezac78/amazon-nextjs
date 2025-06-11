@@ -1,23 +1,23 @@
 "use client";
-import dynamic from "next/dynamic";
+
+import React, {useEffect, useState} from "react";
 import {CategoryHome, Product} from "@/utils/types";
+import {fetchProductAll} from "@/utils/fetchProduct";
+
+// UI Components
+import Slider from "@/components/common/Slider/Slider";
+import ProductSlider from "@/components/common/ProductSlider";
+import HomeCategoris from "@/components/common/homeCategoris";
+
+// Skeletons
+import SwiperSkeleton from "@/components/common/SkeletonComponent/SwiperSkeleton";
 import HomeCategorisMainSkeleton from "@/components/common/SkeletonComponent/homeCategorisMain";
 import SkeletonProducts from "@/components/common/SkeletonComponent/SkeletonProducts";
-import React, {useRef, useState, useEffect} from "react";
-import {fetchProductAll} from "@/utils/fetchProduct";
-import SwiperSkeleton from "@/components/common/SkeletonComponent/SwiperSkeleton";
-const ProductSlider = dynamic(() => import("@/components/common/ProductSlider"), {
- ssr: false,
- loading: () => <SkeletonProducts count={8} />,
-});
-const HomeCategoris = dynamic(() => import("@/components/common/homeCategoris"), {
- ssr: false,
- loading: () => <HomeCategorisMainSkeleton count={8} />,
-});
-const Slider = dynamic(() => import("@/components/common/Slider/Slider"), {
- ssr: false,
- loading: () => <SwiperSkeleton />,
-});
+
+// Hooks
+import useHydration from "@/utils/seHydration";
+import {useInView} from "react-intersection-observer";
+
 interface HomePageProps {
  NewProducts: Product[];
  categorie: CategoryHome[];
@@ -25,98 +25,53 @@ interface HomePageProps {
 }
 
 export default function HomePage({NewProducts, categorie}: HomePageProps) {
+ const isHydrated = useHydration();
+
+ // Featured products
  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
- const [isLoadingFeatured, setIsLoadingFeatured] = useState(false);
  const [hasLoadedFeatured, setHasLoadedFeatured] = useState(false);
- const featuredProductsRef = useRef<HTMLDivElement | null>(null);
+ const {ref: featuredRef, inView: featuredInView} = useInView({triggerOnce: true, threshold: 0.2});
 
+ // All products
  const [allProducts, setAllProducts] = useState<Product[]>([]);
- const [isLoadingAll, setIsLoadingAll] = useState(false);
  const [hasLoadedAll, setHasLoadedAll] = useState(false);
- const allProductsRef = useRef<HTMLDivElement | null>(null);
+ const {ref: allRef, inView: allInView} = useInView({triggerOnce: true, threshold: 0.2});
+
+ // Fetch featured products
  useEffect(() => {
-  const element = featuredProductsRef.current;
-
-  const observer = new IntersectionObserver(
-   (entries) => {
-    if (entries[0].isIntersecting && !hasLoadedFeatured && !isLoadingFeatured) {
-     setIsLoadingFeatured(true);
-     fetchProductAll({
-      featured: 1,
-      sort: "name-desc",
-      limit: 12,
-     })
-      .then((res) => {
-       setFeaturedProducts(res);
-       setHasLoadedFeatured(true);
-      })
-      .finally(() => {
-       setIsLoadingFeatured(false);
-      });
-    }
-   },
-   {threshold: 0.2}
-  );
-
-  if (element) {
-   observer.observe(element);
+  if (featuredInView && !hasLoadedFeatured) {
+   fetchProductAll({featured: 1, sort: "name-desc", limit: 12}).then((res) => {
+    setFeaturedProducts(res);
+    setHasLoadedFeatured(true);
+   });
   }
+ }, [featuredInView, hasLoadedFeatured]);
 
-  return () => {
-   if (element) {
-    observer.unobserve(element);
-   }
-  };
- }, [hasLoadedFeatured, isLoadingFeatured]);
-
+ // Fetch all products
  useEffect(() => {
-  const element = allProductsRef.current;
-
-  const observer = new IntersectionObserver(
-   (entries) => {
-    if (entries[0].isIntersecting && !hasLoadedAll && !isLoadingAll) {
-     setIsLoadingAll(true);
-     fetchProductAll({
-      sort: "name-desc",
-      limit: 12,
-     })
-      .then((res) => {
-       setAllProducts(res);
-       setHasLoadedAll(true);
-      })
-      .finally(() => {
-       setIsLoadingAll(false);
-      });
-    }
-   },
-   {threshold: 0.2}
-  );
-
-  if (element) {
-   observer.observe(element);
+  if (allInView && !hasLoadedAll) {
+   fetchProductAll({sort: "name-desc", limit: 12}).then((res) => {
+    setAllProducts(res);
+    setHasLoadedAll(true);
+   });
   }
+ }, [allInView, hasLoadedAll]);
 
-  return () => {
-   if (element) {
-    observer.unobserve(element);
-   }
-  };
- }, [hasLoadedAll, isLoadingAll]);
-
+ // Static banner images
  const images = ["/pages/home/slide1.webp", "/pages/home/slide2.webp", "/pages/home/slide3.webp"];
+
  return (
   <div className="relative mt-6">
    <section className="w-full max-w-screen-xl mx-auto my-10 px-4">
-    <Slider images={images} interval={4000} />
+    {isHydrated ? <Slider images={images} interval={4000} /> : <SwiperSkeleton />}
    </section>
-   <HomeCategoris Data={categorie} useIn="HomeMain" />
-   {/* <div className="border rounded-12 pt-4 border-border text-center my-10">
-    <h2 className="font-bold text-3xl">محصولات جدید </h2>
-    <ProductCard homePage={true} products={NewProducts} />
-   </div> */}
-   <ProductSlider title="محصولات جدید" Data={NewProducts} link="/search?new=1&sort=price-desc&limit=12&mode=grid" />
-   {/* <PaginationComponent setPage={setPage} page={page} pageInfo={localPageInfo} /> */}
-   <div ref={featuredProductsRef}>
+   {isHydrated ? <HomeCategoris Data={categorie} useIn="HomeMain" /> : <HomeCategorisMainSkeleton count={6} />}
+   {isHydrated ? (
+    <ProductSlider title="محصولات جدید" Data={NewProducts} link="/search?new=1&sort=price-desc&limit=12&mode=grid" />
+   ) : (
+    <SkeletonProducts count={8} />
+   )}
+   <div ref={featuredRef}>
     {hasLoadedFeatured ? (
      <ProductSlider
       title="محصولات ویژه"
@@ -127,8 +82,8 @@ export default function HomePage({NewProducts, categorie}: HomePageProps) {
      <SkeletonProducts count={8} />
     )}
    </div>
-   <div ref={allProductsRef}>
-    {hasLoadedFeatured ? (
+   <div ref={allRef}>
+    {hasLoadedAll ? (
      <ProductSlider title="همه محصولات" Data={allProducts} link="/search?sort=price-desc&limit=12&mode=grid" />
     ) : (
      <SkeletonProducts count={8} />

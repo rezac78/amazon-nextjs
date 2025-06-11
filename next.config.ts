@@ -8,6 +8,8 @@ const nextConfig = {
   BASE_URL_API: process.env.BASE_URL_API,
  },
  images: {
+  deviceSizes: [320, 420, 768, 1024, 1200],
+  imageSizes: [16, 32, 48, 64, 96],
   remotePatterns: [
    {
     protocol: "https",

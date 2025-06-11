@@ -10,13 +10,14 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import {buildCategoryTree} from "@/utils/buildCategoryTree";
+import React from "react";
 
 interface HomeCategoriesProps {
  Data: CategoryHome[];
  useIn: string;
 }
 
-export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
+export default React.memo(function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
  const treeData = buildCategoryTree(Data);
 
  return (
@@ -31,7 +32,7 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
           <NavigationMenuTrigger className="bg-transparent text-white  px-2 py-1">
            {category.name}
           </NavigationMenuTrigger>
-          <NavigationMenuContent   className="bg-white text-black shadow-md border rounded-md mt-1">
+          <NavigationMenuContent className="bg-white text-black shadow-md border rounded-md mt-1">
            <ul className="grid w-[120px] gap-2 p-2 text-sm text-right">
             {category.children.map((child) => (
              <li key={child.id}>
@@ -94,4 +95,4 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
    ) : null}
   </>
  );
-}
+});

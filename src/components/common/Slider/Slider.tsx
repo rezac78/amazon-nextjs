@@ -40,7 +40,7 @@ export default function Slider({images, interval = 5000}: SliderProps) {
       className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out transform 
        ${index === current ? "opacity-100 z-10" : "opacity-0 z-0"}`}
      >
-      <Slide imageUrl={img} />
+      <Slide imageUrl={img} index={index} />
      </div>
     ))}
    </div>
