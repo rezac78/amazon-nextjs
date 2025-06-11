@@ -67,12 +67,12 @@ export default function ProfileAddress({Token, Data}: {Token: string; Data: Addr
   try {
    setLoading(true);
    const formData: Address = {
-    id: 0, 
+    id: 0,
     company_name: dataForm.company_name,
     first_name: dataForm.first_name,
     last_name: dataForm.last_name,
     vat_id: dataForm.vat_id,
-    address: dataForm.address, 
+    address: dataForm.address,
     address1: dataForm.address,
     address2: "",
     country: dataForm.country,
@@ -82,7 +82,7 @@ export default function ProfileAddress({Token, Data}: {Token: string; Data: Addr
     postcode: dataForm.postcode,
     phone: dataForm.phone,
     email: dataForm.email,
-    is_default: "0", 
+    is_default: "0",
    };
    if (editMode && editId !== null) {
     const updatedAddress = await UpdateProfileAddress(editId, formData, Token);

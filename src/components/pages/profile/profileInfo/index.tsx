@@ -28,6 +28,7 @@ interface FormErrors {
 }
 export default function ProfileInfo({Data, Token}: ProfileProps) {
  const [open, setOpen] = useState(false);
+ const [loading, setLoading] = useState(false);
  const [errors, setErrors] = useState<FormErrors>({});
  const [formData, setFormData] = useState<{
   first_name: string;
@@ -64,6 +65,7 @@ export default function ProfileInfo({Data, Token}: ProfileProps) {
 
  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
+  setLoading(true);
   const newErrors = {};
   const payload = new FormData();
 
@@ -85,7 +87,6 @@ export default function ProfileInfo({Data, Token}: ProfileProps) {
   setErrors(newErrors);
 
   if (Object.keys(newErrors).length === 0) {
-   // ارسال فرم
    try {
     await ProfileCustomerUpdate(payload, Token);
     toast.success("پروفایل با موفقیت به‌روزرسانی شد");
@@ -94,6 +95,7 @@ export default function ProfileInfo({Data, Token}: ProfileProps) {
     console.error(err);
     toast.error("خطا در به‌روزرسانی پروفایل");
    }
+   setLoading(false);
   }
  };
  return (
@@ -280,7 +282,9 @@ export default function ProfileInfo({Data, Token}: ProfileProps) {
       </div>
 
       <div className="pt-4 flex justify-end">
-       <Button type="submit">ذخیره تغییرات</Button>
+       <Button loading={loading} type="submit">
+        ذخیره تغییرات
+       </Button>
       </div>
      </form>
     </DialogContent>
