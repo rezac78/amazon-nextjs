@@ -8,6 +8,7 @@ import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {loginCustomer} from "@/utils/authUsers";
 import {useAuth} from "@/store/useAuth";
+import {Button} from "@/components/ui/button";
 export default function LoginPage() {
  const [form, setForm] = useState({
   email: "",
@@ -16,6 +17,7 @@ export default function LoginPage() {
  const router = useRouter();
 
  const [errors, setErrors] = useState<Record<string, string>>({});
+ const [loading, setLoading] = useState(false);
 
  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const {name, value, type, checked} = e.target;
@@ -38,7 +40,7 @@ export default function LoginPage() {
   setErrors(validationErrors);
 
   if (Object.keys(validationErrors).length > 0) return;
-
+  setLoading(true);
   try {
    const result = await loginCustomer({
     email: form.email,
@@ -59,6 +61,7 @@ export default function LoginPage() {
    } else {
     toast.error(result?.message || "ورود ناموفق بود.");
    }
+   setLoading(false);
   } catch (err: unknown) {
    if (err instanceof Error) {
     toast.error(err.message || "خطا در ورود.");
@@ -102,9 +105,13 @@ export default function LoginPage() {
       {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
      </div>
      {errors.agreement && <p className="text-sm text-red-600 mt-1">{errors.agreement}</p>}
-     <button type="submit" className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">
+     <Button
+      loading={loading}
+      type="submit"
+      className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+     >
       ورود
-     </button>
+     </Button>
     </form>
 
     <div className="mt-6 text-sm text-center text-gray-600">

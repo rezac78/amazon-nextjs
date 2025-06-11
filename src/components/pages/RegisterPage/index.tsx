@@ -8,6 +8,7 @@ import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {registerCustomer} from "@/utils/authUsers";
+import {Button} from "@/components/ui/button";
 export default function RegisterPage() {
  const [form, setForm] = useState({
   firstName: "",
@@ -19,6 +20,8 @@ export default function RegisterPage() {
  });
 
  const [errors, setErrors] = useState<Record<string, string>>({});
+ const [loading, setLoading] = useState(false);
+
  const router = useRouter();
 
  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +49,7 @@ export default function RegisterPage() {
   setErrors(validationErrors);
 
   if (Object.keys(validationErrors).length > 0) return;
-
+  setLoading(true);
   try {
    const result = await registerCustomer({
     firstName: form.firstName,
@@ -70,6 +73,7 @@ export default function RegisterPage() {
    } else {
     toast.error(result?.message || "ثبت‌نام ناموفق بود.");
    }
+   setLoading(false);
   } catch (err: unknown) {
    if (err instanceof Error) {
     toast.error(err.message || "خطا در ثبت‌نام.");
@@ -171,9 +175,13 @@ export default function RegisterPage() {
       </Label>
      </div>
      {errors.agreement && <p className="text-sm text-red-600 mt-1">{errors.agreement}</p>}
-     <button type="submit" className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">
+     <Button
+      loading={loading}
+      type="submit"
+      className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
+     >
       ثبت‌نام
-     </button>
+     </Button>
     </form>
 
     <div className="mt-6 text-sm text-center text-gray-600">
