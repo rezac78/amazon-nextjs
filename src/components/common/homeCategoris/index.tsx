@@ -28,11 +28,11 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
        <NavigationMenuItem key={category.id}>
         {category.children && category.children.length > 0 ? (
          <>
-          <NavigationMenuTrigger className="bg-transparent text-white hover:underline px-2 py-1">
+          <NavigationMenuTrigger className="bg-transparent text-white  px-2 py-1">
            {category.name}
           </NavigationMenuTrigger>
-          <NavigationMenuContent dir="rtl" className="bg-white text-black shadow-md border rounded-md mt-1">
-           <ul className="grid w-[200px] gap-2 p-2 text-sm">
+          <NavigationMenuContent   className="bg-white text-black shadow-md border rounded-md mt-1">
+           <ul className="grid w-[120px] gap-2 p-2 text-sm text-right">
             {category.children.map((child) => (
              <li key={child.id}>
               <NavigationMenuLink asChild>
@@ -52,7 +52,7 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
          <NavigationMenuLink asChild>
           <Link
            href={`/main/${category.slug}?category_id=${category.id}`}
-           className="px-2 py-1 text-sm hover:underline hover:bg-transparent"
+           className="px-2 py-1 text-sm  hover:bg-transparent"
           >
            {category.name}
           </Link>
@@ -61,6 +61,11 @@ export default function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
        </NavigationMenuItem>
       ))}
      </NavigationMenuList>
+     <NavigationMenuLink asChild>
+      <Link href={`#`} className="px-2 py-1 text-sm  hover:bg-transparent">
+       : دسته بندی
+      </Link>
+     </NavigationMenuLink>
     </NavigationMenu>
    ) : useIn === "HomeMain" ? (
     <section className="py-10 px-4">
