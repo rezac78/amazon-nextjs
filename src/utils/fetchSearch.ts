@@ -14,13 +14,15 @@ export async function getCategoryAttributes() {
  }
 }
 
-export async function getProducts(params: Record<string, string | number>) {
+export async function getProducts(params: Record<string, string | number | boolean>) {
  try {
   const queryString = new URLSearchParams(
-   Object.entries(params).reduce((acc, [key, val]) => {
-    acc[key] = String(val);
-    return acc;
-   }, {} as Record<string, string>)
+   Object.entries(params)
+    .filter(([, val]) => val !== undefined && val !== null && val !== "")
+    .reduce((acc, [key, val]) => {
+     acc[key] = String(val);
+     return acc;
+    }, {} as Record<string, string>)
   ).toString();
 
   const res = await fetch(`${process.env.BASE_URL_API}products?${queryString}`, {
@@ -36,12 +38,9 @@ export async function getProducts(params: Record<string, string | number>) {
    throw new Error("Failed to fetch products");
   }
 
-  const data = await res.json();
-
-  // فقط لیست محصولات
-  return data?.data ?? [];
+  return await res.json(); // بدون data?.data چون ممکنه API ساختار متفاوتی بده
  } catch (err) {
   console.error("❌ getProducts error:", err);
-  return [];
+  return {data: []};
  }
 }

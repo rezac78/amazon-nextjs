@@ -39,7 +39,6 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
   currentParams.forEach((value, key) => {
    params[key] = value;
   });
-  params.currency = "OMR";
   getProducts(params)
    .then((res) => setProducts(res.data || []))
    .catch((err) => console.error("Product fetch error:", err));
@@ -49,6 +48,22 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
   const current = new URLSearchParams(searchParams.toString());
   if (value) current.set(key, value);
   else current.delete(key);
+  router.push(`?${current.toString()}`);
+ };
+ const toggleMultiFilter = (key: string, value: string) => {
+  const current = new URLSearchParams(searchParams.toString());
+  const existing = current.get(key)?.split(",").filter(Boolean) || [];
+
+  const newValues = existing.includes(value)
+   ? existing.filter((v) => v !== value) // حذف گزینه
+   : [...existing, value]; // افزودن گزینه
+
+  if (newValues.length > 0) {
+   current.set(key, newValues.join(","));
+  } else {
+   current.delete(key);
+  }
+
   router.push(`?${current.toString()}`);
  };
 
@@ -90,22 +105,22 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
       return (
        <div key={filter.id}>
         <h3 className="font-semibold">{filter.name}</h3>
-        {filter.options.map((option, i) => (
-         <div className="flex items-center gap-2 py-1" key={i}>
-          <Checkbox
-           id={`${option.id}`}
-           checked={searchParams.get(filter.code) === String(option.id)}
-           onCheckedChange={(checked) => {
-            updateFilter(filter?.code, checked ? String(option.id) : "");
-           }}
-          />
-          <label htmlFor={`${option.id}`}>{option.admin_name ?? ""}</label>
-         </div>
-        ))}
+        {filter.options.map((option, i) => {
+         const selectedValues = searchParams.get(filter.code)?.split(",") || [];
+         return (
+          <div className="flex items-center gap-2 py-1" key={i}>
+           <Checkbox
+            id={`${option.id}`}
+            checked={selectedValues.includes(String(option.id))}
+            onCheckedChange={() => toggleMultiFilter(filter.code, String(option.id))}
+           />
+           <label htmlFor={`${option.id}`}>{option.admin_name ?? ""}</label>
+          </div>
+         );
+        })}
        </div>
       );
      }
-
      return null;
     })}
    </aside>
