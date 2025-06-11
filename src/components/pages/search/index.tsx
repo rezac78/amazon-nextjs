@@ -6,6 +6,5 @@ interface SearchProps {
 }
 
 export default function Search({Data}: SearchProps) {
-
  return <SearchAndFilter data={Data ?? []} />;
 }

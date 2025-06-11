@@ -12,11 +12,30 @@ import {Product} from "@/utils/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
 import ShareSection from "@/components/common/ShareSection";
 import {toast} from "sonner";
+import getColorCodeFromLabel from "@/utils/getColorCodeFromLabel";
 export default function CartSinglePage({Token}: {Token: string}) {
  const {id} = useParams();
  const [selectedImage, setSelectedImage] = useState<string>("");
  const [product, setProduct] = useState<Product | null>(null);
  const [wishlisted, setWishlisted] = useState(false);
+ const [selectedColor, setSelectedColor] = useState<string>("");
+ const [selectedSize, setSelectedSize] = useState<string>("");
+ const [variantPrice, setVariantPrice] = useState<string | number>("");
+ const colorOptions = product?.super_attributes?.find((attr) => attr.code === "color")?.options || [];
+ const sizeOptions = product?.super_attributes?.find((attr) => attr.code === "size")?.options || [];
+ useEffect(() => {
+  if (selectedColor && selectedSize) {
+   const variant = product?.variants?.find((v) => {
+    return v?.attributes?.color === Number(selectedColor) && v?.attributes?.size === Number(selectedSize);
+   });
+   if (variant) {
+    setVariantPrice(variant.formatted_price || variant.price);
+   } else {
+    setVariantPrice("");
+   }
+  }
+ }, [selectedColor, selectedSize, product?.variants]);
+
  useEffect(() => {
   if (id) {
    fetchProductById(Number(id)).then((res) => {
@@ -57,6 +76,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
    toast.error("افزودن به لیست مقایسه انجام نشد");
   }
  };
+ console.log(product);
  return (
   <>
    <BreadcrumbComponent Data={product} />
@@ -104,9 +124,61 @@ export default function CartSinglePage({Token}: {Token: string}) {
     <div className="flex flex-grow flex-col gap-4">
      <h1 className="text-2xl md:text-3xl font-semibold">{product.name}</h1>
      <div className="text-yellow-500 font-medium text-sm">Amazon&apos;s Choice ✨</div>
-     <div className="text-3xl font-bold">{product.price} هزارتومان</div>
      <div className="text-sm text-gray-500">No Import Charges & $46.96 Shipping to Azerbaijan. Delivery June 17–27</div>
 
+     <div className="flex flex-col md:flex-row gap-4 items-center">
+      {/* انتخاب رنگ */}
+      {colorOptions.length > 0 && (
+       <div>
+        <p className="font-medium mb-2">
+         رنگ: {colorOptions.find((opt) => String(opt.id) === selectedColor)?.label || "انتخاب نشده"}
+        </p>
+        <div className="flex gap-3 flex-wrap">
+         {colorOptions.map((option) => (
+          <button
+           key={option.id}
+           onClick={() => setSelectedColor(String(option.id))}
+           className={`
+              w-6 h-6 rounded-full border-2 flex items-center justify-center
+              transition-all duration-200
+              ${selectedColor === String(option.id) ? "border-cyan-500" : "border-gray-300"}
+            `}
+           style={{
+            backgroundColor: getColorCodeFromLabel(option.label),
+           }}
+           title={option.label}
+          >
+           {selectedColor === String(option.id) && <span className="text-white text-xs">✓</span>}
+          </button>
+         ))}
+        </div>
+       </div>
+      )}
+      {sizeOptions.length > 0 && (
+       <div>
+        <label className="font-medium block mb-1">اندازه:</label>
+        <Select onValueChange={setSelectedSize}>
+         <SelectTrigger className="w-[150px]">
+          <SelectValue placeholder="انتخاب اندازه" />
+         </SelectTrigger>
+         <SelectContent>
+          <SelectGroup>
+           {sizeOptions.map((option) => (
+            <SelectItem key={option.id} value={String(option.id)}>
+             {option.label}
+            </SelectItem>
+           ))}
+          </SelectGroup>
+         </SelectContent>
+        </Select>
+       </div>
+      )}
+
+      {/* قیمت متغیر */}
+      {variantPrice && (
+       <div className="text-xl font-bold text-green-600 mt-4 md:mt-0">قیمت انتخاب‌شده: {variantPrice}</div>
+      )}
+     </div>
      <div className="grid grid-cols-2 gap-4 text-sm border-t border-b py-4">
       <div>
        <strong>Brand:</strong> HP
@@ -139,7 +211,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
      </div>
     </div>
     <div className="flex flex-col md:w-[19%] min-w-[19%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">
-     <h1 className="text-2xl md:text-3xl font-semibold">500 هزار تومان</h1>
+     <h1 className="text-2xl md:text-3xl font-semibold">{product?.price.toLocaleString("fa")} هزارتومان</h1>
      <span>در این قسمت توضیحات کوتاه قرار میگیره</span>
      <div className="flex flex-col gap-4 mt-4">
       <Select>

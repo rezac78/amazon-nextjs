@@ -2,7 +2,7 @@ import {BASE_URL_API} from "@/config";
 
 export async function getCategoryAttributes() {
  try {
-  const res = await fetch(`${BASE_URL_API}attributes?sort=id`, {
+  const res = await fetch(`${process.env.BASE_URL_API}v1/attributes`, {
    method: "GET",
    headers: {
     Accept: "application/json",

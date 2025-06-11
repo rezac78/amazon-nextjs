@@ -12,6 +12,7 @@ import {CategoryAttributeFilter} from "@/utils/types";
 import {getProducts} from "@/utils/fetchSearch";
 import {useSearchParams, useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
+import ProductCardSkeleton from "../SkeletonComponent/ProductCard";
 
 interface SearchAndFilterProps {
  data: CategoryAttributeFilter[];
@@ -24,6 +25,7 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
  const router = useRouter();
  const [viewMode] = useState(searchParams.get("mode") || "grid");
  const [products, setProducts] = useState([]);
+ const [loading, setLoading] = useState(false);
  const [priceRange, setPriceRange] = useState<[number, number]>(() => {
   const priceParam = searchParams.get("price");
   if (priceParam && priceParam.includes(",")) {
@@ -32,16 +34,17 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
   }
   return [0, 999999999];
  });
-
  useEffect(() => {
   const currentParams = new URLSearchParams(searchParams.toString());
   const params: Record<string, string> = {};
   currentParams.forEach((value, key) => {
    params[key] = value;
   });
+  setLoading(true);
   getProducts(params)
    .then((res) => setProducts(res.data || []))
-   .catch((err) => console.error("Product fetch error:", err));
+   .catch((err) => console.error("Product fetch error:", err))
+   .finally(() => setLoading(false));
  }, [searchParams]);
 
  const updateFilter = (key: string, value: string) => {
@@ -166,7 +169,11 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
      </div>
     </div>
 
-    {products.length > 0 ? (
+    {loading ? (
+     <div className="text-center py-20 text-gray-500 text-sm animate-pulse">
+      <ProductCardSkeleton count={8} />
+     </div>
+    ) : products.length > 0 ? (
      <ProductCard homePage={true} products={products} />
     ) : (
      <div className="text-center text-gray-500 py-20">

@@ -51,17 +51,17 @@ export default function Slider({images, interval = 5000}: SliderProps) {
      variant="ghost"
      size="icon"
      className="bg-white/70 hover:bg-white text-black rounded-full shadow"
-     onClick={prevSlide}
+     onClick={nextSlide}
     >
-     <ChevronLeftIcon className="w-6 h-6" />
+     <ChevronRightIcon className="w-6 h-6" />
     </Button>
     <Button
      variant="ghost"
      size="icon"
      className="bg-white/70 hover:bg-white text-black rounded-full shadow"
-     onClick={nextSlide}
+     onClick={prevSlide}
     >
-     <ChevronRightIcon className="w-6 h-6" />
+     <ChevronLeftIcon className="w-6 h-6" />
     </Button>
    </div>
 

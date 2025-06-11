@@ -32,6 +32,7 @@ interface HeaderProps {
 export default function Header({isLogin, categorie}: HeaderProps) {
  const [language, setLanguage] = useState("fa");
  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+ const [loading, setLoading] = useState(false);
  const [searchText, setSearchText] = useState("");
  const router = useRouter();
  const changeLanguage = (lang: string) => {
@@ -41,7 +42,9 @@ export default function Header({isLogin, categorie}: HeaderProps) {
  const handleSearch = useMemo(() => {
   return () => {
    if (!searchText.trim()) return;
+   setLoading(true);
    router.push(`/search?query=${encodeURIComponent(searchText)}&sort=price-desc&limit=12&mode=grid`);
+   setTimeout(() => setLoading(false), 1500);
   };
  }, [searchText, router]);
  return (
@@ -79,7 +82,12 @@ export default function Header({isLogin, categorie}: HeaderProps) {
       className="w-full px-4 py-2 ltr:rounded-l-md rtl:rounded-r-md bg-white text-black text-sm"
      />
 
-     <Button variant="secondary" className="rtl:rounded-r-none ltr:rounded-l-none px-4" onClick={handleSearch}>
+     <Button
+      loading={loading}
+      variant="secondary"
+      className="rtl:rounded-r-none ltr:rounded-l-none px-4"
+      onClick={handleSearch}
+     >
       <SearchIcon className="w-4 h-4" />
      </Button>
     </div>
@@ -124,8 +132,11 @@ export default function Header({isLogin, categorie}: HeaderProps) {
        type="text"
        placeholder="سرچ در محصولات ..."
        className="w-full px-4 py-2 ltr:rounded-l-md rtl:rounded-r-md bg-white text-black text-sm"
+       onClick={handleSearch}
+       onChange={(e) => setSearchText(e.target.value)}
+       onKeyDown={(e) => e.key === "Enter" && handleSearch()}
       />
-      <Button variant="secondary" className="rtl:rounded-r-none ltr:rounded-l-none px-4">
+      <Button loading={loading} variant="secondary" className="rtl:rounded-r-none ltr:rounded-l-none px-4">
        <SearchIcon className="w-4 h-4" />
       </Button>
      </div>

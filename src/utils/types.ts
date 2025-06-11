@@ -6,6 +6,8 @@ export interface Product {
  isInWishlist: boolean;
  weight?: number;
  shareURL: string;
+ super_attributes?: SuperAttribute[];
+ variants?: ProductVariant[];
  images: ProductImage[];
  videos?: ProductVideo[];
  relatedProducts?: ProductRelatedProducts[];
@@ -16,6 +18,28 @@ export interface Product {
 export interface ProductImage {
  url?: string;
  large_image_url?: string;
+}
+export interface ProductVariant {
+ id: number;
+ price: number | string;
+ formatted_price?: string;
+ attributes: {
+  [key: string]: number;
+ };
+}
+export interface SuperAttributeOption {
+ id: number;
+ admin_name: string;
+ label: string;
+ swatch_value?: string | null;
+}
+
+export interface SuperAttribute {
+ id: number;
+ name: string;
+ admin_name: string;
+ code: string;
+ options: SuperAttributeOption[];
 }
 
 export interface ProductVideo {
@@ -50,7 +74,7 @@ export interface Category {
 }
 export interface CategoryHome {
  id: number;
- parent_id: number | null; 
+ parent_id: number | null;
  name: string;
  slug: string;
  description: string;
