@@ -8,6 +8,7 @@ import {buttonVariants} from "@/components/ui/button";
 import {cn} from "lib/utils";
 import {ProductSliderItem} from "@/utils/types";
 import React from "react";
+import {CardContent} from "@/components/ui/card";
 const Carousel = dynamic(() => import("@/components/ui/carousel").then((mod) => mod.Carousel), {ssr: false});
 const CarouselContent = dynamic(() => import("@/components/ui/carousel").then((mod) => mod.CarouselContent), {
  ssr: false,
@@ -45,11 +46,11 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
           localStorage.setItem("lastProductId", String(product.id));
          }}
          href={`/${product.url_key}`}
-         className="p-0"
+         className=""
         >
-         <Card className="group relative flex flex-col justify-between bg-background border border-border w-[250px] min-h-[350px]">
-          <CardHeader className="flex-1">
-           <div className="w-[150px] h-[150px] mx-auto relative">
+         <Card className="group relative flex flex-col justify-between bg-background border border-border w-[220px] min-h-[300px] p-2 ">
+          <CardHeader className="flex-1 w-full">
+           <div className="w-[150px] h-[150px] relative">
             <Image
              src={
               product?.images?.[0]?.large_image_url
@@ -64,14 +65,18 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
              loading="lazy"
             />
            </div>
-           <CardTitle>{product.name}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-1 flex flex-col justify-between flex-1">
+           <CardTitle className="w-full line-clamp-2 leading-relaxed text-[16px] min-h-[48px]">
+            {product.name}
+           </CardTitle>
            {product.price && (
-            <div className="flex items-center justify-end gap-1 text-card-foreground">
-             <span className="text-18px font-bold">{product.price}</span>
-             <span className="text-14px font-semibold">هزارتومان</span>
+            <div className="flex items-center justify-end gap-1 text-card-foreground mt-auto">
+             <span className="text-[16px] font-bold">{product.price}</span>
+             <span className="text-[14px] font-semibold">هزارتومان</span>
             </div>
            )}
-          </CardHeader>
+          </CardContent>
          </Card>
         </Link>
        </CarouselItem>
