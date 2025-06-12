@@ -2,17 +2,20 @@ import CompareIcon from "@/public/icons/Compare";
 import HeartIcon from "@/public/icons/Heart";
 import ShareIcon from "@/public/icons/Share";
 import {toast} from "sonner";
+import LoadingInline from "../LoadingInline";
 
 export default function ShareSection({
  onLike,
  isLiked,
  shareURL,
  AddToCompare,
+ loadingLike,
 }: {
  onLike?: () => void;
  isLiked?: boolean;
  shareURL: string;
  AddToCompare?: () => void;
+ loadingLike?: boolean;
 }) {
  const handleShare = async () => {
   try {
@@ -25,7 +28,12 @@ export default function ShareSection({
  };
  return (
   <div className="flex flex-col gap-4 z-[999] mt-20 ml-2 cursor-pointer">
-   <HeartIcon className={`hover:text-red-400 ${isLiked ? "text-red-500" : "text-gray-400"}`} onClick={onLike} />
+   {loadingLike ? (
+    <LoadingInline className="h-6 w-6" />
+   ) : (
+    <HeartIcon className={`hover:text-red-400 ${isLiked ? "text-red-500" : "text-gray-400"}`} onClick={onLike} />
+   )}
+
    <ShareIcon onClick={handleShare} className="hover:text-blue-400" />
    <CompareIcon className="hover:text-gray-400" onClick={AddToCompare} />
   </div>

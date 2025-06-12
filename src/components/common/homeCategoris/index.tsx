@@ -23,51 +23,53 @@ export default React.memo(function HomeCategoris({Data, useIn}: HomeCategoriesPr
  return (
   <>
    {useIn === "HomeHeader" ? (
-    <NavigationMenu viewport={false} className="text-white bg-transparent px-2 py-1 relative z-20">
-     <NavigationMenuList className="gap-2">
-      {treeData.map((category) => (
-       <NavigationMenuItem key={category.id}>
-        {category.children && category.children.length > 0 ? (
-         <>
-          <NavigationMenuTrigger className="bg-transparent text-white  px-2 py-1">
-           {category.name}
-          </NavigationMenuTrigger>
-          <NavigationMenuContent className="bg-white text-black shadow-md border rounded-md mt-1">
-           <ul className="grid w-[120px] gap-2 p-2 text-sm text-right">
-            {category.children.map((child) => (
-             <li key={child.id}>
-              <NavigationMenuLink asChild>
-               <Link
-                href={`/main/${child.slug}?category_id=${child.id}`}
-                className="block hover:text-black hover:bg-transparent"
-               >
-                {child.name}
-               </Link>
-              </NavigationMenuLink>
-             </li>
-            ))}
-           </ul>
-          </NavigationMenuContent>
-         </>
-        ) : (
-         <NavigationMenuLink asChild>
-          <Link
-           href={`/main/${category.slug}?category_id=${category.id}`}
-           className="px-2 py-1 text-sm  hover:bg-transparent"
-          >
-           {category.name}
-          </Link>
-         </NavigationMenuLink>
-        )}
-       </NavigationMenuItem>
-      ))}
-     </NavigationMenuList>
-     <NavigationMenuLink asChild>
-      <Link href={`#`} className="px-2 py-1 text-sm  hover:bg-transparent">
-       : دسته بندی
-      </Link>
-     </NavigationMenuLink>
-    </NavigationMenu>
+    <div className="max-w-dvw overflow-x-auto">
+     <NavigationMenu viewport={false} className="text-white bg-transparent px-2 py-1 relative z-20 ">
+      <NavigationMenuList className="gap-2">
+       {treeData.map((category) => (
+        <NavigationMenuItem key={category.id}>
+         {category.children && category.children.length > 0 ? (
+          <>
+           <NavigationMenuTrigger className="bg-transparent text-white  px-2 py-1 whitespace-nowrap">
+            {category.name}
+           </NavigationMenuTrigger>
+           <NavigationMenuContent className="bg-white text-black shadow-md border rounded-md mt-1">
+            <ul className="grid w-[120px] gap-2 p-2 text-sm text-right">
+             {category.children.map((child) => (
+              <li key={child.id}>
+               <NavigationMenuLink asChild>
+                <Link
+                 href={`/main/${child.slug}?category_id=${child.id}`}
+                 className="block hover:text-black hover:bg-transparent"
+                >
+                 {child.name}
+                </Link>
+               </NavigationMenuLink>
+              </li>
+             ))}
+            </ul>
+           </NavigationMenuContent>
+          </>
+         ) : (
+          <NavigationMenuLink asChild>
+           <Link
+            href={`/main/${category.slug}?category_id=${category.id}`}
+            className="px-2 py-1 text-sm  hover:bg-transparent whitespace-nowrap"
+           >
+            {category.name}
+           </Link>
+          </NavigationMenuLink>
+         )}
+        </NavigationMenuItem>
+       ))}
+      </NavigationMenuList>
+      <NavigationMenuLink asChild>
+       <Link href={`#`} className="px-2 py-1 text-sm  hover:bg-transparent whitespace-nowrap">
+        : دسته بندی
+       </Link>
+      </NavigationMenuLink>
+     </NavigationMenu>
+    </div>
    ) : useIn === "HomeMain" ? (
     <section className="py-10 px-4">
      <h2 className="text-xl md:text-2xl font-semibold text-center mb-8">خرید بر اساس دسته‌بندی</h2>

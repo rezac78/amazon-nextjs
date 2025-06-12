@@ -159,7 +159,10 @@ export async function fetchWishlist(token: string) {
    return [];
   }
   const items = result.data ?? [];
-  return items.map((item: {product: unknown}) => item.product);
+  return items.map((item: {product: Product}) => ({
+   ...item.product,
+   isInWishlist: true,
+  }));
  } catch (error) {
   console.error("Failed to fetch wishlist:", error);
   return [];

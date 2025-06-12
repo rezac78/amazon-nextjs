@@ -8,23 +8,25 @@ import GridIcon from "@/public/icons/Grid";
 import ListIcon from "@/public/icons/List";
 import ShoppingBagIcon from "@/public/icons/shopping-bag";
 import ProductCard from "@/components/common/ProductCard";
-import {CategoryAttributeFilter} from "@/utils/types";
+import {CategoryAttributeFilter, ProductSliderItem} from "@/utils/types";
 import {getProducts} from "@/utils/fetchSearch";
 import {useSearchParams, useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import ProductCardSkeleton from "../SkeletonComponent/ProductCard";
+import {fetchWishlist} from "@/utils/fetchProduct";
 
 interface SearchAndFilterProps {
  data: CategoryAttributeFilter[];
  showHeading?: boolean;
+ Token: string;
 }
 
-export default function SearchAndFilter({data, showHeading = true}: SearchAndFilterProps) {
+export default function SearchAndFilter({data, Token, showHeading = true}: SearchAndFilterProps) {
  const searchParams = useSearchParams();
  const query = searchParams.get("query") || "";
  const router = useRouter();
  const [viewMode] = useState(searchParams.get("mode") || "grid");
- const [products, setProducts] = useState([]);
+ const [products, setProducts] = useState<ProductSliderItem[]>([]);
  const [loading, setLoading] = useState(false);
  const [priceRange, setPriceRange] = useState<[number, number]>(() => {
   const priceParam = searchParams.get("price");
@@ -40,13 +42,46 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
   currentParams.forEach((value, key) => {
    params[key] = value;
   });
-  setLoading(true);
-  getProducts(params)
-   .then((res) => setProducts(res.data || []))
-   .catch((err) => console.error("Product fetch error:", err))
-   .finally(() => setLoading(false));
- }, [searchParams]);
 
+  const fetchAndSetProducts = async () => {
+   try {
+    setLoading(true);
+    const res = await getProducts(params);
+    let fetchedProducts = res.data || [];
+
+    if (Token) {
+     const wishlistItems = await fetchWishlist(Token);
+     const wishlistIds = new Set(wishlistItems.map((item: {id: unknown}) => item.id));
+
+     fetchedProducts = fetchedProducts.map((product: {id: unknown}) => ({
+      ...product,
+      isInWishlist: wishlistIds.has(product.id),
+     }));
+    }
+
+    setProducts(fetchedProducts);
+   } catch (err) {
+    console.error("Product fetch error:", err);
+   } finally {
+    setLoading(false);
+   }
+  };
+
+  fetchAndSetProducts();
+ }, [Token, searchParams]);
+ const handleWishlistToggle = (productId: number, liked: boolean) => {
+  setProducts((prev) =>
+   prev.map((p) =>
+    p.id === productId
+     ? {
+        ...p,
+        isInWishlist: liked,
+        price: typeof p.price === "string" ? Number(p.price) : p.price,
+       }
+     : p
+   )
+  );
+ };
  const updateFilter = (key: string, value: string) => {
   const current = new URLSearchParams(searchParams.toString());
   if (value) current.set(key, value);
@@ -174,7 +209,7 @@ export default function SearchAndFilter({data, showHeading = true}: SearchAndFil
       <ProductCardSkeleton count={8} />
      </div>
     ) : products.length > 0 ? (
-     <ProductCard homePage={true} products={products} />
+     <ProductCard Token={Token} homePage={true} products={products} onWishlistToggle={handleWishlistToggle} />
     ) : (
      <div className="text-center text-gray-500 py-20">
       <ShoppingBagIcon className="w-32 h-32 mx-auto" />

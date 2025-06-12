@@ -3,7 +3,7 @@ import ProductCard from "@/components/common/ProductCard";
 import {Button} from "@/components/ui/button";
 import {ProductSliderItem} from "@/utils/types";
 interface ProductCardProps {
-    Data: ProductSliderItem[];
+ Data: ProductSliderItem[];
  Token: string;
 }
 export default function FavoritePage({Data, Token}: ProductCardProps) {

@@ -3,8 +3,9 @@ import SearchAndFilter from "@/components/common/FilterSide";
 
 interface SearchProps {
  Data: CategoryAttributeFilter[];
+ Token: string;
 }
 
-export default function Search({Data}: SearchProps) {
- return <SearchAndFilter data={Data ?? []} />;
+export default function Search({Data, Token}: SearchProps) {
+ return <SearchAndFilter Token={Token ?? ""} data={Data ?? []} />;
 }

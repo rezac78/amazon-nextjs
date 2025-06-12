@@ -6,7 +6,7 @@ import React, {useEffect, useState} from "react";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
-import {addToCompareProduct, fetchProductById, fetchProductLike} from "@/utils/fetchProduct";
+import {addToCompareProduct, fetchProductById, fetchProductLike, fetchWishlist} from "@/utils/fetchProduct";
 import {Product} from "@/utils/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
 import ShareSection from "@/components/common/ShareSection";
@@ -14,6 +14,7 @@ import {toast} from "sonner";
 import getColorCodeFromLabel from "@/utils/getColorCodeFromLabel";
 export default function CartSinglePage({Token}: {Token: string}) {
  const [selectedImage, setSelectedImage] = useState<string>("");
+ const [loadingLike, setLoadingLike] = useState<boolean>(false);
  const [product, setProduct] = useState<Product | null>(null);
  const [wishlisted, setWishlisted] = useState(false);
  const [selectedColor, setSelectedColor] = useState<string>("");
@@ -42,12 +43,29 @@ export default function CartSinglePage({Token}: {Token: string}) {
  }, []);
  useEffect(() => {
   if (productId) {
-   fetchProductById(productId).then((res) => {
-    setProduct(res);
-    if (res?.images?.[0]?.url) setSelectedImage(res.images[0].url);
-   });
+   (async () => {
+    const res = await fetchProductById(productId);
+    if (res) {
+     setProduct(res);
+     if (res?.images?.[0]?.url) setSelectedImage(res.images[0].url);
+
+     if (Token) {
+      try {
+       setLoadingLike(true);
+       const wishlistItems = await fetchWishlist(Token);
+       const liked = wishlistItems.some((item: {id: number}) => item.id === res.id);
+       setWishlisted(liked);
+      } catch (err) {
+       console.error("wishlist fetch error:", err);
+      } finally {
+       setLoadingLike(false);
+      }
+     }
+    }
+   })();
   }
- }, [productId]);
+ }, [Token, productId]);
+
  if (!product) return <Loading />;
  const relatedProducts = product.relatedProducts ?? [];
  const upSells = product.upSells ?? [];
@@ -88,6 +106,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
        isLiked={wishlisted}
        shareURL={product.url_key ?? ""}
        AddToCompare={handleAddToCompare}
+       loadingLike={loadingLike}
       />
       <div className="relative w-[90%] h-[500px] aspect-[16/10] rounded-lg overflow-hidden">
        {selectedImage?.endsWith(".mp4") || selectedImage?.endsWith(".webm") ? (
@@ -207,7 +226,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
      </div>
 
      <div className="space-y-2 text-sm text-gray-700">
-      <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description}} />
+      <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description ?? ""}} />
      </div>
     </div>
     <div className="flex flex-col md:w-[19%] min-w-[19%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">

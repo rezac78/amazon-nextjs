@@ -1,7 +1,10 @@
 import Search from "@/components/pages/search";
+import {getAuthToken} from "@/utils/checkCookies";
 import {getCategoryAttributes} from "@/utils/fetchSearch";
 
 export default async function SearchPage() {
  const {data} = await getCategoryAttributes();
- return <Search Data={data} />;
+ const Token = await getAuthToken();
+
+ return <Search Token={Token ?? ""} Data={data} />;
 }

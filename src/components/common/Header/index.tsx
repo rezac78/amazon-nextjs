@@ -16,7 +16,6 @@ import SearchIcon from "@/public/icons/Search";
 import ShoppingCartIcon from "@/public/icons/ShoppingCart";
 import {CategoryHome} from "@/utils/types";
 import {useRouter} from "next/navigation";
-import HomeCategorisWrapper from "../homeCategoris/HomeCategorisWrapper";
 import {useAuth} from "@/store/useAuth";
 // import CompareIcon from "@/public/icons/Compare";
 
@@ -30,7 +29,7 @@ interface HeaderProps {
  isLogin: boolean;
 }
 
-export default function Header({categorie, isLogin}: HeaderProps) {
+export default function Header({isLogin}: HeaderProps) {
  const [language, setLanguage] = useState("fa");
  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
  const [loading, setLoading] = useState(false);
@@ -152,7 +151,7 @@ export default function Header({categorie, isLogin}: HeaderProps) {
      </div>
     </div>
    )}
-   <HomeCategorisWrapper Data={categorie} useIn="HomeHeader" />
+   {/* <HomeCategorisWrapper Data={categorie} useIn="HomeHeader" /> */}
   </header>
  );
 }

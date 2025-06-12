@@ -43,11 +43,11 @@ export default function HeaderSkeleton() {
    </div>
 
    {/* Category Slider Skeleton */}
-   <div className="px-4 py-2 flex gap-2 overflow-x-auto">
+   {/* <div className="px-4 py-2 flex gap-2 overflow-x-auto">
     {Array.from({length: 4}).map((_, i) => (
      <Skeleton key={i} className="w-20 h-8" />
     ))}
-   </div>
+   </div> */}
   </header>
  );
 }
