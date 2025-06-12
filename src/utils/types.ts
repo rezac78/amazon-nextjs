@@ -79,7 +79,7 @@ export interface CategoryHome {
  name: string;
  slug: string;
  description: string;
- logo_url: string | null;
+ logo: ProductImage;
  bannerUrl: string | null;
  position: number | null;
  metaTitle: string | null;

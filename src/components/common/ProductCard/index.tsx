@@ -29,7 +29,7 @@ export default function ProductCard({products, homePage, Token}: ProductCardProp
  };
  return (
   <div className="my-10">
-   <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2 md:px-6 ${homePage && ""}`}>
+   <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 md:px-6 ${homePage && ""}`}>
     {wishlistProducts.map((card) => {
      const isInCart = cart.some((item) => item.id === card.id);
      return (
@@ -51,7 +51,7 @@ export default function ProductCard({products, homePage, Token}: ProductCardProp
           src={
            card?.images?.[0]?.large_image_url
             ? card.images[0].large_image_url.replace("/cache/large/", "/storage/")
-            : card?.images?.[0]?.url || "/default.avif"
+            : card?.images?.[0]?.url || "/defult.avif"
           }
           alt={card.name}
           width={!homePage ? 150 : 300}

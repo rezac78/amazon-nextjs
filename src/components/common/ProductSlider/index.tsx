@@ -38,8 +38,8 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
    <div className="px-12 md:px-6">
     <Carousel opts={{align: "start"}} className="w-full">
      <CarouselContent>
-      {Data.map((product) => (
-       <CarouselItem key={product.id}>
+      {[...Data, ...Data].map((product, i) => (
+       <CarouselItem key={i}>
         <Link
          onClick={() => {
           localStorage.setItem("lastProductId", String(product.id));
@@ -54,7 +54,7 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
              src={
               product?.images?.[0]?.large_image_url
                ? product.images[0].large_image_url.replace("/cache/large/", "/storage/")
-               : product?.images?.[0]?.url || "/default.avif"
+               : product?.images?.[0]?.url || "/defult.avif"
              }
              alt={product.name}
              width={150}

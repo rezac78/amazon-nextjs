@@ -80,7 +80,11 @@ export default React.memo(function HomeCategoris({Data, useIn}: HomeCategoriesPr
        >
         <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden bg-gray-100 shadow-md flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
          <Image
-          src={cat?.logo_url ?? "/defult.avif"}
+          src={
+           cat?.logo?.large_image_url
+            ? cat.logo.large_image_url.replace("/cache/large/", "/storage/")
+            : cat?.logo?.large_image_url || "/defult.avif"
+          }
           alt={cat.name}
           width={80}
           height={80}

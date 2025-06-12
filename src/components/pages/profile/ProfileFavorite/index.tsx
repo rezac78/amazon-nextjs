@@ -2,7 +2,7 @@
 
 import {Button} from "@/components/ui/button";
 import TrashIcon from "@/public/icons/Trash";
-import { ProductSliderItem} from "@/utils/types";
+import {ProductSliderItem} from "@/utils/types";
 import Image from "next/image";
 import {
  AlertDialog,
@@ -68,7 +68,7 @@ export default function ProfileFavorite({Data, Token}: ProductCardProps) {
        src={
         e?.images?.[0]?.large_image_url
          ? e.images[0].large_image_url.replace("/cache/large/", "/storage/")
-         : e?.images?.[0]?.url || "/default.avif"
+         : e?.images?.[0]?.url || "/defult.avif"
        }
        width={120}
        height={120}
