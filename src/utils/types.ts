@@ -2,7 +2,7 @@ export interface Product {
  id: number;
  name: string;
  description?: string;
- price: number;
+ formatted_price: number;
  isInWishlist: boolean;
  weight?: number;
  url_key?: string;

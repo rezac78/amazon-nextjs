@@ -230,7 +230,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
      </div>
     </div>
     <div className="flex flex-col md:w-[19%] min-w-[19%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">
-     <h1 className="text-2xl md:text-3xl font-semibold">{product?.price?.toLocaleString("fa")} هزارتومان</h1>
+     <h1 className="text-2xl md:text-3xl font-semibold">{product.formatted_price}</h1>
      <span>در این قسمت توضیحات کوتاه قرار میگیره</span>
      <div className="flex flex-col gap-4 mt-4">
       <Select>
