@@ -168,6 +168,28 @@ export async function fetchWishlist(token: string) {
   return [];
  }
 }
+export async function fetchProductsAdditional(token: string, id: number) {
+ try {
+  const response = await fetch(`${BASE_URL_API}v1/products/${id}/additional-information`, {
+   method: "GET",
+   headers: {
+    Accept: "application/json",
+    Authorization: `Bearer ${token}`,
+   },
+  });
+
+  const result = await response.json();
+
+  if (result.errors) {
+   console.error("GraphQL Error:", result.errors);
+   return [];
+  }
+  return result.data ?? [];
+ } catch (error) {
+  console.error("Failed to fetch wishlist:", error);
+  return [];
+ }
+}
 export async function addToCompareProduct(productId: number, token?: string): Promise<boolean> {
  try {
   const response = await fetch(BASE_URL, {

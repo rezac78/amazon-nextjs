@@ -6,16 +6,24 @@ import React, {useEffect, useState} from "react";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
-import {addToCompareProduct, fetchProductById, fetchProductLike, fetchWishlist} from "@/utils/fetchProduct";
-import {Product} from "@/utils/types";
+import {
+ addToCompareProduct,
+ fetchProductById,
+ fetchProductLike,
+ fetchProductsAdditional,
+ fetchWishlist,
+} from "@/utils/fetchProduct";
+import {Product, ProductAttribute} from "@/utils/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
 import ShareSection from "@/components/common/ShareSection";
 import {toast} from "sonner";
 import getColorCodeFromLabel from "@/utils/getColorCodeFromLabel";
+import Link from "next/link";
 export default function CartSinglePage({Token}: {Token: string}) {
  const [selectedImage, setSelectedImage] = useState<string>("");
  const [loadingLike, setLoadingLike] = useState<boolean>(false);
  const [product, setProduct] = useState<Product | null>(null);
+ const [productAtribute, setProductAtribute] = useState<ProductAttribute[] | null>(null);
  const [wishlisted, setWishlisted] = useState(false);
  const [selectedColor, setSelectedColor] = useState<string>("");
  const [selectedSize, setSelectedSize] = useState<string>("");
@@ -45,6 +53,8 @@ export default function CartSinglePage({Token}: {Token: string}) {
   if (productId) {
    (async () => {
     const res = await fetchProductById(productId);
+    const additionalProducts = await fetchProductsAdditional(Token ?? "", productId);
+
     if (res) {
      setProduct(res);
      if (res?.images?.[0]?.url) setSelectedImage(res.images[0].url);
@@ -62,10 +72,12 @@ export default function CartSinglePage({Token}: {Token: string}) {
       }
      }
     }
+    if (additionalProducts) {
+     setProductAtribute(additionalProducts);
+    }
    })();
   }
  }, [Token, productId]);
-
  if (!product) return <Loading />;
  const relatedProducts = product.relatedProducts ?? [];
  const upSells = product.upSells ?? [];
@@ -192,37 +204,34 @@ export default function CartSinglePage({Token}: {Token: string}) {
         </Select>
        </div>
       )}
-
-      {/* قیمت متغیر */}
       {variantPrice && (
        <div className="text-xl font-bold text-green-600 mt-4 md:mt-0">قیمت انتخاب‌شده: {variantPrice}</div>
       )}
      </div>
      <div className="grid grid-cols-2 gap-4 text-sm border-t border-b py-4">
-      <div>
-       <strong>Brand:</strong> HP
-      </div>
-      <div>
-       <strong>Model:</strong> 15-fa1082wm
-      </div>
-      <div>
-       <strong>Screen Size:</strong> 15.6&quot;
-      </div>
-      <div>
-       <strong>Color:</strong> Silver
-      </div>
-      <div>
-       <strong>CPU:</strong> Intel Core i5-13420H
-      </div>
-      <div>
-       <strong>GPU:</strong> NVIDIA RTX 4050 6GB
-      </div>
-      <div>
-       <strong>RAM:</strong> 16GB DDR4
-      </div>
-      <div>
-       <strong>Storage:</strong> 512GB SSD
-      </div>
+      {productAtribute?.map((attribute) => {
+       if (!attribute.value) return null;
+       const valueToDisplay = String(attribute.value);
+
+       const colorCode = attribute.code === "color" ? getColorCodeFromLabel(valueToDisplay) : "";
+
+       return (
+        <div key={attribute.id} className="flex items-center gap-2">
+         <strong>{attribute.label}:</strong> {attribute.code !== "color" && valueToDisplay}
+         {colorCode && (
+          <div
+           style={{
+            width: "16px",
+            height: "16px",
+            borderRadius: "50%",
+            backgroundColor: colorCode,
+           }}
+           title={attribute.label}
+          />
+         )}
+        </div>
+       );
+      })}
      </div>
 
      <div className="space-y-2 text-sm text-gray-700">
@@ -250,10 +259,60 @@ export default function CartSinglePage({Token}: {Token: string}) {
       </Select>
       <Button className="flex-1 flex items-center gap-2">افزودن به سبد</Button>
       <Button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black">خرید</Button>
-      <Button variant="outline" className="flex-1  hover:text-black">
+      <Button variant="outline" className="flex-1 hover:text-black">
        اضافه کردن به لیست
       </Button>
      </div>
+     {product.downloadable_links && product.downloadable_links.length > 0 && (
+      <div className="flex justify-center mt-4">
+       {product.downloadable_links.map((link) => {
+        return (
+         <div key={link.id}>
+          {/* اگر فایل باشد */}
+          {link.type === "file" && link.file_url && (
+           <div className="text-center bg-blue-700">
+            <Link
+             href={link.file_url}
+             download
+             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50"
+             title="دانلود فایل"
+            >
+             دانلود فایل
+            </Link>
+           </div>
+          )}
+
+          {/* اگر لینک URL باشد */}
+          {link.sample_type === "url" && link.sample_url && (
+           <div className="text-center mt-2">
+            <a
+             href={link.sample_url}
+             target="_blank"
+             rel="noopener noreferrer"
+             className="text-blue-600 hover:text-blue-800"
+             title="دنبال کردن لینک"
+            >
+             دنبال کردن لینک دانلود
+            </a>
+           </div>
+          )}
+          {link.sample_download_url && (
+           <div className="text-center mt-2">
+            <a href={link.sample_download_url} className="text-blue-600 hover:text-blue-800" title="دانلود نمونه">
+             {`دانلود ${link.title}`}
+            </a>
+           </div>
+          )}
+
+          {/* اگر هیچ کدام نباشند، هیچ چیزی نمایش داده نشود */}
+          {!link.file_url && !link.sample_url && !link.sample_download_url && (
+           <div className="text-center mt-2 text-red-500">هیچ فایلی برای دانلود موجود نیست</div>
+          )}
+         </div>
+        );
+       })}
+      </div>
+     )}
     </div>
    </div>
    {relatedProducts.length > 0 && <ProductSlider title="محصولات مرتبط" Data={relatedProducts} />}

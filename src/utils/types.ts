@@ -1,8 +1,10 @@
 export interface Product {
+ downloadable_links?: DownloadableLink[];
  id: number;
  name: string;
  description?: string;
- formatted_price: number;
+ price?: number;
+ formatted_price?: number;
  isInWishlist: boolean;
  weight?: number;
  url_key?: string;
@@ -137,4 +139,23 @@ export interface Address {
  phone: string;
  email: string;
  is_default: string;
+}
+export interface ProductAttribute {
+ id: number;
+ code: string;
+ label: string;
+ value: string | number;
+ admin_name: string;
+}
+export interface DownloadableLink {
+ id: number;
+ file_url?: string | null;
+ sample_url?: string | null;
+ sample_download_url?: string | null;
+ sample_type: "file" | "url"; // نوع فایل یا لینک
+ file_name?: string | null;
+ title: string;
+ type: "file" | "url"; // نوع لینک
+ created_at: string;
+ updated_at: string;
 }

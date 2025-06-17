@@ -76,7 +76,7 @@ export default function SearchAndFilter({data, Token, showHeading = true}: Searc
      ? {
         ...p,
         isInWishlist: liked,
-        price: typeof p.price === "string" ? Number(p.price) : p.price,
+        price: typeof p.price === "string" ? Number(p.price) : p.price, // اطمینان از تبدیل به عدد
        }
      : p
    )
