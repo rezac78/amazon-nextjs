@@ -1,7 +1,7 @@
 "use client";
 import ProductCard from "@/components/common/ProductCard";
 import {Button} from "@/components/ui/button";
-import {ProductSliderItem} from "@/utils/types";
+import {ProductSliderItem} from "@/utils/types/types";
 interface ProductCardProps {
  Data: ProductSliderItem[];
  Token: string;

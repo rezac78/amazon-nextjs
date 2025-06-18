@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {Product} from "@/utils/types";
+import {Product} from "@/utils/types/types";
 
 interface StoreState {
  favorites: Product[];

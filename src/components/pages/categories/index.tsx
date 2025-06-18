@@ -1,4 +1,4 @@
-import {CategoryAttributeFilter} from "@/utils/types";
+import {CategoryAttributeFilter} from "@/utils/types/types";
 import SearchAndFilter from "@/components/common/FilterSide";
 
 interface SearchProps {

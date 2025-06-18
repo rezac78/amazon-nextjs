@@ -1,4 +1,4 @@
-import {CustomerInfo} from "@/utils/types";
+import {CustomerInfo} from "@/utils/types/types";
 import ProfileLayoutComponent from "./common/profileLayout";
 interface ProfileProps {
  Token: string;

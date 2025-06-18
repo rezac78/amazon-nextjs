@@ -8,7 +8,7 @@ import GridIcon from "@/public/icons/Grid";
 import ListIcon from "@/public/icons/List";
 import ShoppingBagIcon from "@/public/icons/shopping-bag";
 import ProductCard from "@/components/common/ProductCard";
-import {CategoryAttributeFilter, ProductSliderItem} from "@/utils/types";
+import {CategoryAttributeFilter, ProductSliderItem} from "@/utils/types/types";
 import {getProducts} from "@/utils/fetchSearch";
 import {useSearchParams, useRouter} from "next/navigation";
 import {useEffect, useState} from "react";

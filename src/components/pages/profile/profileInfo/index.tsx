@@ -12,7 +12,7 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import Image from "next/image";
 import {ProfileCustomerUpdate} from "@/utils/profile/proFileInfo/profile";
 import {toast} from "sonner";
-import {CustomerInfo} from "@/utils/types";
+import {CustomerInfo} from "@/utils/types/types";
 interface ProfileProps {
  Token: string;
  Data: CustomerInfo;

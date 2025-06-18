@@ -1,12 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import {CategoryHome} from "@/utils/types";
+import {CategoryHome} from "@/utils/types/types";
 import HeaderSkeleton from "./SkeletonComponent/HeaderSkeleton";
 
 const Header = dynamic(() => import("../common/Header"), {
  ssr: false,
- loading: () => <HeaderSkeleton/>,
+ loading: () => <HeaderSkeleton />,
 });
 
 export default function HeaderWrapper({isLogin, categorie}: {isLogin: boolean; categorie: CategoryHome[]}) {

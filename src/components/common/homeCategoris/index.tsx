@@ -1,4 +1,4 @@
-import {CategoryHome} from "@/utils/types";
+import {CategoryHome} from "@/utils/types/types";
 import {
  NavigationMenu,
  NavigationMenuContent,

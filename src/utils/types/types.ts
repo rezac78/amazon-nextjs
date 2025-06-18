@@ -148,6 +148,8 @@ export interface ProductAttribute {
  admin_name: string;
 }
 export interface DownloadableLink {
+ formatted_price?: number;
+ price?: number;
  id: number;
  file_url?: string | null;
  sample_url?: string | null;

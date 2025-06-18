@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {Card, CardAction, CardContent, CardHeader, CardTitle} from "../../ui/card";
 import Image from "next/image";
-import {ProductSliderItem} from "@/utils/types";
 import {useStore} from "@/store/useCounter";
 import HeartIcon from "@/public/icons/Heart";
 import ShoppingBagIcon from "@/public/icons/ShoppingBag";
@@ -9,6 +8,7 @@ import {fetchProductLike} from "@/utils/fetchProduct";
 import {toast} from "sonner";
 import {useState} from "react";
 import {usePathname} from "next/navigation";
+import { ProductSliderItem } from "@/utils/types/types";
 
 interface ProductCardProps {
  products: ProductSliderItem[];

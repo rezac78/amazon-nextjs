@@ -7,7 +7,7 @@ import {
  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import React from "react";
-import {Product} from "@/utils/types";
+import {Product} from "@/utils/types/types";
 interface BreadcrumbComponentProps {
  Data: Product;
 }

@@ -6,7 +6,7 @@ const CardHeader = dynamic(() => import("@/components/ui/card").then((mod) => mo
 const CardTitle = dynamic(() => import("@/components/ui/card").then((mod) => mod.CardTitle), {ssr: false});
 import {buttonVariants} from "@/components/ui/button";
 import {cn} from "lib/utils";
-import {ProductSliderItem} from "@/utils/types";
+import {ProductSliderItem} from "@/utils/types/types";
 import React from "react";
 import {CardContent} from "@/components/ui/card";
 const Carousel = dynamic(() => import("@/components/ui/carousel").then((mod) => mod.Carousel), {ssr: false});

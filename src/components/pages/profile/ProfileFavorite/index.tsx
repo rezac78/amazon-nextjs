@@ -2,7 +2,7 @@
 
 import {Button} from "@/components/ui/button";
 import TrashIcon from "@/public/icons/Trash";
-import {ProductSliderItem} from "@/utils/types";
+import {ProductSliderItem} from "@/utils/types/types";
 import Image from "next/image";
 import {
  AlertDialog,

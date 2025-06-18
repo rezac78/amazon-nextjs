@@ -1,7 +1,7 @@
 "use client";
 
 import React, {useEffect, useState} from "react";
-import {CategoryHome, Product} from "@/utils/types";
+import {CategoryHome, Product} from "@/utils/types/types";
 import {fetchProductAll} from "@/utils/fetchProduct";
 
 // UI Components

@@ -1,7 +1,7 @@
 import {Button} from "@/components/ui/button";
 import PencilIcon from "@/public/icons/Pencil";
 import TrashIcon from "@/public/icons/Trash";
-import {Address} from "@/utils/types";
+import {Address} from "@/utils/types/types";
 
 export default function AddressList({
  addresses,

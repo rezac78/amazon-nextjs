@@ -14,7 +14,7 @@ import {useStore} from "@/store/useCounter";
 import MenuIcon from "@/public/icons/Menu";
 import SearchIcon from "@/public/icons/Search";
 import ShoppingCartIcon from "@/public/icons/ShoppingCart";
-import {CategoryHome} from "@/utils/types";
+import {CategoryHome} from "@/utils/types/types";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/store/useAuth";
 // import CompareIcon from "@/public/icons/Compare";

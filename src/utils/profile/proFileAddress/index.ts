@@ -1,5 +1,5 @@
 import {BASE_URL_API} from "@/config";
-import {Address} from "@/utils/types";
+import {Address} from "@/utils/types/types";
 
 export async function ProfileAddressFetch(Data: Address, Token: string) {
  const preparedData = {

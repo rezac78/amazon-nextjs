@@ -5,7 +5,7 @@ import {
  REMOVE_FROM_COMPARE_MUTATION,
 } from "./../graphql/productLike/productLike";
 import {PRODUCTS_QUERY} from "../graphql/queries/products";
-import {Product} from "./types";
+import {Product} from "./types/types";
 import {BASE_URL} from "./config";
 import {toast} from "sonner";
 import {BASE_URL_API} from "@/config";

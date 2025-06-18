@@ -8,7 +8,7 @@ import {Textarea} from "@/components/ui/textarea";
 import {toast} from "sonner";
 import {DeletedProfileAddress, ProfileAddressFetch, UpdateProfileAddress} from "@/utils/profile/proFileAddress";
 import AddressList from "../common/AddressList";
-import {Address} from "@/utils/types";
+import {Address} from "@/utils/types/types";
 import {
  AlertDialog,
  AlertDialogAction,

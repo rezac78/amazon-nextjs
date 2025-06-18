@@ -1,4 +1,4 @@
-import {CategoryHome} from "./types";
+import {CategoryHome} from "./types/types";
 
 export function buildCategoryTree(data: CategoryHome[]): CategoryHome[] {
  const map = new Map<number, CategoryHome & {children: CategoryHome[]}>();

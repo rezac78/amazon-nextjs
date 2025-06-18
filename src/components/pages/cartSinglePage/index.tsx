@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import Image from "next/image";
 import {Button} from "../../ui/button";
@@ -13,12 +14,13 @@ import {
  fetchProductsAdditional,
  fetchWishlist,
 } from "@/utils/fetchProduct";
-import {Product, ProductAttribute} from "@/utils/types";
+import {Product, ProductAttribute} from "@/utils/types/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
 import ShareSection from "@/components/common/ShareSection";
 import {toast} from "sonner";
 import getColorCodeFromLabel from "@/utils/getColorCodeFromLabel";
-import Link from "next/link";
+import {CustomerCartAdd} from "@/utils/cart";
+
 export default function CartSinglePage({Token}: {Token: string}) {
  const [selectedImage, setSelectedImage] = useState<string>("");
  const [loadingLike, setLoadingLike] = useState<boolean>(false);
@@ -29,6 +31,8 @@ export default function CartSinglePage({Token}: {Token: string}) {
  const [selectedSize, setSelectedSize] = useState<string>("");
  const [productId, setProductId] = useState<number | null>(null);
  const [variantPrice, setVariantPrice] = useState<string | number>("");
+ const [selectedQuantity, setSelectedQuantity] = useState<string>("1");
+ const [selectedDownloadLink, setSelectedDownloadLink] = useState<number | null>(null);
  const colorOptions = product?.super_attributes?.find((attr) => attr.code === "color")?.options || [];
  const sizeOptions = product?.super_attributes?.find((attr) => attr.code === "size")?.options || [];
  useEffect(() => {
@@ -58,7 +62,6 @@ export default function CartSinglePage({Token}: {Token: string}) {
     if (res) {
      setProduct(res);
      if (res?.images?.[0]?.url) setSelectedImage(res.images[0].url);
-
      if (Token) {
       try {
        setLoadingLike(true);
@@ -84,33 +87,49 @@ export default function CartSinglePage({Token}: {Token: string}) {
  const crossSells = product.crossSells ?? [];
  const handleToggleWishlist = async () => {
   if (!product) return;
-  if (wishlisted) {
-   setWishlisted(false);
-   if (!Token) {
-    toast.warning("برای حذف از لیست علاقه‌مندی‌ها وارد شوید");
-    return;
-   }
-   await fetchProductLike(product.id, Token);
-  } else {
-   setWishlisted(true);
-   if (!Token) {
-    toast.warning("برای افزودن به لیست علاقه‌مندی‌ها وارد شوید");
-    return;
-   }
-   await fetchProductLike(product.id, Token);
+  if (!Token) {
+   toast.warning("برای افزودن یا حذف از علاقه‌مندی‌ها وارد شوید");
+   return;
   }
+  setWishlisted(!wishlisted);
+  await fetchProductLike(product.id, Token);
  };
  const handleAddToCompare = async () => {
   if (!product) return;
   const success = await addToCompareProduct(product.id, Token);
-  if (!success) {
-   toast.error("افزودن به لیست مقایسه انجام نشد");
+  if (!success) toast.error("افزودن به لیست مقایسه انجام نشد");
+ };
+ const handleQuantityChange = (value: string) => setSelectedQuantity(value);
+ const handleAddToCart = async () => {
+  if (!product) return;
+  if (!Token) {
+   toast.warning("ابتدا وارد حساب کاربری شوید");
+   return;
+  }
+  if (!selectedDownloadLink) {
+   toast.warning("یک گزینه دانلود را انتخاب کنید");
+   return;
+  }
+  const data = {
+   is_buy_now: 0,
+   product_id: product.id,
+   quantity: selectedQuantity,
+   links: [selectedDownloadLink],
+  };
+  try {
+   await CustomerCartAdd(data, Token, String(product.id));
+   toast.success("محصول به سبد خرید اضافه شد");
+  } catch (error) {
+   toast.error("خطا در اضافه کردن محصول به سبد خرید");
+   console.error(error);
   }
  };
+
  return (
   <>
    <BreadcrumbComponent Data={product} />
    <div className="flex flex-col md:flex-row gap-1">
+    {/* ---------- gallery ---------- */}
     <div className="flex flex-col md:w-[35%] min-w-[35%] h-fit">
      <div className="flex">
       <ShareSection
@@ -156,9 +175,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
      <h1 className="text-2xl md:text-3xl font-semibold">{product.name}</h1>
      <div className="text-yellow-500 font-medium text-sm">Amazon&apos;s Choice ✨</div>
      <div className="text-sm text-gray-500">No Import Charges & $46.96 Shipping to Azerbaijan. Delivery June 17–27</div>
-
      <div className="flex flex-col md:flex-row gap-4 items-center">
-      {/* انتخاب رنگ */}
       {colorOptions.length > 0 && (
        <div>
         <p className="font-medium mb-2">
@@ -170,13 +187,10 @@ export default function CartSinglePage({Token}: {Token: string}) {
            key={option.id}
            onClick={() => setSelectedColor(String(option.id))}
            className={`
-              w-6 h-6 rounded-full border-2 flex items-center justify-center
-              transition-all duration-200
-              ${selectedColor === String(option.id) ? "border-cyan-500" : "border-gray-300"}
-            `}
-           style={{
-            backgroundColor: getColorCodeFromLabel(option.label),
-           }}
+                        w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+                         selectedColor === String(option.id) ? "border-cyan-500" : "border-gray-300"
+                        }`}
+           style={{backgroundColor: getColorCodeFromLabel(option.label)}}
            title={option.label}
           >
            {selectedColor === String(option.id) && <span className="text-white text-xs">✓</span>}
@@ -188,7 +202,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
       {sizeOptions.length > 0 && (
        <div>
         <label className="font-medium block mb-1">اندازه:</label>
-        <Select onValueChange={setSelectedSize}>
+        <Select onValueChange={setSelectedSize} value={selectedSize}>
          <SelectTrigger className="w-[150px]">
           <SelectValue placeholder="انتخاب اندازه" />
          </SelectTrigger>
@@ -212,20 +226,13 @@ export default function CartSinglePage({Token}: {Token: string}) {
       {productAtribute?.map((attribute) => {
        if (!attribute.value) return null;
        const valueToDisplay = String(attribute.value);
-
        const colorCode = attribute.code === "color" ? getColorCodeFromLabel(valueToDisplay) : "";
-
        return (
         <div key={attribute.id} className="flex items-center gap-2">
          <strong>{attribute.label}:</strong> {attribute.code !== "color" && valueToDisplay}
          {colorCode && (
           <div
-           style={{
-            width: "16px",
-            height: "16px",
-            borderRadius: "50%",
-            backgroundColor: colorCode,
-           }}
+           style={{width: "16px", height: "16px", borderRadius: "50%", backgroundColor: colorCode}}
            title={attribute.label}
           />
          )}
@@ -233,84 +240,51 @@ export default function CartSinglePage({Token}: {Token: string}) {
        );
       })}
      </div>
-
      <div className="space-y-2 text-sm text-gray-700">
       <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description ?? ""}} />
      </div>
     </div>
     <div className="flex flex-col md:w-[19%] min-w-[19%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">
      <h1 className="text-2xl md:text-3xl font-semibold">{product.formatted_price}</h1>
-     <span>در این قسمت توضیحات کوتاه قرار میگیره</span>
      <div className="flex flex-col gap-4 mt-4">
-      <Select>
+      <Select value={selectedQuantity} onValueChange={handleQuantityChange}>
        <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="تعداد محصول" />
        </SelectTrigger>
        <SelectContent>
         <SelectGroup>
          <SelectLabel>تعداد محصول</SelectLabel>
-         <SelectItem value="apple">1</SelectItem>
-         <SelectItem value="banana">2</SelectItem>
-         <SelectItem value="blueberry">3</SelectItem>
-         <SelectItem value="grapes">4</SelectItem>
-         <SelectItem value="pineapple">5</SelectItem>
+         {["1", "2", "3", "4", "5"].map((num) => (
+          <SelectItem key={num} value={num}>
+           {num}
+          </SelectItem>
+         ))}
         </SelectGroup>
        </SelectContent>
       </Select>
-      <Button className="flex-1 flex items-center gap-2">افزودن به سبد</Button>
-      <Button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black">خرید</Button>
-      <Button variant="outline" className="flex-1 hover:text-black">
-       اضافه کردن به لیست
+      <Button disabled={!selectedDownloadLink} className="flex-1 flex items-center gap-2" onClick={handleAddToCart}>
+       افزودن به سبد
       </Button>
      </div>
      {product.downloadable_links && product.downloadable_links.length > 0 && (
-      <div className="flex justify-center mt-4">
-       {product.downloadable_links.map((link) => {
-        return (
-         <div key={link.id}>
-          {/* اگر فایل باشد */}
-          {link.type === "file" && link.file_url && (
-           <div className="text-center bg-blue-700">
-            <Link
-             href={link.file_url}
-             download
-             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all cursor-pointer disabled:pointer-events-none disabled:opacity-50"
-             title="دانلود فایل"
-            >
-             دانلود فایل
-            </Link>
-           </div>
-          )}
-
-          {/* اگر لینک URL باشد */}
-          {link.sample_type === "url" && link.sample_url && (
-           <div className="text-center mt-2">
-            <a
-             href={link.sample_url}
-             target="_blank"
-             rel="noopener noreferrer"
-             className="text-blue-600 hover:text-blue-800"
-             title="دنبال کردن لینک"
-            >
-             دنبال کردن لینک دانلود
-            </a>
-           </div>
-          )}
-          {link.sample_download_url && (
-           <div className="text-center mt-2">
-            <a href={link.sample_download_url} className="text-blue-600 hover:text-blue-800" title="دانلود نمونه">
-             {`دانلود ${link.title}`}
-            </a>
-           </div>
-          )}
-
-          {/* اگر هیچ کدام نباشند، هیچ چیزی نمایش داده نشود */}
-          {!link.file_url && !link.sample_url && !link.sample_download_url && (
-           <div className="text-center mt-2 text-red-500">هیچ فایلی برای دانلود موجود نیست</div>
-          )}
-         </div>
-        );
-       })}
+      <div className="flex flex-col gap-2 mt-4">
+       {product.downloadable_links.map((link) => (
+        <label
+         key={link.id}
+         className="flex items-center justify-between gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
+        >
+         <input
+          type="radio"
+          name="downloadable_link"
+          value={link.id}
+          checked={selectedDownloadLink === link.id}
+          onChange={() => setSelectedDownloadLink(link.id)}
+          className="accent-blue-600"
+         />
+         <span className="flex-1 text-sm">{link.title}</span>
+         <span className="whitespace-nowrap font-semibold">{link.formatted_price ?? link.price}</span>
+        </label>
+       ))}
       </div>
      )}
     </div>

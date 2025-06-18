@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import HomeCategorisSkeleton from "../SkeletonComponent/homeCategoris";
 import HomeCategoris from ".";
-import {CategoryHome} from "@/utils/types";
+import {CategoryHome} from "@/utils/types/types";
 
 const HomeCategorisWrapper = ({Data, useIn}: {Data: CategoryHome[]; useIn: string}) => {
  const [show, setShow] = useState(false);
