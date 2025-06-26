@@ -1,38 +1,18 @@
+// store/useCartCount.ts
 import {create} from "zustand";
-import {Product} from "@/utils/types/types";
 
-interface StoreState {
- favorites: Product[];
- cart: Product[];
- addToFavorites: (product: Product) => void;
- removeFromFavorites: (productId: number) => void;
- addToCart: (product: Product) => void;
- removeFromCart: (productId: number) => void;
+interface CartCountStore {
+ cartCount: number;
+ increase: (qty: number) => void;
+ decrease: (qty: number) => void;
+ setCount: (qty: number) => void;
+ reset: () => void;
 }
 
-export const useStore = create<StoreState>((set, get) => ({
- favorites: [],
- cart: [],
-
- addToFavorites: (product) => {
-  const current = get().favorites;
-  if (!current.find((p) => p.id === product.id)) {
-   set({favorites: [...current, product]});
-  }
- },
-
- removeFromFavorites: (productId) => {
-  set({favorites: get().favorites.filter((p) => p.id !== productId)});
- },
-
- addToCart: (product) => {
-  const current = get().cart;
-  if (!current.find((p) => p.id === product.id)) {
-   set({cart: [...current, product]});
-  }
- },
-
- removeFromCart: (productId) => {
-  set({cart: get().cart.filter((p) => p.id !== productId)});
- },
+export const useCartCount = create<CartCountStore>((set) => ({
+ cartCount: 0,
+ increase: (qty) => set((state) => ({cartCount: state.cartCount + qty})),
+ decrease: (qty) => set((state) => ({cartCount: state.cartCount - qty})),
+ setCount: (qty) => set({cartCount: qty}),
+ reset: () => set({cartCount: 0}),
 }));

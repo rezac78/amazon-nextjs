@@ -10,13 +10,13 @@ import {
 import {useEffect, useMemo, useState} from "react";
 import Link from "next/link";
 import {Button} from "../../ui/button";
-import {useStore} from "@/store/useCounter";
 import MenuIcon from "@/public/icons/Menu";
 import SearchIcon from "@/public/icons/Search";
 import ShoppingCartIcon from "@/public/icons/ShoppingCart";
 import {CategoryHome} from "@/utils/types/types";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/store/useAuth";
+import {useCartCount} from "@/store/useCounter";
 // import CompareIcon from "@/public/icons/Compare";
 
 const options = [
@@ -36,10 +36,10 @@ export default function Header({isLogin}: HeaderProps) {
  const [searchText, setSearchText] = useState("");
  const router = useRouter();
  const {isLoggedIn} = useAuth();
+ const cartCount = useCartCount((s) => s.cartCount);
  const changeLanguage = (lang: string) => {
   setLanguage(lang);
  };
- const {cart} = useStore();
  const handleSearch = useMemo(() => {
   return () => {
    if (!searchText.trim()) return;
@@ -115,10 +115,10 @@ export default function Header({isLogin}: HeaderProps) {
      <Link href={"/favorite"} className="relative flex flex-col items-center text-xs">
       <span className="font-bold">موردعلاقه</span>
      </Link>
-     <Link href={"/cart"} className="relative flex flex-col items-center">
+     <Link href={"/checkout/cart"} className="relative flex flex-col items-center">
       <ShoppingCartIcon className="w-5 h-5" />
       <span className="absolute top-[-6px] right-[-2px] bg-secondary text-black text-xs w-5 h-5 rounded-full flex items-center justify-center">
-       {cart.length}
+       {cartCount}
       </span>
       <span className="text-sm font-bold ml-1">سبد خرید</span>
      </Link>

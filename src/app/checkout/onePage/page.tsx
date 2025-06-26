@@ -1,13 +1,13 @@
 import {CustomerCartAll} from "@/utils/cart";
-import CartPage from "../../components/pages/cart";
 import {getAuthToken} from "@/utils/checkCookies";
+import CheckoutPage from "@/components/pages/onePage";
 
-export default async function Cart() {
+export default async function OnePage() {
  const Token = await getAuthToken();
  const wishlistItems = await CustomerCartAll(Token ?? "");
  return (
   <div className="container mx-auto">
-   <CartPage Data={wishlistItems?.items ?? []} Token={Token ?? ""} />
+   <CheckoutPage Data={wishlistItems?.items ?? []} Token={Token ?? ""} />
   </div>
  );
 }

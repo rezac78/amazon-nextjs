@@ -44,7 +44,9 @@ export interface CartItem {
  };
 
  product: {
-  base_image: ProductImage[];
+  base_image?: ProductImage;
+  formatted_price?: string;
+  images: ProductImage[];
   id: number;
   sku: string;
   type: string;

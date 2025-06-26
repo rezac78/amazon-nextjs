@@ -7,6 +7,8 @@ import {Button} from "../../ui/button";
 import {CartItem} from "@/utils/types/cart";
 import {CustomerCartDeleted, CustomerCartDeletedAll, CustomerCartMoveWishlist, CustomerCartPUT} from "@/utils/cart";
 import {toast} from "sonner";
+import {useCartCount} from "@/store/useCounter";
+import {redirect} from "next/navigation";
 
 interface CartPageProps {
  Data: CartItem[];
@@ -14,7 +16,8 @@ interface CartPageProps {
 }
 
 export default function CartComponent({Data, Token}: CartPageProps) {
- const [coupon, setCoupon] = useState("");
+ const [coupon] = useState("");
+ const {decrease, reset} = useCartCount();
 
  const tax = 0;
  const shipping = 0;
@@ -43,6 +46,7 @@ export default function CartComponent({Data, Token}: CartPageProps) {
  const onRemoveItem = async (productId: number) => {
   try {
    await CustomerCartDeleted({product_id: productId}, Token, productId.toString());
+   decrease(committedQuantities[productId] ?? 1);
    setQuantities((prev) => {
     const updated = {...prev};
     delete updated[productId];
@@ -54,7 +58,6 @@ export default function CartComponent({Data, Token}: CartPageProps) {
     delete updated[productId];
     return updated;
    });
-
    setCartItems((prev) => prev.filter((item) => item.id !== productId));
   } catch (err) {
    console.error("Remove error", err);
@@ -80,11 +83,11 @@ export default function CartComponent({Data, Token}: CartPageProps) {
  };
 
  const onCheckout = () => {
-  console.log("Proceed to checkout");
-  // redirect to checkout
+  redirect("/checkout/onePage");
  };
  const handleRemoveSelected = async () => {
   await CustomerCartDeletedAll(Token);
+  reset();
   setCartItems([]);
  };
 
@@ -131,7 +134,6 @@ export default function CartComponent({Data, Token}: CartPageProps) {
    toast.error("خطا در به‌روزرسانی سبد خرید");
   }
  };
-
  const Totals = () => (
   <div className="flex flex-col gap-3 text-sm w-full md:w-[35%] lg:w-[30%] border border-border/40 rounded-2xl p-6 rtl text-right">
    <h2 className="text-lg font-semibold mb-4">خلاصه سبد خرید</h2>
@@ -160,16 +162,16 @@ export default function CartComponent({Data, Token}: CartPageProps) {
     <span>مجموع کل</span>
     <span>{total.toLocaleString()} ﷼</span>
    </div>
-   <input
+   <Button onClick={onCheckout} variant={"default"} className="mt-6 w-full">
+    ادامه به تسویه حساب
+   </Button>
+   {/* <input
     type="text"
     placeholder="کد تخفیف"
     value={coupon}
     onChange={(e) => setCoupon(e.target.value)}
     className="border rounded-md p-2 mt-4 text-right w-full"
-   />
-   <Button onClick={onCheckout} className="mt-6 w-full bg-primary-900 text-white">
-    ادامه به تسویه حساب
-   </Button>
+   /> */}
   </div>
  );
 
@@ -184,9 +186,9 @@ export default function CartComponent({Data, Token}: CartPageProps) {
    <div className="w-24 h-24 relative sm:order-2 order-1">
     <Image
      src={
-      item.product.base_image?.[0]?.large_image_url
-       ? item.product.base_image[0].large_image_url.replace("/cache/large/", "/storage/")
-       : item.product.base_image?.[0]?.url || "/defult.avif"
+      item.product.base_image?.large_image_url
+       ? item.product.base_image.large_image_url.replace("/cache/large/", "/storage/")
+       : item.product.base_image?.url || "/default.avif"
      }
      alt={item.name}
      fill
@@ -259,15 +261,16 @@ export default function CartComponent({Data, Token}: CartPageProps) {
       {cartItems.map((item) => (
        <ItemRow key={item.id} item={item} />
       ))}
-
-      <div className="flex justify-end mt-6">
-       <Button variant="ghost" onClick={onUpdateCart} size="sm">
-        به‌روزرسانی سبد خرید
-       </Button>
-       <Button variant="ghost" onClick={() => (location.href = "/products")}>
-        ادامه خرید
-       </Button>
-      </div>
+      {cartItems.length > 0 && (
+       <div className="flex justify-end mt-6">
+        <Button variant="ghost" onClick={onUpdateCart} size="sm">
+         به‌روزرسانی سبد خرید
+        </Button>
+        <Button variant="ghost" onClick={() => (location.href = "/")}>
+         ادامه خرید
+        </Button>
+       </div>
+      )}
      </div>
 
      <Totals />

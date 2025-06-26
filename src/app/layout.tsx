@@ -12,14 +12,13 @@ export const metadata = {
 export default async function RootLayout({children}: {children: React.ReactNode}) {
  const token = await getAuthToken();
  const categorie = await categories();
-
  return (
   <html dir="rtl" lang="fa">
    <head>
     <link rel="preload" as="image" href="/pages/home/slide1.webp" />
    </head>
    <body className={`font-sansv flex flex-col min-h-dvh`}>
-    <HeaderWrapper isLogin={!!token} categorie={categorie}  />
+    <HeaderWrapper isLogin={!!token} categorie={categorie} token={token ?? ""} />
     <main className="flex flex-grow">
      <MountWrapper>{children}</MountWrapper>
     </main>

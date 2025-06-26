@@ -20,6 +20,7 @@ import ShareSection from "@/components/common/ShareSection";
 import {toast} from "sonner";
 import getColorCodeFromLabel from "@/utils/getColorCodeFromLabel";
 import {CustomerCartAdd} from "@/utils/cart";
+import {useCartCount} from "@/store/useCounter";
 
 export default function CartSinglePage({Token}: {Token: string}) {
  const [selectedImage, setSelectedImage] = useState<string>("");
@@ -32,6 +33,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
  const [productId, setProductId] = useState<number | null>(null);
  const [variantPrice, setVariantPrice] = useState<string | number>("");
  const [selectedQuantity, setSelectedQuantity] = useState<string>("1");
+ const {increase} = useCartCount();
  const [selectedDownloadLink, setSelectedDownloadLink] = useState<number | null>(null);
  const colorOptions = product?.super_attributes?.find((attr) => attr.code === "color")?.options || [];
  const sizeOptions = product?.super_attributes?.find((attr) => attr.code === "size")?.options || [];
@@ -118,7 +120,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
   };
   try {
    await CustomerCartAdd(data, Token, String(product.id));
-   toast.success("محصول به سبد خرید اضافه شد");
+   increase(Number(selectedQuantity));
   } catch (error) {
    toast.error("خطا در اضافه کردن محصول به سبد خرید");
    console.error(error);

@@ -1,14 +1,39 @@
+// HeaderWrapper.tsx (Client Component)
 "use client";
 
-import dynamic from "next/dynamic";
+import {useEffect} from "react";
+import {CustomerCartAll} from "@/utils/cart";
 import {CategoryHome} from "@/utils/types/types";
+import dynamic from "next/dynamic";
 import HeaderSkeleton from "./SkeletonComponent/HeaderSkeleton";
+import {useCartCount} from "@/store/useCounter";
 
 const Header = dynamic(() => import("../common/Header"), {
  ssr: false,
  loading: () => <HeaderSkeleton />,
 });
 
-export default function HeaderWrapper({isLogin, categorie}: {isLogin: boolean; categorie: CategoryHome[]}) {
+export default function HeaderWrapper({
+ isLogin,
+ categorie,
+ token,
+}: {
+ isLogin: boolean;
+ categorie: CategoryHome[];
+ token: string;
+}) {
+ const setCount = useCartCount((s) => s.setCount);
+
+ useEffect(() => {
+  if (token) {
+   CustomerCartAll(token).then((res) => {
+    if (res?.items) {
+     const totalQty = res?.items?.length ?? 0;
+     setCount(totalQty);
+    }
+   });
+  }
+ }, [token, setCount]);
+
  return <Header isLogin={isLogin} categorie={categorie} />;
 }

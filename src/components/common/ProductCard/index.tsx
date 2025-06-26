@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {Card, CardAction, CardContent, CardHeader, CardTitle} from "../../ui/card";
 import Image from "next/image";
-import {useStore} from "@/store/useCounter";
 import HeartIcon from "@/public/icons/Heart";
 import ShoppingBagIcon from "@/public/icons/ShoppingBag";
 import {fetchProductLike} from "@/utils/fetchProduct";
@@ -17,7 +16,6 @@ interface ProductCardProps {
  Token?: string;
 }
 export default function ProductCard({products, homePage, onWishlistToggle, Token}: ProductCardProps) {
- const {cart} = useStore();
  const [wishlistProducts, setWishlistProducts] = useState(products);
  const pathname = usePathname();
  const handleToggleWishlist = async (productId: number) => {
@@ -52,7 +50,6 @@ export default function ProductCard({products, homePage, onWishlistToggle, Token
   <div className="my-10">
    <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 md:px-6`}>
     {wishlistProducts.map((card) => {
-     const isInCart = cart.some((item) => item.id === card.id);
      return (
       <Link
        onClick={() => {
@@ -110,7 +107,7 @@ export default function ProductCard({products, homePage, onWishlistToggle, Token
          <hr />
          <div
           className={`transition duration-300 transform hover:bg-secondary hover:text-white ${
-           isInCart ? "text-green-500" : "text-black"
+           false ? "text-green-500" : "text-black"
           }`}
          >
           <ShoppingBagIcon className="m-2 cursor-pointer" />
