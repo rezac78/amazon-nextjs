@@ -62,32 +62,34 @@ export default function HomePage({NewProducts, categorie}: HomePageProps) {
 
  return (
   <div className="relative mt-6">
-   <section className="w-full max-w-screen-xl mx-auto my-10 px-4">
+   <section className="w-full mx-auto my-10 px-4 ">
     {isHydrated ? <Slider images={images} interval={4000} /> : <SwiperSkeleton />}
    </section>
-   {isHydrated ? <HomeCategoris Data={categorie} useIn="HomeMain" /> : <HomeCategorisMainSkeleton count={6} />}
-   {isHydrated ? (
-    <ProductSlider title="محصولات جدید" Data={NewProducts} link="/search?new=1&sort=price-desc&limit=12&mode=grid" />
-   ) : (
-    <SkeletonProducts count={8} />
-   )}
-   <div ref={featuredRef}>
-    {hasLoadedFeatured ? (
-     <ProductSlider
-      title="محصولات ویژه"
-      Data={featuredProducts}
-      link="/search?featured=1&sort=price-desc&limit=12&mode=grid"
-     />
+   <div className="container ">
+    {isHydrated ? <HomeCategoris Data={categorie} useIn="HomeMain" /> : <HomeCategorisMainSkeleton count={6} />}
+    {isHydrated ? (
+     <ProductSlider title="محصولات جدید" Data={NewProducts} link="/search?new=1&sort=price-desc&limit=12&mode=grid" />
     ) : (
      <SkeletonProducts count={8} />
     )}
-   </div>
-   <div ref={allRef}>
-    {hasLoadedAll ? (
-     <ProductSlider title="همه محصولات" Data={allProducts} link="/search?sort=price-desc&limit=12&mode=grid" />
-    ) : (
-     <SkeletonProducts count={8} />
-    )}
+    <div ref={featuredRef}>
+     {hasLoadedFeatured ? (
+      <ProductSlider
+       title="محصولات ویژه"
+       Data={featuredProducts}
+       link="/search?featured=1&sort=price-desc&limit=12&mode=grid"
+      />
+     ) : (
+      <SkeletonProducts count={8} />
+     )}
+    </div>
+    <div ref={allRef}>
+     {hasLoadedAll ? (
+      <ProductSlider title="همه محصولات" Data={allProducts} link="/search?sort=price-desc&limit=12&mode=grid" />
+     ) : (
+      <SkeletonProducts count={8} />
+     )}
+    </div>
    </div>
   </div>
  );

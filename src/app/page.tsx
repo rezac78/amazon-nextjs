@@ -12,7 +12,7 @@ export default async function Home() {
   limit: 12,
  });
  return (
-  <div className="container mx-auto">
+  <div className="mx-auto">
    <HomePage isLogin={!!token} NewProducts={NewProducts} categorie={categorie} />
   </div>
  );

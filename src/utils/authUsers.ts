@@ -1,4 +1,5 @@
 import {BASE_URL_API} from "@/config";
+import {toast} from "sonner";
 
 export async function registerCustomer(input: {
  firstName: string;
@@ -55,11 +56,13 @@ export async function loginCustomer(input: {
   });
 
   const resData = await response.json();
-
-  if (!response.ok || resData.errors) {
-   throw resData.errors?.[0] || resData.message || "Login failed";
+  if (resData.errors) {
+   const firstKey = Object.keys(resData.errors)[0];
+   const firstMessage = resData.errors[firstKey][0];
+   toast.error(firstMessage || resData.message || "خطایی رخ داد.");
+  } else {
+   toast.success(resData.message);
   }
-
   return resData;
  } catch (err) {
   console.error("Login Error:", err);

@@ -3,7 +3,6 @@
 import {useState} from "react";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import {toast} from "sonner";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {loginCustomer} from "@/utils/authUsers";
@@ -57,17 +56,11 @@ export default function LoginPage() {
     });
     useAuth.getState().setLoggedIn(true);
     router.push("/");
-    toast.success(result.message || "ورود موفق بود.");
-   } else {
-    toast.error(result?.message || "ورود ناموفق بود.");
    }
+  } catch (err) {
+   console.error(err);
+  } finally {
    setLoading(false);
-  } catch (err: unknown) {
-   if (err instanceof Error) {
-    toast.error(err.message || "خطا در ورود.");
-   } else {
-    toast.error("خطای ناشناخته‌ای رخ داد.");
-   }
   }
  };
 
