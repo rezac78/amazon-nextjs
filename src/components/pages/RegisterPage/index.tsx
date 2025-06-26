@@ -84,111 +84,117 @@ export default function RegisterPage() {
  };
 
  return (
-  <div className=" w-[550px] mx-auto flex items-center justify-center p-4">
-   <div className="bg-primary/80 text-primary-foreground w-full rounded-xl shadow-md p-6">
-    <h2 className="text-2xl font-semibold text-center mb-6">ثبت‌نام</h2>
-    <form onSubmit={handleRegister} className="space-y-4">
-     <div className="">
-      <Label className="block text-sm font-medium" htmlFor="firstName">
-       نام
-      </Label>
-      <Input
-       id="firstName"
-       name="firstName"
-       type="text"
-       onChange={handleChange}
-       value={form.firstName}
-       className="w-full px-3 py-2 border rounded-md bg-gray-100 mt-2 text-black"
-      />
-      {errors.firstName && <p className="text-sm text-red-600 mt-1">{errors.firstName}</p>}
+  <div className="flex w-full  items-center justify-center bg-gray-100 p-4">
+   <div className="w-full max-w-4xl bg-white rounded-3xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+    <div className="text-black md:w-1/2  p-6 order-2 md:order-1">
+     <h2 className="text-2xl font-semibold text-center mb-6">ثبت‌نام</h2>
+     <form onSubmit={handleRegister} className="space-y-4">
+      <div className="w-full flex gap-3">
+       <div className="w-full">
+        <Label className="block text-sm font-medium" htmlFor="firstName">
+         نام
+        </Label>
+        <Input
+         id="firstName"
+         name="firstName"
+         type="text"
+         onChange={handleChange}
+         value={form.firstName}
+         className="w-full px-3 py-2 border rounded-md bg-gray-100 mt-2 text-black"
+        />
+        {errors.firstName && <p className="text-sm text-red-600 mt-1">{errors.firstName}</p>}
+       </div>
+       <div className="w-full">
+        <Label className="block text-sm font-medium" htmlFor="lastName">
+         نام خانوادگی
+        </Label>
+        <Input
+         id="lastName"
+         name="lastName"
+         type="text"
+         onChange={handleChange}
+         value={form.lastName}
+         className="bg-gray-100 mt-2 text-black"
+        />
+        {errors.lastName && <p className="text-sm text-red-600 mt-1">{errors.lastName}</p>}
+       </div>
+      </div>
+      <div className="">
+       <Label className="block text-sm font-medium" htmlFor="email">
+        ایمیل
+       </Label>
+       <Input
+        id="email"
+        name="email"
+        type="email"
+        onChange={handleChange}
+        value={form.email}
+        className="bg-gray-100 mt-2 text-black"
+       />
+       {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
+      </div>
+      <div className="">
+       <Label className="block text-sm font-medium" htmlFor="password">
+        رمز عبور
+       </Label>
+       <Input
+        id="password"
+        type="password"
+        name="password"
+        onChange={handleChange}
+        value={form.password}
+        className="w-full px-3 py-2 border rounded-md bg-gray-100 mt-2 text-black"
+       />
+       {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
+      </div>
+      <div className="">
+       <Label className="block text-sm font-medium" htmlFor="passwordConfirmation">
+        تکرار رمز عبور
+       </Label>
+       <Input
+        id="passwordConfirmation"
+        name="passwordConfirmation"
+        type="password"
+        onChange={handleChange}
+        value={form.passwordConfirmation}
+        className="w-full px-3 py-2 border rounded-md bg-gray-100 mt-2 text-black"
+       />
+       {errors.passwordConfirmation && <p className="text-sm text-red-600 mt-1">{errors.passwordConfirmation}</p>}
+      </div>
+      <div className="flex gap-2">
+       <Checkbox
+        id="agreement"
+        name="agreement"
+        checked={form.agreement}
+        onCheckedChange={(checked) =>
+         setForm((prev) => ({
+          ...prev,
+          agreement: !!checked,
+         }))
+        }
+       />
+       <Label className="" htmlFor="agreement">
+        با قوانین و شرایط موافقم
+       </Label>
+      </div>
+      {errors.agreement && <p className="text-sm text-red-600 mt-1">{errors.agreement}</p>}
+      <Button
+       loading={loading}
+       type="submit"
+       className="w-full bg-gradient-to-br from-blue-300  to-blue-400  text-white py-2 rounded-md hover:bg-green-700 transition"
+      >
+       ثبت‌نام
+      </Button>
+     </form>
+    </div>
+    <div className="md:w-1/2 bg-gradient-to-br from-blue-300  to-blue-400 md:rounded-r-[60px] text-white p-8 flex flex-col justify-center items-center gap-4 order-1 md:order-2">
+     <h2 className="text-2xl font-bold">سلام خوش آمدید!</h2>
+     <div className="text-white border-white flex gap-1">
+      قبلاً ثبت‌نام کرده‌اید؟
+      <Link href="/auth/signup" className="text-gray-950">
+       ورود به حساب
+      </Link>
      </div>
-     <div className="">
-      <Label className="block text-sm font-medium" htmlFor="lastName">
-       نام خانوادگی
-      </Label>
-      <Input
-       id="lastName"
-       name="lastName"
-       type="text"
-       onChange={handleChange}
-       value={form.lastName}
-       className="bg-gray-100 mt-2 text-black"
-      />
-      {errors.lastName && <p className="text-sm text-red-600 mt-1">{errors.lastName}</p>}
-     </div>
-     <div className="">
-      <Label className="block text-sm font-medium" htmlFor="email">
-       ایمیل
-      </Label>
-      <Input
-       id="email"
-       name="email"
-       type="email"
-       onChange={handleChange}
-       value={form.email}
-       className="bg-gray-100 mt-2 text-black"
-      />
-      {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
-     </div>
-     <div className="">
-      <Label className="block text-sm font-medium" htmlFor="password">
-       رمز عبور
-      </Label>
-      <Input
-       id="password"
-       type="password"
-       name="password"
-       onChange={handleChange}
-       value={form.password}
-       className="w-full px-3 py-2 border rounded-md bg-gray-100 mt-2 text-black"
-      />
-      {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
-     </div>
-     <div className="">
-      <Label className="block text-sm font-medium" htmlFor="passwordConfirmation">
-       تکرار رمز عبور
-      </Label>
-      <Input
-       id="passwordConfirmation"
-       name="passwordConfirmation"
-       type="password"
-       onChange={handleChange}
-       value={form.passwordConfirmation}
-       className="w-full px-3 py-2 border rounded-md bg-gray-100 mt-2 text-black"
-      />
-      {errors.passwordConfirmation && <p className="text-sm text-red-600 mt-1">{errors.passwordConfirmation}</p>}
-     </div>
-     <div className="flex gap-2">
-      <Checkbox
-       id="agreement"
-       name="agreement"
-       checked={form.agreement}
-       onCheckedChange={(checked) =>
-        setForm((prev) => ({
-         ...prev,
-         agreement: !!checked,
-        }))
-       }
-      />
-      <Label className="" htmlFor="agreement">
-       با قوانین و شرایط موافقم
-      </Label>
-     </div>
-     {errors.agreement && <p className="text-sm text-red-600 mt-1">{errors.agreement}</p>}
-     <Button
-      loading={loading}
-      type="submit"
-      className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
-     >
-      ثبت‌نام
-     </Button>
-    </form>
-
-    <div className="mt-6 text-sm text-center text-gray-600">
-     قبلاً ثبت‌نام کرده‌اید؟
-     <Link href="/auth/signup" className="text-blue-600 hover:underline">
-      ورود به حساب
-     </Link>
     </div>
    </div>
   </div>

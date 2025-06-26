@@ -72,58 +72,62 @@ export default function LoginPage() {
  };
 
  return (
-  <div className=" w-[550px] mx-auto flex items-center justify-center p-4">
-   <div className="bg-primary/80 text-primary-foreground w-full rounded-xl shadow-md p-6">
-    <h2 className="text-2xl font-semibold text-center mb-6">ورود کاربر</h2>
-    <form onSubmit={handleRegister} className="space-y-4">
-     <div className="">
-      <Label className="block text-sm font-medium" htmlFor="email">
-       ایمیل
-      </Label>
-      <Input
-       id="email"
-       name="email"
-       type="email"
-       onChange={handleChange}
-       value={form.email}
-       className="bg-gray-100 mt-2 text-black"
-      />
-      {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
+  <div className="flex w-full  items-center justify-center bg-gray-100 p-4">
+   <div className="w-full md:h-8/12 max-w-4xl bg-white rounded-3xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+    <div className="md:w-1/2 bg-gradient-to-br from-blue-300  to-blue-400 md:rounded-l-[60px] text-white p-8 flex flex-col justify-center items-center gap-4">
+     <h2 className="text-2xl font-bold">سلام خوش آمدید!</h2>
+     <div className="text-white border-white flex gap-1">
+      مشتری جدید ؟
+      <Link href="/auth/signin" className="text-gray-950">
+       حساب کاربری خود را ایجاد کنید
+      </Link>
      </div>
-     <div className="">
-      <Label className="block text-sm font-medium" htmlFor="password">
-       رمز عبور
-      </Label>
-      <Input
-       id="password"
-       type="password"
-       name="password"
-       onChange={handleChange}
-       value={form.password}
-       className="w-full px-3 py-2 border rounded-md bg-gray-100 mt-2 text-black"
-      />
-      {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
-     </div>
-     {errors.agreement && <p className="text-sm text-red-600 mt-1">{errors.agreement}</p>}
-     <Button
-      loading={loading}
-      type="submit"
-      className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
-     >
-      ورود
-     </Button>
-    </form>
-
-    <div className="mt-6 text-sm text-center text-gray-600">
-     مشتری جدید ؟
-     <Link href="/auth/signup" className="text-blue-600 hover:underline">
-      حساب کاربری خود را ایجاد کنید
-     </Link>
     </div>
-    <div className="mt-6 text-sm text-center text-gray-600">
-     <Link href="/auth/forgot-password" className="text-blue-600 hover:underline">
-      رمز عبور فراموش کردید؟
-     </Link>
+    <div className="text-black md:w-1/2  p-6 md:mt-20">
+     <h2 className="text-2xl font-semibold text-center mb-6">ورود</h2>
+     <form onSubmit={handleRegister} className="space-y-4">
+      <div className="">
+       <Label className="block text-sm font-medium" htmlFor="email">
+        ایمیل
+       </Label>
+       <Input
+        id="email"
+        name="email"
+        type="email"
+        onChange={handleChange}
+        value={form.email}
+        className="bg-gray-100 mt-2 text-black"
+       />
+       {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
+      </div>
+      <div className="">
+       <Label className="block text-sm font-medium" htmlFor="password">
+        رمز عبور
+       </Label>
+       <Input
+        id="password"
+        type="password"
+        name="password"
+        onChange={handleChange}
+        value={form.password}
+        className="w-full px-3 py-2 border rounded-md bg-gray-100 mt-2 text-black"
+       />
+       {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
+      </div>
+      {errors.agreement && <p className="text-sm text-red-600 mt-1">{errors.agreement}</p>}
+      <Button
+       loading={loading}
+       type="submit"
+       className="w-full bg-gradient-to-br from-blue-300  to-blue-400 text-white py-2 rounded-md hover:bg-green-700 transition"
+      >
+       ورود
+      </Button>
+      <div className="mt-6 text-sm text-center text-gray-600">
+       <Link href="/auth/forgot-password" className="text-blue-600 hover:underline">
+        رمز عبور فراموش کردید؟
+       </Link>
+      </div>
+     </form>
     </div>
    </div>
   </div>
