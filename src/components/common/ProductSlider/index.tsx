@@ -8,7 +8,8 @@ import {buttonVariants} from "@/components/ui/button";
 import {cn} from "lib/utils";
 import {ProductSliderItem} from "@/utils/types/types";
 import React from "react";
-import {CardContent} from "@/components/ui/card";
+import {CardContent, CardFooter} from "@/components/ui/card";
+import StarIcon from "@/public/icons/star";
 const Carousel = dynamic(() => import("@/components/ui/carousel").then((mod) => mod.Carousel), {ssr: false});
 const CarouselContent = dynamic(() => import("@/components/ui/carousel").then((mod) => mod.CarouselContent), {
  ssr: false,
@@ -48,9 +49,9 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
          href={`/${product.url_key}`}
          className=""
         >
-         <Card className="group relative flex flex-col justify-between bg-background border border-border w-[220px] min-h-[300px] p-2 ">
+         <Card className="group relative flex flex-col justify-between w-[280px] h-[340px] bg-[#FFFFFF] border border-[#E8E8E8]">
           <CardHeader className="flex-1 w-full">
-           <div className="w-[150px] h-[150px] relative">
+           <div className="w-[150px] h-[150px] relative mx-auto">
             <Image
              src={
               product?.images?.[0]?.large_image_url
@@ -66,17 +67,23 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
             />
            </div>
           </CardHeader>
-          <CardContent className="p-1 flex flex-col justify-between flex-1">
-           <CardTitle className="w-full line-clamp-2 leading-relaxed text-[16px] min-h-[48px]">
+          <CardContent className="flex-1">
+           <CardTitle className="w-full text-[#4C4C4C] line-clamp-2 leading-relaxed text-[12px] min-h-[48px] font-medium">
             {product.name}
            </CardTitle>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+           <div className="flex item-center gap-1">
+            <StarIcon className="text-[#E4E82E] w-3 h-3" />
+            <span className="text-xs font-medium text-[#4C4C4C]">4.5</span>
+           </div>
            {product.price && (
-            <div className="flex items-center justify-end gap-1 text-card-foreground mt-auto">
-             <span className="text-[16px] font-bold">{product.price}</span>
+            <div className="flex items-center justify-end gap-1 mt-auto text-[#4C4C4C]">
+             <span className="text-[14px] font-bold">{product.price}</span>
              <span className="text-[14px] font-semibold">هزارتومان</span>
             </div>
            )}
-          </CardContent>
+          </CardFooter>
          </Card>
         </Link>
        </CarouselItem>

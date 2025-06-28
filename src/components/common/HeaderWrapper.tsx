@@ -25,13 +25,17 @@ export default function HeaderWrapper({
  const setCount = useCartCount((s) => s.setCount);
 
  useEffect(() => {
-  if (token) {
-   CustomerCartAll(token).then((res) => {
-    if (res?.items) {
-     const totalQty = res?.items?.length ?? 0;
-     setCount(totalQty);
-    }
-   });
+  if (token && token.length > 10) {
+   CustomerCartAll(token)
+    .then((res) => {
+     if (res?.items) {
+      const totalQty = res.items.length;
+      setCount(totalQty);
+     }
+    })
+    .catch((e) => {
+     console.warn("خطا در دریافت سبد خرید:", e);
+    });
   }
  }, [token, setCount]);
 

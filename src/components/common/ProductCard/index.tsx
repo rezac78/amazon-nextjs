@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {Card, CardAction, CardContent, CardHeader, CardTitle} from "../../ui/card";
+import {Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle} from "../../ui/card";
 import Image from "next/image";
 import HeartIcon from "@/public/icons/Heart";
 import ShoppingBagIcon from "@/public/icons/ShoppingBag";
@@ -7,7 +7,8 @@ import {fetchProductLike} from "@/utils/fetchProduct";
 import {toast} from "sonner";
 import {useState} from "react";
 import {usePathname} from "next/navigation";
-import { ProductSliderItem } from "@/utils/types/types";
+import {ProductSliderItem} from "@/utils/types/types";
+import StarIcon from "@/public/icons/star";
 
 interface ProductCardProps {
  products: ProductSliderItem[];
@@ -48,21 +49,19 @@ export default function ProductCard({products, homePage, onWishlistToggle, Token
 
  return (
   <div className="my-10">
-   <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-2 md:px-6`}>
+   <div className={`flex flex-wrap justify-center gap-6 px-2 md:px-6`}>
     {wishlistProducts.map((card) => {
      return (
       <Link
+       key={card.id}
        onClick={() => {
         localStorage.setItem("lastProductId", String(card.id));
        }}
        href={`/${card.url_key}`}
-       key={card.id}
        className=""
       >
-       <Card
-        className={`group relative flex flex-col justify-between bg-background border border-border min-h-[320px] h-[320px]`}
-       >
-        <CardHeader className="flex-1 w-full ">
+       <Card className="group relative flex flex-col justify-between w-[280px] h-[340px] bg-[#FFFFFF] border border-[#E8E8E8]">
+        <CardHeader className="flex-1 w-full">
          <div className="w-[150px] h-[150px] relative mx-auto">
           <Image
            src={
@@ -71,26 +70,34 @@ export default function ProductCard({products, homePage, onWishlistToggle, Token
              : card?.images?.[0]?.url || "/defult.avif"
            }
            alt={card.name}
-           width={250}
-           height={250}
-           sizes={`(max-width: 768px) 100vw, ${!homePage ? "150px" : "300px"}`}
+           width={150}
+           height={150}
+           sizes="(max-width: 768px) 100vw, 150px"
            className="object-contain"
            loading="lazy"
           />
          </div>
         </CardHeader>
-        <CardContent>
-         <CardTitle className="line-clamp-2 leading-relaxed text-[16px] min-h-[48px]">{card.name}</CardTitle>
+        <CardContent className="flex-1">
+         <CardTitle className="w-full text-[#4C4C4C] line-clamp-2 leading-relaxed text-[12px] min-h-[48px] font-medium">
+          {card.name}
+         </CardTitle>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+         <div className="flex item-center gap-1">
+          <StarIcon className="text-[#E4E82E] w-3 h-3" />
+          <span className="text-xs font-medium text-[#4C4C4C]">4.5</span>
+         </div>
          {card.price && (
-          <div className="flex items-center justify-end gap-1 text-card-foreground mt-1">
-           <span className="text-[18px] font-bold">{card.price}</span>
+          <div className="flex items-center justify-end gap-1 mt-auto text-[#4C4C4C]">
+           <span className="text-[14px] font-bold">{card.price}</span>
            <span className="text-[14px] font-semibold">هزارتومان</span>
           </div>
          )}
-        </CardContent>
+        </CardFooter>
         <CardAction
          className={`absolute ${
-          !homePage ? "top-40" : "top-10"
+          !homePage ? "top-6" : "top-10"
          } right-4 flex flex-col border rounded-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white shadow-md`}
         >
          <div

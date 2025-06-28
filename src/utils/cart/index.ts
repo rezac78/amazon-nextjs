@@ -27,6 +27,7 @@ export async function CustomerCartAdd(
  }
 }
 export async function CustomerCartAll(Token: string) {
+ if (!Token) return null; // جلوگیری از ارسال درخواست
  try {
   const response = await fetch(BASE_URL_API + "v1/customer/cart", {
    method: "GET",
@@ -38,13 +39,12 @@ export async function CustomerCartAll(Token: string) {
 
   const resData = await response.json();
   if (resData.errors) {
-   throw resData.errors[0];
+   throw new Error(resData.errors[0]);
   }
-
   return resData.data;
  } catch (err) {
-  console.error("Logout Error:", err);
-  throw err;
+  console.error("CustomerCartAll Error:", err);
+  return null;
  }
 }
 
