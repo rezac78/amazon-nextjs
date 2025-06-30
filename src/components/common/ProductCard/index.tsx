@@ -57,7 +57,7 @@ export default function ProductCard({products, homePage, onWishlistToggle, Token
        onClick={() => {
         localStorage.setItem("lastProductId", String(card.id));
        }}
-       href={`/${card.url_key}`}
+       href={`/${card.urlKey}`}
        className=""
       >
        <Card className="group relative flex flex-col justify-between w-[280px] h-[340px] bg-[#FFFFFF] border border-[#E8E8E8]">

@@ -1,51 +1,138 @@
 export const GET_PRODUCT_QUERY = `
   query GetProduct($id: ID!) {
-    product(id: $id) {
-      id
-      name
-      description
-      isInWishlist
-      shareURL
-      price
-       relatedProducts {
-      id
-      images {
-        id
-        url
-      }
-      price
-      name
+  product(id: $id) {
+    id
+    sku
+    name
+    type
+    parentId
+    attributeFamilyId
+    productNumber
+    shortDescription
+    description
+    urlKey
+    shareURL
+    new
+    featured
+    status
+    guestCheckout
+    visibleIndividually
+    metaTitle
+    metaKeywords
+    metaDescription
+    price
+    specialPrice
+    specialPriceFrom
+    specialPriceTo
+    weight
+    createdAt
+    inventories {
+      qty
     }
-       upSells {
-      id
-      name
-       images {
-        id
-        url
-      }
-      price
+    specialPrice
+    specialPriceTo
+    specialPriceFrom
+    updatedAt
+    priceHtml {
+      formattedFinalPrice
     }
-
+    images {
+      url
+    }
+    videos {
+      url
+    }
+    additionalData {
+      id
+      value
+      code
+      value
+      label
+    }
     crossSells {
       id
       name
-       images {
-        id
+      urlKey
+      images {
         url
       }
       price
     }
+    upSells {
+      id
+      name
+      urlKey
       images {
         url
       }
-        videos {
-     id
-    url
-   }
-      categories {
+      price
+    }
+    relatedProducts {
+      id
+      name
+      urlKey
+      images {
+        url
+      }
+      price
+    }
+    downloadableLinks {
+      id
+      title
+      price
+    }
+    downloadableSamples {
+      id
+      url
+      fileUrl
+      file
+      fileName
+    }
+    booking {
+      id
+      type
+      qty
+      location
+      showLocation
+      availableEveryWeek
+      availableFrom
+      availableTo
+      productId
+       tableSlot {
         id
-        name
+        priceType
+        guestLimit
+        duration
+        breakTime
+        preventSchedulingBefore
+        sameSlotAllDays
+        slots {
+          id
+          day
+          from
+          to
+        }
+        bookingProductId
+      }
+      defaultSlot {
+        id
+        bookingType
+        duration
+        breakTime
+      }
+      appointmentSlot {
+        id
+        duration
+      }
+      eventTickets {
+        id
+        price
+      }
+      rentalSlot {
+        id
+        rentingType
       }
     }
   }
+}
 `;

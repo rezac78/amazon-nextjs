@@ -1,7 +1,7 @@
 import {fetchProductAll} from "@/utils/fetchProduct";
 import HomePage from "../components/pages/home";
 import {categories} from "@/utils/fetchhome";
-import { getAuthToken } from "@/utils/checkCookies";
+import {getAuthToken} from "@/utils/checkCookies";
 
 export default async function Home() {
  const token = await getAuthToken();

@@ -9,6 +9,9 @@ import {Product} from "./types/types";
 import {BASE_URL} from "./config";
 import {toast} from "sonner";
 import {BASE_URL_API} from "@/config";
+import {GET_PRODUCT_QUERY} from "@/graphql/productId/products";
+export const BASE_URL_GRAPHQL =
+ typeof window === "undefined" ? process.env.BASE_URL || "" : process.env.NEXT_PUBLIC_BASE_URL_CLIENT || "";
 
 export async function fetchProducts({page, limit}: {page: number; limit: number}) {
  try {
@@ -39,21 +42,26 @@ export async function fetchProducts({page, limit}: {page: number; limit: number}
   return {data: [], pageInfo: {currentPage: 1, lastPage: 1}};
  }
 }
-export async function fetchProductById(id: number): Promise<Product | null> {
+export async function fetchProductById(id: number) {
  try {
-  const response = await fetch(BASE_URL_API + `v1/products/${id}`, {
-   method: "GET",
+  const response = await fetch(BASE_URL_GRAPHQL, {
+   method: "POST",
    headers: {
     "Content-Type": "application/json",
    },
+   body: JSON.stringify({
+    query: GET_PRODUCT_QUERY,
+    variables: {id: id.toString()},
+   }),
   });
-  if (!response.ok) {
-   throw new Error(`HTTP error! Status: ${response.status}`);
-  }
   const result = await response.json();
-  return result.data ?? null;
+  if (result.errors) {
+   console.error("GraphQL errors:", result.errors);
+   return null;
+  }
+  return result.data.product;
  } catch (error) {
-  console.error("Failed to fetch product:", error);
+  console.error("GraphQL fetch failed:", error);
   return null;
  }
 }

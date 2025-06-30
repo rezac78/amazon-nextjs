@@ -4,6 +4,8 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Button} from "@/components/ui/button";
 import {CartItem} from "@/utils/types/cart";
 import Image from "next/image";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import StarIcon from "@/public/icons/star";
 interface CartPageProps {
  Data: CartItem[];
  Token: string;
@@ -75,15 +77,39 @@ export default function CheckoutPage({Data}: CartPageProps) {
        e.product.images[0]?.url ||
        "/default.avif";
       return (
-       <div key={i} className="flex flex-col gap-4 border rounded-xl p-4">
-        <div className="flex flex-col gap-4 items-center">
-         <Image src={imageSrc} alt={e.name} width={120} height={120} className="w-20 h-20 rounded-lg object-cover" />
-         <div className="flex-1">
-          <p className="font-medium text-justify text-sm w-40">{e.name}</p>
-          <p className="text-xs text-gray-500">تعداد: ۲</p>
-         </div>
-         <div className="font-semibold">{e.product.formatted_price}</div>
-        </div>
+       <div key={i} className="flex flex-col gap-2 p-2">
+        <Card className="group relative flex flex-col justify-between w-[280px] h-[340px] bg-[#FFFFFF] border border-[#E8E8E8]">
+         <CardHeader className="flex-1 w-full">
+          <div className="w-[150px] h-[150px] relative mx-auto">
+           <Image
+            src={imageSrc}
+            alt={e.name}
+            width={150}
+            height={150}
+            sizes="(max-width: 768px) 100vw, 150px"
+            className="object-contain"
+            loading="lazy"
+           />
+          </div>
+         </CardHeader>
+         <CardContent className="flex-1">
+          <CardTitle className="w-full text-[#4C4C4C] line-clamp-2 leading-relaxed text-[12px] min-h-[48px] font-medium">
+           {e.name}
+           <p className="text-xs text-gray-500">تعداد: ۲</p>
+          </CardTitle>
+         </CardContent>
+         <CardFooter className="flex justify-between">
+          <div className="flex item-center gap-1">
+           <StarIcon className="text-[#E4E82E] w-3 h-3" />
+           <span className="text-xs font-medium text-[#4C4C4C]">4.5</span>
+          </div>
+          {e.price && (
+           <div className="flex items-center justify-end gap-1 mt-auto text-[#4C4C4C]">
+            <span className="text-[14px] font-bold">{e.product.formatted_price}</span>
+           </div>
+          )}
+         </CardFooter>
+        </Card>
        </div>
       );
      })}

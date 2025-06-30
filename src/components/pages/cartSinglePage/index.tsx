@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import Image from "next/image";
 import {Button} from "../../ui/button";
@@ -7,26 +6,28 @@ import React, {useEffect, useState} from "react";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
-import {
- addToCompareProduct,
- fetchProductById,
- fetchProductLike,
- fetchProductsAdditional,
- fetchWishlist,
-} from "@/utils/fetchProduct";
-import {Product, ProductAttribute} from "@/utils/types/types";
+import {addToCompareProduct, fetchProductById, fetchProductLike, fetchWishlist} from "@/utils/fetchProduct";
+import {Product} from "@/utils/types/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
 import ShareSection from "@/components/common/ShareSection";
 import {toast} from "sonner";
 import getColorCodeFromLabel from "@/utils/getColorCodeFromLabel";
 import {CustomerCartAdd} from "@/utils/cart";
 import {useCartCount} from "@/store/useCounter";
+import BookingSection from "./common/booking";
+import Downloadable from "./common/downloadable";
+import {isSpecialPriceValid} from "@/utils/priceUtils";
+import DiscountRibbon from "./discountRibbon";
+import SpecialOfferBanner from "./common/SpecialOfferBanner";
+import {type DateObject as DateObjectType} from "react-multi-date-picker";
 
 export default function CartSinglePage({Token}: {Token: string}) {
  const [selectedImage, setSelectedImage] = useState<string>("");
  const [loadingLike, setLoadingLike] = useState<boolean>(false);
  const [product, setProduct] = useState<Product | null>(null);
- const [productAtribute, setProductAtribute] = useState<ProductAttribute[] | null>(null);
+ const [selectedDate, setSelectedDate] = useState<DateObjectType | null>(null);
+ const [selectedSlot, setSelectedSlot] = useState<{date: string; slot: string | null} | null>(null);
+
  const [wishlisted, setWishlisted] = useState(false);
  const [selectedColor, setSelectedColor] = useState<string>("");
  const [selectedSize, setSelectedSize] = useState<string>("");
@@ -59,7 +60,6 @@ export default function CartSinglePage({Token}: {Token: string}) {
   if (productId) {
    (async () => {
     const res = await fetchProductById(productId);
-    const additionalProducts = await fetchProductsAdditional(Token ?? "", productId);
 
     if (res) {
      setProduct(res);
@@ -76,9 +76,6 @@ export default function CartSinglePage({Token}: {Token: string}) {
        setLoadingLike(false);
       }
      }
-    }
-    if (additionalProducts) {
-     setProductAtribute(additionalProducts);
     }
    })();
   }
@@ -108,36 +105,62 @@ export default function CartSinglePage({Token}: {Token: string}) {
    toast.warning("ابتدا وارد حساب کاربری شوید");
    return;
   }
-  if (!selectedDownloadLink) {
-   toast.warning("یک گزینه دانلود را انتخاب کنید");
-   return;
-  }
-  const data = {
+  type CartAddData = {
+   is_buy_now: number;
+   product_id: number;
+   quantity: string;
+   links?: number[];
+   "booking[date]"?: string;
+   "booking[slot]"?: string;
+   "booking[note]"?: string;
+  };
+
+  const data: CartAddData = {
    is_buy_now: 0,
    product_id: product.id,
    quantity: selectedQuantity,
-   links: [selectedDownloadLink],
   };
+  if (product.type === "downloadable") {
+   if (!selectedDownloadLink) {
+    toast.warning("یک گزینه دانلود را انتخاب کنید");
+    return;
+   }
+   data.links = [selectedDownloadLink];
+  }
+  if (product.type === "booking") {
+   if (!selectedDate || !selectedSlot) {
+    toast.warning("لطفاً تاریخ و زمان رزرو را انتخاب کنید");
+    return;
+   }
+   data["booking[date]"] = selectedSlot.date;
+   if (selectedSlot.slot !== null) {
+    data["booking[slot]"] = selectedSlot.slot;
+   }
+   data["booking[note]"] = "bookingNote"; // ← ارسال حتی اگر خالی باشد
+  }
+
   try {
    await CustomerCartAdd(data, Token, String(product.id));
    increase(Number(selectedQuantity));
+   toast.success("محصول با موفقیت به سبد خرید اضافه شد");
   } catch (error) {
    toast.error("خطا در اضافه کردن محصول به سبد خرید");
    console.error(error);
   }
  };
 
+ console.log("product", product.booking);
  return (
   <>
    <BreadcrumbComponent Data={product} />
    <div className="flex flex-col md:flex-row gap-1">
-    {/* ---------- gallery ---------- */}
-    <div className="flex flex-col md:w-[35%] min-w-[35%] h-fit">
+    <div className="relative flex flex-col md:w-[35%] min-w-[35%] h-fit">
+     {isSpecialPriceValid(product) && <SpecialOfferBanner product={product} />}
      <div className="flex">
       <ShareSection
        onLike={handleToggleWishlist}
        isLiked={wishlisted}
-       shareURL={product.url_key ?? ""}
+       shareURL={product.shareURL ?? ""}
        AddToCompare={handleAddToCompare}
        loadingLike={loadingLike}
       />
@@ -175,8 +198,8 @@ export default function CartSinglePage({Token}: {Token: string}) {
     </div>
     <div className="flex flex-grow flex-col gap-4">
      <h1 className="text-2xl md:text-3xl font-semibold">{product.name}</h1>
-     <div className="text-yellow-500 font-medium text-sm">Amazon&apos;s Choice ✨</div>
-     <div className="text-sm text-gray-500">No Import Charges & $46.96 Shipping to Azerbaijan. Delivery June 17–27</div>
+     {/* <div className="text-yellow-500 font-medium text-sm">Amazon&apos;s Choice ✨</div>
+     <div className="text-sm text-gray-500">No Import Charges & $46.96 Shipping to Azerbaijan. Delivery June 17–27</div> */}
      <div className="flex flex-col md:flex-row gap-4 items-center">
       {colorOptions.length > 0 && (
        <div>
@@ -225,7 +248,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
       )}
      </div>
      <div className="grid grid-cols-2 gap-4 text-sm border-t border-b py-4">
-      {productAtribute?.map((attribute) => {
+      {product.additionalData?.map((attribute) => {
        if (!attribute.value) return null;
        const valueToDisplay = String(attribute.value);
        const colorCode = attribute.code === "color" ? getColorCodeFromLabel(valueToDisplay) : "";
@@ -246,8 +269,20 @@ export default function CartSinglePage({Token}: {Token: string}) {
       <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description ?? ""}} />
      </div>
     </div>
-    <div className="flex flex-col md:w-[19%] min-w-[19%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">
-     <h1 className="text-2xl md:text-3xl font-semibold">{product.formatted_price}</h1>
+    <div className="relative flex flex-col md:w-[19%] min-w-[19%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">
+     {isSpecialPriceValid(product) && <DiscountRibbon Data={product} />}
+     <h1 className="text-2xl md:text-3xl font-semibold">
+      {isSpecialPriceValid(product) ? (
+       <div className="flex flex-col">
+        <span className="line-through text-gray-500 ml-2">{product.priceHtml.formattedFinalPrice}</span>
+        <span className="text-red-600">
+         {typeof product.specialPrice === "number" ? (product.specialPrice * 100).toLocaleString("IR-fa") : ""}
+        </span>
+       </div>
+      ) : (
+       product.priceHtml.formattedFinalPrice
+      )}
+     </h1>
      <div className="flex flex-col gap-4 mt-4">
       <Select value={selectedQuantity} onValueChange={handleQuantityChange}>
        <SelectTrigger className="w-full">
@@ -264,30 +299,46 @@ export default function CartSinglePage({Token}: {Token: string}) {
         </SelectGroup>
        </SelectContent>
       </Select>
-      <Button disabled={!selectedDownloadLink} className="flex-1 flex items-center gap-2" onClick={handleAddToCart}>
+      {product?.type !== "booking" &&
+       (() => {
+        const totalQty = product?.inventories?.reduce((sum, e) => sum + (e.qty ?? 0), 0) || 0;
+
+        if (totalQty === 0) {
+         return <p className="text-red-600 text-sm">متأسفانه این محصول موجود نیست</p>;
+        }
+
+        if (totalQty < 10) {
+         return <p className="text-red-600 text-sm">فقط {totalQty} عدد از کالا موجود است</p>;
+        }
+        return null;
+       })()}
+
+      <Button
+       disabled={
+        (product.type === "downloadable" && (product.downloadableLinks?.length ?? 0) > 0 && !selectedDownloadLink) ||
+        (product.type === "booking" && !selectedDate)
+       }
+       className="flex-1 flex items-center gap-2"
+       onClick={handleAddToCart}
+      >
        افزودن به سبد
       </Button>
      </div>
-     {product.downloadable_links && product.downloadable_links.length > 0 && (
-      <div className="flex flex-col gap-2 mt-4">
-       {product.downloadable_links.map((link) => (
-        <label
-         key={link.id}
-         className="flex items-center justify-between gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
-        >
-         <input
-          type="radio"
-          name="downloadable_link"
-          value={link.id}
-          checked={selectedDownloadLink === link.id}
-          onChange={() => setSelectedDownloadLink(link.id)}
-          className="accent-blue-600"
-         />
-         <span className="flex-1 text-sm">{link.title}</span>
-         <span className="whitespace-nowrap font-semibold">{link.formatted_price ?? link.price}</span>
-        </label>
-       ))}
-      </div>
+     {product.type === "downloadable" && (
+      <Downloadable
+       product={product}
+       selectedDownloadLink={selectedDownloadLink}
+       setSelectedDownloadLink={setSelectedDownloadLink}
+      />
+     )}
+     {product.type === "booking" && (
+      <BookingSection
+       bookings={product}
+       setSelectedDate={setSelectedDate}
+       selectedDate={selectedDate}
+       setSelectedSlot={setSelectedSlot}
+       selectedSlot={selectedSlot}
+      />
      )}
     </div>
    </div>

@@ -1,21 +1,138 @@
 export interface Product {
- downloadable_links?: DownloadableLink[];
  id: number;
  name: string;
+ type: string;
+ parentId?: number;
+ url?: string;
+ url_key?: string;
+ attributeFamilyId?: number;
+ productNumber?: string;
+ shortDescription?: string;
  description?: string;
+ urlKey?: string;
+ shareURL?: string;
+ new?: boolean;
+ featured?: boolean;
+ status?: boolean;
+ guestCheckout?: boolean;
+ visibleIndividually?: boolean;
+ metaTitle?: string;
+ metaKeywords?: string;
+ metaDescription?: string;
  price?: number;
  formatted_price?: number;
- isInWishlist: boolean;
+ specialPrice?: number;
+ specialPriceFrom?: string | Date;
+ specialPriceTo?: string | Date;
  weight?: number;
- url_key?: string;
- super_attributes?: SuperAttribute[];
- variants?: ProductVariant[];
+ createdAt?: string;
+ updatedAt?: string;
+ priceHtml: {
+  formattedFinalPrice: string;
+ };
  images: ProductImage[];
  videos?: ProductVideo[];
- relatedProducts?: ProductRelatedProducts[];
- upSells?: UpSellsProducts[];
- crossSells?: CrossSellsProducts[];
+ additionalData?: AdditionalAttribute[];
+ inventories?: {qty?: number}[];
+
+ downloadableLinks?: DownloadableLink[];
+ downloadableSamples?: DownloadableSample[];
+
+ booking?: BookingProduct;
+
+ crossSells?: RelatedProduct[];
+ upSells?: RelatedProduct[];
+ relatedProducts?: RelatedProduct[];
+
+ super_attributes?: SuperAttribute[];
+ variants?: ProductVariant[];
+
  categories?: Category[];
+
+ isInWishlist?: boolean; // optional client-side data
+}
+export interface RelatedProduct {
+ id: number;
+ name: string;
+ urlKey: string;
+ images: ProductImage[];
+ price: number;
+}
+export interface AdditionalAttribute {
+ id: number;
+ label: string;
+ code: string;
+ value: string;
+}
+export interface DownloadableLink {
+ id: number;
+ title: string;
+ price: number;
+}
+export interface Slot {
+ id: number;
+ day: string;
+ from: string; // "13:00"
+ to: string; // "14:00"
+}
+export interface DownloadableSample {
+ formatted_price?: string;
+ price: number;
+ id: number;
+ url?: string;
+ fileUrl?: string;
+ file?: string;
+ fileName?: string;
+}
+export interface BookingProduct {
+ id: number;
+ type: string;
+ qty?: number;
+ location?: string;
+ showLocation?: boolean;
+ availableEveryWeek?: boolean;
+ availableFrom?: string;
+ availableTo?: string;
+ productId: number;
+
+ tableSlot?: {
+  id: number;
+  priceType?: string;
+  guestLimit?: number;
+  duration?: number;
+  breakTime?: number;
+  preventSchedulingBefore?: number;
+  sameSlotAllDays?: boolean;
+  bookingProductId: number;
+  slots: {
+   id: number;
+   day: string;
+   from: string;
+   to: string;
+  }[];
+ };
+
+ defaultSlot?: {
+  id: number;
+  bookingType: string;
+  duration: number;
+  breakTime?: number;
+ };
+
+ appointmentSlot?: {
+  id: number;
+  duration: number;
+ };
+
+ eventTickets?: {
+  id: number;
+  price: number;
+ }[];
+
+ rentalSlot?: {
+  id: number;
+  rentingType: string;
+ };
 }
 export interface ProductImage {
  url?: string;
@@ -49,11 +166,12 @@ export interface ProductVideo {
 }
 export interface ProductRelatedProducts {
  id: number;
- url: string;
+ url?: string;
+ urlKey?: string;
  images: ProductImage[];
- price: string;
+ price?: number;
  name: string;
- isInWishlist?: string;
+ isInWishlist?: boolean;
  url_key?: string;
 }
 export interface UpSellsProducts {
@@ -149,7 +267,7 @@ export interface ProductAttribute {
 }
 export interface DownloadableLink {
  formatted_price?: number;
- price?: number;
+ price: number;
  id: number;
  file_url?: string | null;
  sample_url?: string | null;

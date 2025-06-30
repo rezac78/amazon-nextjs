@@ -40,7 +40,7 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
    <div className="px-12 md:px-6">
     <Carousel opts={{align: "start"}} className="w-full">
      <CarouselContent>
-      {[...Data, ...Data].map((product, i) => (
+      {Data.map((product, i) => (
        <CarouselItem key={i}>
         <Link
          onClick={() => {
