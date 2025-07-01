@@ -36,7 +36,7 @@ export default function CommentsTab({product, ProductId, Token}: {product: Produ
      <input
       type="text"
       placeholder="عنوان نظر"
-      className="w-full p-2 border rounded mb-3 text-sm"
+      className="w-full p-2 border rounded mb-3 text-sm bg-white border-gray-200 "
       value={title}
       onChange={(e) => setTitle(e.target.value)}
       required

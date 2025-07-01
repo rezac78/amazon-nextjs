@@ -32,7 +32,7 @@ export default function ProductTabs({product, Token}: {product: Product; Token: 
 
    {activeTab === "توضیحات" && (
     <div className="text-gray-600 p-4">
-     <div className="space-y-2 text-sm text-gray-700">
+     <div className="space-y-2 text-sm text-gray-700 overflow-auto h-[700px]">
       <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description ?? ""}} />
      </div>
     </div>

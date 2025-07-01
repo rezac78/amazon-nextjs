@@ -31,26 +31,26 @@ export default function CartSinglePage({Token}: {Token: string}) {
 
  const [wishlisted, setWishlisted] = useState(false);
  const [selectedColor, setSelectedColor] = useState<string>("");
-//  const [selectedSize, setSelectedSize] = useState<string>("");
+ //  const [selectedSize, setSelectedSize] = useState<string>("");
  const [productId, setProductId] = useState<number | null>(null);
-//  const [variantPrice, setVariantPrice] = useState<string | number>("");
+ //  const [variantPrice, setVariantPrice] = useState<string | number>("");
  const [selectedQuantity, setSelectedQuantity] = useState<string>("1");
  const {increase} = useCartCount();
  const [selectedDownloadLink, setSelectedDownloadLink] = useState<number | null>(null);
-//  const colorOptions = product?.super_attributes?.find((attr) => attr.code === "color")?.options || [];
-//  const sizeOptions = product?.super_attributes?.find((attr) => attr.code === "size")?.options || [];
-//  useEffect(() => {
-//   if (selectedColor && selectedSize) {
-//    const variant = product?.variants?.find((v) => {
-//     return v?.attributes?.color === Number(selectedColor) && v?.attributes?.size === Number(selectedSize);
-//    });
-//    if (variant) {
-//     setVariantPrice(variant.formatted_price || variant.price);
-//    } else {
-//     setVariantPrice("");
-//    }
-//   }
-//  }, [selectedColor, selectedSize, product?.variants]);
+ //  const colorOptions = product?.super_attributes?.find((attr) => attr.code === "color")?.options || [];
+ //  const sizeOptions = product?.super_attributes?.find((attr) => attr.code === "size")?.options || [];
+ //  useEffect(() => {
+ //   if (selectedColor && selectedSize) {
+ //    const variant = product?.variants?.find((v) => {
+ //     return v?.attributes?.color === Number(selectedColor) && v?.attributes?.size === Number(selectedSize);
+ //    });
+ //    if (variant) {
+ //     setVariantPrice(variant.formatted_price || variant.price);
+ //    } else {
+ //     setVariantPrice("");
+ //    }
+ //   }
+ //  }, [selectedColor, selectedSize, product?.variants]);
  useEffect(() => {
   const storedId = localStorage.getItem("lastProductId");
   if (storedId) {
@@ -156,7 +156,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
    <BreadcrumbComponent Data={product} />
    <div className="container mx-auto p-4 border rounded-12 border-[#E8E8E8]">
     <div className="grid md:grid-cols-2 gap-8 ">
-     <div className="relative border border-[#DDDDDD] p-4 rounded-14">
+     <div className="relative border border-[#DDDDDD] p-4 rounded-14 ">
       <ShareSection
        onLike={handleToggleWishlist}
        isLiked={wishlisted}
@@ -165,10 +165,13 @@ export default function CartSinglePage({Token}: {Token: string}) {
        loadingLike={loadingLike}
       />
       {isSpecialPriceValid(product) && <SpecialOfferBanner product={product} />}
-      <div className="relative md:w-[372px] h-[420px] mx-auto">
-       <Image src={selectedImage} alt="Main Product" fill className="object-contain" />
+      <div className="relative md:w-[372px] h-[420px] mx-auto ">
+       {selectedImage?.endsWith(".mp4") || selectedImage?.endsWith(".webm") ? (
+        <video src={selectedImage} controls autoPlay className="w-full h-full object-contain" />
+       ) : (
+        <Image src={selectedImage} alt="Main Product" fill className="object-contain" />
+       )}{" "}
       </div>
-
       <div className="flex mt-4 gap-2 overflow-x-auto">
        {product?.images?.map((img, index) => (
         <div
@@ -183,7 +186,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
        ))}
        {Array.isArray(product.videos) && product.videos.length > 0 && product.videos[0]?.url && (
         <div
-         className={`relative w-14 h-14 cursor-pointer border-2 rounded-md overflow-hidden ${
+         className={`relative w-24 h-24 cursor-pointer border-2 rounded-md overflow-hidden ${
           selectedImage === product.videos[0].url ? "border-blue-500" : "border-gray-200"
          }`}
          onMouseEnter={() => setSelectedImage(product.videos![0].url)}

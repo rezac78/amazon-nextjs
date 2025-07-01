@@ -136,7 +136,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
    if (selectedSlot.slot !== null) {
     data["booking[slot]"] = selectedSlot.slot;
    }
-   data["booking[note]"] = "bookingNote"; // ← ارسال حتی اگر خالی باشد
+   data["booking[note]"] = "bookingNote";
   }
 
   try {
