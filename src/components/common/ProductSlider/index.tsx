@@ -75,7 +75,11 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
           <CardFooter className="flex justify-between">
            <div className="flex item-center gap-1">
             <StarIcon className="text-[#E4E82E] w-3 h-3" />
-            <span className="text-xs font-medium text-[#4C4C4C]">4.5</span>
+            <span className="text-xs font-medium text-[#4C4C4C]">
+             {!Array.isArray(product.reviews)
+              ? parseFloat(product.reviews?.average_rating || "0").toFixed(1)
+              : "بدون امتیاز"}
+            </span>
            </div>
            {product.price && (
             <div className="flex items-center justify-end gap-1 mt-auto text-[#4C4C4C]">

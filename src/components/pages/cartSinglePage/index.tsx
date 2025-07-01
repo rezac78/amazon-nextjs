@@ -6,7 +6,7 @@ import React, {useEffect, useState} from "react";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
-import {addToCompareProduct, fetchProductById, fetchProductLike, fetchWishlist} from "@/utils/fetchProduct";
+import {fetchProductById, fetchProductLike, fetchWishlist} from "@/utils/fetchProduct";
 import {Product} from "@/utils/types/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
 import ShareSection from "@/components/common/ShareSection";
@@ -14,12 +14,13 @@ import {toast} from "sonner";
 import getColorCodeFromLabel from "@/utils/getColorCodeFromLabel";
 import {CustomerCartAdd} from "@/utils/cart";
 import {useCartCount} from "@/store/useCounter";
-import BookingSection from "./common/booking";
-import Downloadable from "./common/downloadable";
 import {isSpecialPriceValid} from "@/utils/priceUtils";
 import DiscountRibbon from "./discountRibbon";
 import SpecialOfferBanner from "./common/SpecialOfferBanner";
 import {type DateObject as DateObjectType} from "react-multi-date-picker";
+import StarIcon from "@/public/icons/star";
+import ProductTabs from "./common/ProductTabs";
+import TechnicalSpecifications from "./common/technicalSpecifications ";
 
 export default function CartSinglePage({Token}: {Token: string}) {
  const [selectedImage, setSelectedImage] = useState<string>("");
@@ -30,26 +31,26 @@ export default function CartSinglePage({Token}: {Token: string}) {
 
  const [wishlisted, setWishlisted] = useState(false);
  const [selectedColor, setSelectedColor] = useState<string>("");
- const [selectedSize, setSelectedSize] = useState<string>("");
+//  const [selectedSize, setSelectedSize] = useState<string>("");
  const [productId, setProductId] = useState<number | null>(null);
- const [variantPrice, setVariantPrice] = useState<string | number>("");
+//  const [variantPrice, setVariantPrice] = useState<string | number>("");
  const [selectedQuantity, setSelectedQuantity] = useState<string>("1");
  const {increase} = useCartCount();
  const [selectedDownloadLink, setSelectedDownloadLink] = useState<number | null>(null);
- const colorOptions = product?.super_attributes?.find((attr) => attr.code === "color")?.options || [];
- const sizeOptions = product?.super_attributes?.find((attr) => attr.code === "size")?.options || [];
- useEffect(() => {
-  if (selectedColor && selectedSize) {
-   const variant = product?.variants?.find((v) => {
-    return v?.attributes?.color === Number(selectedColor) && v?.attributes?.size === Number(selectedSize);
-   });
-   if (variant) {
-    setVariantPrice(variant.formatted_price || variant.price);
-   } else {
-    setVariantPrice("");
-   }
-  }
- }, [selectedColor, selectedSize, product?.variants]);
+//  const colorOptions = product?.super_attributes?.find((attr) => attr.code === "color")?.options || [];
+//  const sizeOptions = product?.super_attributes?.find((attr) => attr.code === "size")?.options || [];
+//  useEffect(() => {
+//   if (selectedColor && selectedSize) {
+//    const variant = product?.variants?.find((v) => {
+//     return v?.attributes?.color === Number(selectedColor) && v?.attributes?.size === Number(selectedSize);
+//    });
+//    if (variant) {
+//     setVariantPrice(variant.formatted_price || variant.price);
+//    } else {
+//     setVariantPrice("");
+//    }
+//   }
+//  }, [selectedColor, selectedSize, product?.variants]);
  useEffect(() => {
   const storedId = localStorage.getItem("lastProductId");
   if (storedId) {
@@ -93,11 +94,11 @@ export default function CartSinglePage({Token}: {Token: string}) {
   setWishlisted(!wishlisted);
   await fetchProductLike(product.id, Token);
  };
- const handleAddToCompare = async () => {
-  if (!product) return;
-  const success = await addToCompareProduct(product.id, Token);
-  if (!success) toast.error("افزودن به لیست مقایسه انجام نشد");
- };
+ //  const handleAddToCompare = async () => {
+ //   if (!product) return;
+ //   const success = await addToCompareProduct(product.id, Token);
+ //   if (!success) toast.error("افزودن به لیست مقایسه انجام نشد");
+ //  };
  const handleQuantityChange = (value: string) => setSelectedQuantity(value);
  const handleAddToCart = async () => {
   if (!product) return;
@@ -148,200 +149,167 @@ export default function CartSinglePage({Token}: {Token: string}) {
    console.error(error);
   }
  };
-
- console.log("product", product.booking);
+ const colorAttributes = product.additionalData?.filter((attr) => attr.code === "color");
+ const otherAttributes = product.additionalData?.filter((attr) => attr.code !== "color" && attr.value);
  return (
   <>
    <BreadcrumbComponent Data={product} />
-   <div className="flex flex-col md:flex-row gap-1">
-    <div className="relative flex flex-col md:w-[35%] min-w-[35%] h-fit">
-     {isSpecialPriceValid(product) && <SpecialOfferBanner product={product} />}
-     <div className="flex">
+   <div className="container mx-auto p-4 border rounded-12 border-[#E8E8E8]">
+    <div className="grid md:grid-cols-2 gap-8 ">
+     <div className="relative border border-[#DDDDDD] p-4 rounded-14">
       <ShareSection
        onLike={handleToggleWishlist}
        isLiked={wishlisted}
        shareURL={product.shareURL ?? ""}
-       AddToCompare={handleAddToCompare}
+       //    AddToCompare={handleAddToCompare}
        loadingLike={loadingLike}
       />
-      <div className="relative w-[90%] h-[500px] aspect-[16/10] rounded-lg overflow-hidden">
-       {selectedImage?.endsWith(".mp4") || selectedImage?.endsWith(".webm") ? (
-        <video src={selectedImage} controls autoPlay className="w-full h-full object-contain" />
-       ) : (
-        <Image src={selectedImage} alt="Main Product" fill className="object-contain" />
+      {isSpecialPriceValid(product) && <SpecialOfferBanner product={product} />}
+      <div className="relative md:w-[372px] h-[420px] mx-auto">
+       <Image src={selectedImage} alt="Main Product" fill className="object-contain" />
+      </div>
+
+      <div className="flex mt-4 gap-2 overflow-x-auto">
+       {product?.images?.map((img, index) => (
+        <div
+         key={index}
+         className={`relative w-24 h-24 cursor-pointer border-2 rounded-md overflow-hidden ${
+          selectedImage === img.url ? "border-blue-500" : "border-gray-200"
+         }`}
+         onMouseEnter={() => setSelectedImage(img.url ?? "")}
+        >
+         <Image src={img.url ?? ""} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
+        </div>
+       ))}
+       {Array.isArray(product.videos) && product.videos.length > 0 && product.videos[0]?.url && (
+        <div
+         className={`relative w-14 h-14 cursor-pointer border-2 rounded-md overflow-hidden ${
+          selectedImage === product.videos[0].url ? "border-blue-500" : "border-gray-200"
+         }`}
+         onMouseEnter={() => setSelectedImage(product.videos![0].url)}
+        >
+         <video src={product.videos[0].url} muted preload="metadata" className="object-cover w-full h-full" />
+        </div>
        )}
       </div>
      </div>
-     <div className="flex flex-row items-center w-full gap-2 overflow-y-auto max-h-[400px] pr-1 z-10">
-      {product?.images?.map((img, index) => (
-       <div
-        key={index}
-        className={`relative w-14 h-14 cursor-pointer border-2 rounded-md overflow-hidden ${
-         selectedImage === img.url ? "border-blue-500" : "border-gray-200"
-        }`}
-        onMouseEnter={() => setSelectedImage(img.url ?? "")}
-       >
-        <Image src={img.url ?? ""} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
-       </div>
-      ))}
-      {Array.isArray(product.videos) && product.videos.length > 0 && product.videos[0]?.url && (
-       <div
-        className={`relative w-14 h-14 cursor-pointer border-2 rounded-md overflow-hidden ${
-         selectedImage === product.videos[0].url ? "border-blue-500" : "border-gray-200"
-        }`}
-        onMouseEnter={() => setSelectedImage(product.videos![0].url)}
-       >
-        <video src={product.videos[0].url} muted preload="metadata" className="object-cover w-full h-full" />
-       </div>
-      )}
-     </div>
-    </div>
-    <div className="flex flex-grow flex-col gap-4">
-     <h1 className="text-2xl md:text-3xl font-semibold">{product.name}</h1>
-     {/* <div className="text-yellow-500 font-medium text-sm">Amazon&apos;s Choice ✨</div>
-     <div className="text-sm text-gray-500">No Import Charges & $46.96 Shipping to Azerbaijan. Delivery June 17–27</div> */}
-     <div className="flex flex-col md:flex-row gap-4 items-center">
-      {colorOptions.length > 0 && (
-       <div>
-        <p className="font-medium mb-2">
-         رنگ: {colorOptions.find((opt) => String(opt.id) === selectedColor)?.label || "انتخاب نشده"}
-        </p>
-        <div className="flex gap-3 flex-wrap">
-         {colorOptions.map((option) => (
-          <button
-           key={option.id}
-           onClick={() => setSelectedColor(String(option.id))}
-           className={`
-                        w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                         selectedColor === String(option.id) ? "border-cyan-500" : "border-gray-300"
-                        }`}
-           style={{backgroundColor: getColorCodeFromLabel(option.label)}}
-           title={option.label}
-          >
-           {selectedColor === String(option.id) && <span className="text-white text-xs">✓</span>}
-          </button>
-         ))}
+     <div className="space-y-4 text-sm md:text-base ">
+      <h1 className="text-md md:text-lg font-semibold text-right mb-6">{product.name}</h1>
+      <div className="flex items-center gap-1">
+       <StarIcon className="text-[#E4E82E] w-4 h-4" />
+       <span className="font-medium text-xs text-[#808080]">{product.averageRating}</span>
+       <span className="text-[#808080] font-medium text-xs">
+        {Array.isArray(product.reviews) ? `( از مجموع ${product.reviews.length} نظر کاربران )` : ""}
+       </span>
+      </div>
+      <div className="relative border border-[#DDDDDD] px-4 py-8 rounded-12 grid grid-cols-2 h-[480px]">
+       {isSpecialPriceValid(product) && <DiscountRibbon Data={product} />}
+       <div className="flex flex-col gap-6">
+        <div>
+         <h2 className="font-medium text-14px mb-1 text-[#4C4C4C]">انتخاب رنگ</h2>
+         <div className="flex gap-2">
+          {colorAttributes?.map((colorAttr) => {
+           const colorCode = getColorCodeFromLabel(colorAttr.value);
+           return (
+            <div key={colorAttr.id} className="flex items-center gap-1 border border-[#E8E8E8] rounded-8 p-2">
+             <button
+              className={`w-4 h-4 rounded-full border ${
+               selectedColor === colorAttr.value ? "ring-2 ring-blue-600" : ""
+              }`}
+              style={{backgroundColor: colorCode}}
+              onClick={() => setSelectedColor(colorAttr.value)}
+              title={colorAttr.value}
+             />
+             <div className="text-xs font-medium text-[#696969]">{colorAttr.value}</div>
+            </div>
+           );
+          })}
+         </div>
+        </div>
+
+        <div>
+         <h2 className="font-medium text-14px mb-1 text-[#4C4C4C]">تعداد سفارش محصول</h2>
+         <Select value={selectedQuantity} onValueChange={handleQuantityChange}>
+          <SelectTrigger className="">
+           <SelectValue placeholder="تعداد محصول" />
+          </SelectTrigger>
+          <SelectContent>
+           <SelectGroup>
+            <SelectLabel>تعداد محصول</SelectLabel>
+            {["1", "2", "3", "4", "5"].map((num) => (
+             <SelectItem key={num} value={num}>
+              {num}
+             </SelectItem>
+            ))}
+           </SelectGroup>
+          </SelectContent>
+         </Select>
+         {(() => {
+          const totalQty = product?.inventories?.reduce((sum, e) => sum + (e.qty ?? 0), 0) || 0;
+
+          if (totalQty === 0) {
+           return <p className="text-red-600 text-sm mt-3">متأسفانه این محصول موجود نیست</p>;
+          }
+
+          if (totalQty < 10) {
+           return <p className="text-red-600 text-sm mt-3">فقط {totalQty} عدد از کالا موجود است</p>;
+          }
+          return null;
+         })()}
         </div>
        </div>
-      )}
-      {sizeOptions.length > 0 && (
        <div>
-        <label className="font-medium block mb-1">اندازه:</label>
-        <Select onValueChange={setSelectedSize} value={selectedSize}>
-         <SelectTrigger className="w-[150px]">
-          <SelectValue placeholder="انتخاب اندازه" />
-         </SelectTrigger>
-         <SelectContent>
-          <SelectGroup>
-           {sizeOptions.map((option) => (
-            <SelectItem key={option.id} value={String(option.id)}>
-             {option.label}
-            </SelectItem>
-           ))}
-          </SelectGroup>
-         </SelectContent>
-        </Select>
+        <h2 className="font-bold mb-1">خصوصیات محصول</h2>
+        <ul className="list-disc list-inside space-y-1">
+         {otherAttributes?.map((attr) => (
+          <li key={attr.id}>
+           <strong>{attr.label}:</strong> {String(attr.value)}
+          </li>
+         ))}
+        </ul>
        </div>
-      )}
-      {variantPrice && (
-       <div className="text-xl font-bold text-green-600 mt-4 md:mt-0">قیمت انتخاب‌شده: {variantPrice}</div>
-      )}
-     </div>
-     <div className="grid grid-cols-2 gap-4 text-sm border-t border-b py-4">
-      {product.additionalData?.map((attribute) => {
-       if (!attribute.value) return null;
-       const valueToDisplay = String(attribute.value);
-       const colorCode = attribute.code === "color" ? getColorCodeFromLabel(valueToDisplay) : "";
-       return (
-        <div key={attribute.id} className="flex items-center gap-2">
-         <strong>{attribute.label}:</strong> {attribute.code !== "color" && valueToDisplay}
-         {colorCode && (
-          <div
-           style={{width: "16px", height: "16px", borderRadius: "50%", backgroundColor: colorCode}}
-           title={attribute.label}
-          />
-         )}
-        </div>
-       );
-      })}
-     </div>
-     <div className="space-y-2 text-sm text-gray-700">
-      <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description ?? ""}} />
+      </div>
+      {/* قیمت */}
      </div>
     </div>
-    <div className="relative flex flex-col md:w-[19%] min-w-[19%] gap-4 border border-border rounded-2xl p-4 text-right h-fit">
-     {isSpecialPriceValid(product) && <DiscountRibbon Data={product} />}
-     <h1 className="text-2xl md:text-3xl font-semibold">
-      {isSpecialPriceValid(product) ? (
-       <div className="flex flex-col">
-        <span className="line-through text-gray-500 ml-2">{product.priceHtml.formattedFinalPrice}</span>
-        <span className="text-red-600">
-         {typeof product.specialPrice === "number" ? (product.specialPrice * 100).toLocaleString("IR-fa") : ""}
-        </span>
-       </div>
-      ) : (
-       product.priceHtml.formattedFinalPrice
-      )}
-     </h1>
-     <div className="flex flex-col gap-4 mt-4">
-      <Select value={selectedQuantity} onValueChange={handleQuantityChange}>
-       <SelectTrigger className="w-full">
-        <SelectValue placeholder="تعداد محصول" />
-       </SelectTrigger>
-       <SelectContent>
-        <SelectGroup>
-         <SelectLabel>تعداد محصول</SelectLabel>
-         {["1", "2", "3", "4", "5"].map((num) => (
-          <SelectItem key={num} value={num}>
-           {num}
-          </SelectItem>
-         ))}
-        </SelectGroup>
-       </SelectContent>
-      </Select>
-      {product?.type !== "booking" &&
-       (() => {
-        const totalQty = product?.inventories?.reduce((sum, e) => sum + (e.qty ?? 0), 0) || 0;
-
-        if (totalQty === 0) {
-         return <p className="text-red-600 text-sm">متأسفانه این محصول موجود نیست</p>;
-        }
-
-        if (totalQty < 10) {
-         return <p className="text-red-600 text-sm">فقط {totalQty} عدد از کالا موجود است</p>;
-        }
-        return null;
-       })()}
-
-      <Button
-       disabled={
-        (product.type === "downloadable" && (product.downloadableLinks?.length ?? 0) > 0 && !selectedDownloadLink) ||
-        (product.type === "booking" && !selectedDate)
-       }
-       className="flex-1 flex items-center gap-2"
-       onClick={handleAddToCart}
-      >
-       افزودن به سبد
-      </Button>
+    <div className="bg-blue-50 p-4 rounded-12 space-y-2 w-full my-4">
+     <div className="flex justify-between">
+      <p className="text-sm">گارانتی ۱۸ ماهه توسعه توان تات (پرهام تک)</p>
+      <h1 className="text-xl font-semibold">
+       {isSpecialPriceValid(product) ? (
+        <div className="flex flex-col">
+         <span className="text-red-600">
+          {typeof product.specialPrice === "number" ? (product.specialPrice * 100).toLocaleString("IR-fa") : ""}
+         </span>
+         <span className="line-through text-gray-500 ml-2">{product.priceHtml.formattedFinalPrice}</span>
+        </div>
+       ) : (
+        product.priceHtml.formattedFinalPrice
+       )}
+      </h1>
      </div>
-     {product.type === "downloadable" && (
-      <Downloadable
-       product={product}
-       selectedDownloadLink={selectedDownloadLink}
-       setSelectedDownloadLink={setSelectedDownloadLink}
-      />
-     )}
-     {product.type === "booking" && (
-      <BookingSection
-       bookings={product}
-       setSelectedDate={setSelectedDate}
-       selectedDate={selectedDate}
-       setSelectedSlot={setSelectedSlot}
-       selectedSlot={selectedSlot}
-      />
-     )}
+     <TechnicalSpecifications
+      product={product}
+      selectedDownloadLink={selectedDownloadLink}
+      setSelectedDownloadLink={setSelectedDownloadLink}
+      setSelectedDate={setSelectedDate}
+      selectedDate={selectedDate}
+      setSelectedSlot={setSelectedSlot}
+      selectedSlot={selectedSlot}
+     />
+     <Button
+      disabled={
+       (product.type === "downloadable" && (product.downloadableLinks?.length ?? 0) > 0 && !selectedDownloadLink) ||
+       (product.type === "booking" && !selectedDate)
+      }
+      className="flex-1 flex items-center gap-2 w-full"
+      onClick={handleAddToCart}
+     >
+      افزودن به سبد
+     </Button>
     </div>
    </div>
+   <ProductTabs product={product} Token={Token} />
    {relatedProducts.length > 0 && <ProductSlider title="محصولات مرتبط" Data={relatedProducts} />}
    {upSells.length > 0 && <ProductSlider title="محصولات فروش بالا" Data={upSells} />}
    {crossSells.length > 0 && <ProductSlider title="محصولات فروش متقابل" Data={crossSells} />}

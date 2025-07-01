@@ -59,7 +59,7 @@ export default function HomePage({NewProducts, categorie}: HomePageProps) {
 
  // Static banner images
  const images = ["/pages/home/slide1.webp", "/pages/home/slide2.webp", "/pages/home/slide3.webp"];
-
+ console.log(NewProducts);
  return (
   <div className="relative mt-6">
    <section className="w-full mx-auto my-10 px-4 ">

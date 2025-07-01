@@ -351,3 +351,32 @@ export async function removeAllCompareProducts(token?: string): Promise<boolean>
   return false;
  }
 }
+export async function CommentSendProducts(productId: number, token: string, formData: FormData): Promise<boolean> {
+ try {
+  const response = await fetch(BASE_URL_API + `v1/products/${productId}/reviews`, {
+   method: "POST",
+   headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    Authorization: `Bearer ${token}`,
+   },
+   body: formData,
+  });
+  console.log(response);
+  if (!response.ok) {
+   throw new Error(`HTTP Error: ${response.status}`);
+  }
+
+  const result = await response.json();
+  toast.success(result.message || "محصول با موفقیت به لیست علاقه‌مندی‌ها اضافه شد");
+  if (result.errors) {
+   console.error("GraphQL errors:", result.errors);
+   return false;
+  }
+
+  return result.success ?? true;
+ } catch (error) {
+  console.error("Failed to add product to wishlist:", error);
+  return false;
+ }
+}

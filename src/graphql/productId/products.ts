@@ -19,6 +19,7 @@ export const GET_PRODUCT_QUERY = `
     visibleIndividually
     metaTitle
     metaKeywords
+    averageRating
     metaDescription
     price
     specialPrice
@@ -28,6 +29,15 @@ export const GET_PRODUCT_QUERY = `
     createdAt
     inventories {
       qty
+    }
+    reviews {
+      id
+      name
+      comment
+      name
+      title
+      rating
+      createdAt
     }
     specialPrice
     specialPriceTo

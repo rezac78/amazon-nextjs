@@ -59,25 +59,20 @@ export default function BookingDaysSchedule({booking}: {booking: Booking}) {
     <span>نمایش برای همه روزها</span>
     <span>{showAllDays ? "▲" : "▼"}</span>
    </button>
-
    {showAllDays && (
-    <div className="divide-y divide-gray-200">
+    <div className="flex flex-wrap justify-center w-full divide-y divide-gray-200">
      {allDates.map((date, idx) => {
       const dayName = getDayName(date);
       if (dayName === "Friday") return null;
-
-      // Filter Thursday slots
       const filteredSlots = dayName === "Thursday" ? slots.filter((slot: Slot) => isBefore15(slot.to)) : slots;
-
       if (filteredSlots.length === 0) return null;
-
       return (
-       <div key={idx} className="px-4 py-3 flex justify-between">
+       <div key={idx} className="px-4 py-3 flex">
         <div className="font-semibold text-blue-700 flex items-start  gap-2">
          <CalendarDaysIcon className="w-4 h-4 text-blue-600" />
          {formatDate(date)}
         </div>
-        <ul className="space-y-1">
+        <ul className="space-y-1 mr-4">
          {filteredSlots.map((slot: Slot, i: number) => (
           <li key={i}>
            <span className="text-gray-700">

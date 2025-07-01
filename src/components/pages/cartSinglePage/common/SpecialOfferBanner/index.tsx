@@ -45,7 +45,7 @@ export default function SpecialOfferBanner({product}: SpecialOfferBannerProps) {
  }, [product.specialPriceTo]);
 
  return (
-  <div className="absolute left-3 w-full flex justify-between items-center p-2 z-[999] bg-red-300 border border-red-400 rounded-4 text-white">
+  <div className="absolute top-0 left-0 w-full flex justify-between items-center p-2 z-[999] bg-red-300 border border-red-400 rounded-4 text-white">
    <span>پیشنهاد ویژه</span>
    <div className="text-xs">
     {showCountdown ? (

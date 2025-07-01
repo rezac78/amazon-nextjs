@@ -6,6 +6,7 @@ export interface Product {
  url?: string;
  url_key?: string;
  attributeFamilyId?: number;
+ averageRating?: number;
  productNumber?: string;
  shortDescription?: string;
  description?: string;
@@ -31,6 +32,7 @@ export interface Product {
   formattedFinalPrice: string;
  };
  images: ProductImage[];
+ reviews: ProductReviewSummary | ProductReviews[];
  videos?: ProductVideo[];
  additionalData?: AdditionalAttribute[];
  inventories?: {qty?: number}[];
@@ -56,6 +58,7 @@ export interface RelatedProduct {
  name: string;
  urlKey: string;
  images: ProductImage[];
+ reviews: ProductReviewSummary | ProductReviews[];
  price: number;
 }
 export interface AdditionalAttribute {
@@ -138,6 +141,15 @@ export interface ProductImage {
  url?: string;
  large_image_url?: string;
 }
+export interface ProductReviews {
+ id: number;
+ name?: string;
+ comment?: string;
+ title?: string;
+ rating: number;
+ createdAt: string;
+ average_rating?: number;
+}
 export interface ProductVariant {
  id: number;
  price: number | string;
@@ -164,11 +176,18 @@ export interface SuperAttribute {
 export interface ProductVideo {
  url: string;
 }
+export interface ProductReviewSummary {
+ average_rating: string;
+ percentage: string; // JSON string
+ total: number;
+ total_rating: number;
+}
 export interface ProductRelatedProducts {
  id: number;
  url?: string;
  urlKey?: string;
  images: ProductImage[];
+ reviews: ProductReviewSummary | ProductReviews[];
  price?: number;
  name: string;
  isInWishlist?: boolean;
