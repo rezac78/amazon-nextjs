@@ -1,16 +1,9 @@
 import {CategoryHome} from "@/utils/types/types";
-import {
- NavigationMenu,
- NavigationMenuContent,
- NavigationMenuItem,
- NavigationMenuLink,
- NavigationMenuList,
- NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import Image from "next/image";
 import {buildCategoryTree} from "@/utils/buildCategoryTree";
-import React from "react";
+import React, {useRef, useState} from "react";
+import ChevronDownIcon from "@/public/icons/ChevronDown";
 
 interface HomeCategoriesProps {
  Data: CategoryHome[];
@@ -19,56 +12,63 @@ interface HomeCategoriesProps {
 
 export default React.memo(function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
  const treeData = buildCategoryTree(Data);
-
+ const [openMenu, setOpenMenu] = useState<number | null>(null);
+ const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+ const handleMouseEnter = (id: number) => {
+  if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  setOpenMenu(id);
+ };
+ const handleMouseLeave = () => {
+  timeoutRef.current = setTimeout(() => {
+   setOpenMenu(null);
+  }, 200);
+ };
  return (
   <>
    {useIn === "HomeHeader" ? (
-    <div className="max-w-dvw overflow-x-auto">
-     <NavigationMenu viewport={false} className="text-white bg-transparent px-2 py-1 relative z-20 ">
-      <NavigationMenuList className="gap-2">
-       {treeData.map((category) => (
-        <NavigationMenuItem key={category.id}>
-         {category.children && category.children.length > 0 ? (
-          <>
-           <NavigationMenuTrigger className="bg-transparent text-white  px-2 py-1 whitespace-nowrap">
-            {category.name}
-           </NavigationMenuTrigger>
-           <NavigationMenuContent className="bg-white text-black shadow-md border rounded-md mt-1">
-            <ul className="grid w-[120px] gap-2 p-2 text-sm text-right">
+    <div className="flex gap-4 py-2 text-sm ">
+     <ul className="flex flex-col font-medium   rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row">
+      {treeData.map((category) => (
+       <li
+        key={category.id}
+        className="relative"
+        onMouseEnter={() => handleMouseEnter(category.id)}
+        onMouseLeave={handleMouseLeave}
+       >
+        {category.children && category.children.length > 0 ? (
+         <>
+          <button className="flex items-center justify-between w-full py-2 text-white rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:w-auto">
+           {category.name}
+           <ChevronDownIcon className="w-4 h-4" />
+          </button>
+          {openMenu === category.id && (
+           <div className="absolute z-40 bg-white rounded-lg shadow-sm w-44 mt-2">
+            <ul className="py-2 text-sm text-gray-700">
              {category.children.map((child) => (
               <li key={child.id}>
-               <NavigationMenuLink asChild>
-                <Link
-                 href={`/main/${child.slug}?category_id=${child.id}`}
-                 className="block hover:text-black hover:bg-transparent"
-                >
-                 {child.name}
-                </Link>
-               </NavigationMenuLink>
+               <Link
+                href={`/main/${child.slug}?category_id=${child.id}`}
+                className="block px-4 py-2 hover:bg-gray-100 hover:text-black "
+               >
+                {child.name}
+               </Link>
               </li>
              ))}
             </ul>
-           </NavigationMenuContent>
-          </>
-         ) : (
-          <NavigationMenuLink asChild>
-           <Link
-            href={`/main/${category.slug}?category_id=${category.id}`}
-            className="px-2 py-1 text-sm  hover:bg-transparent whitespace-nowrap"
-           >
-            {category.name}
-           </Link>
-          </NavigationMenuLink>
-         )}
-        </NavigationMenuItem>
-       ))}
-      </NavigationMenuList>
-      <NavigationMenuLink asChild>
-       <Link href={`#`} className="px-2 py-1 text-sm  hover:bg-transparent whitespace-nowrap">
-        : دسته بندی
-       </Link>
-      </NavigationMenuLink>
-     </NavigationMenu>
+           </div>
+          )}
+         </>
+        ) : (
+         <Link
+          href={`/main/${category.slug}?category_id=${category.id}`}
+          className="block  rounded-sm  md:border-0 text-white "
+         >
+          {category.name}
+         </Link>
+        )}
+       </li>
+      ))}
+     </ul>
     </div>
    ) : useIn === "HomeMain" ? (
     <section className="py-10 px-4">

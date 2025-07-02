@@ -37,7 +37,7 @@ export default React.memo(function ProductSlider({Data, title, link}: ProductCar
      </Link>
     )}
    </div>
-   <div className="px-12 md:px-6">
+   <div className="px-12 md:px-6 w-[380px] md:w-full">
     <Carousel opts={{align: "start"}} className="w-full">
      <CarouselContent>
       {Data.map((product, i) => (

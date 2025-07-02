@@ -17,6 +17,7 @@ import {CategoryHome} from "@/utils/types/types";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/store/useAuth";
 import {useCartCount} from "@/store/useCounter";
+import HomeCategorisWrapper from "../homeCategoris/HomeCategorisWrapper";
 // import CompareIcon from "@/public/icons/Compare";
 
 const options = [
@@ -29,7 +30,7 @@ interface HeaderProps {
  isLogin: boolean;
 }
 
-export default function Header({isLogin}: HeaderProps) {
+export default function Header({isLogin, categorie}: HeaderProps) {
  const [language, setLanguage] = useState("fa");
  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
  const [loading, setLoading] = useState(false);
@@ -149,9 +150,13 @@ export default function Header({isLogin}: HeaderProps) {
       <span className="text-xs font-bold">موردعلاقه</span>
       <span className="text-xs font-bold">سبد خرید</span>
      </div>
+     <span>دسته بندی :</span>
+     <HomeCategorisWrapper Data={categorie} useIn="HomeHeader" />
     </div>
    )}
-   {/* <HomeCategorisWrapper Data={categorie} useIn="HomeHeader" /> */}
+   <div className="hidden md:block">
+    <HomeCategorisWrapper Data={categorie} useIn="HomeHeader" />
+   </div>
   </header>
  );
 }

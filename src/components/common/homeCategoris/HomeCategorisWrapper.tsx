@@ -1,3 +1,4 @@
+"use client"
 import {useEffect, useRef, useState} from "react";
 import HomeCategorisSkeleton from "../SkeletonComponent/homeCategoris";
 import HomeCategoris from ".";
