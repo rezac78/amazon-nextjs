@@ -3,7 +3,7 @@ import {Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle} from "
 import Image from "next/image";
 import HeartIcon from "@/public/icons/Heart";
 import ShoppingBagIcon from "@/public/icons/ShoppingBag";
-import {fetchProductLike} from "@/utils/fetchProduct";
+import {fetchProductLike} from "@/utils/api/product/fetchProduct";
 import {toast} from "sonner";
 import {useState} from "react";
 import {usePathname} from "next/navigation";

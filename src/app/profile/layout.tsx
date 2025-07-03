@@ -1,7 +1,7 @@
 import {ReactNode} from "react";
 import ProfileLayoutComponent from "../../components/pages/profile/common/profileLayout";
 import {getAuthToken} from "@/utils/checkCookies";
-import {ProfileCustomer} from "@/utils/profile/proFileInfo/profile";
+import {ProfileCustomer} from "@/utils/api/profile/proFileInfo/profile";
 
 interface LayoutProps {
  children: ReactNode;

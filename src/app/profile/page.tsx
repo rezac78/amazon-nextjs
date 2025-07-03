@@ -1,6 +1,6 @@
 import ProfileInfo from "@/components/pages/profile/profileInfo";
 import {getAuthToken} from "@/utils/checkCookies";
-import {ProfileCustomer} from "@/utils/profile/proFileInfo/profile";
+import {ProfileCustomer} from "@/utils/api/profile/proFileInfo/profile";
 
 export default async function ProfilePage() {
  const Token = await getAuthToken();

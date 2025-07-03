@@ -6,13 +6,13 @@ import React, {useEffect, useState} from "react";
 import Loading from "../../common/Loading";
 
 import ProductSlider from "@/components/common/ProductSlider";
-import {fetchProductById, fetchProductLike, fetchWishlist} from "@/utils/fetchProduct";
+import {fetchProductById, fetchProductLike, fetchWishlist} from "@/utils/api/product/fetchProduct";
 import {Product} from "@/utils/types/types";
 import BreadcrumbComponent from "@/components/common/Breadcrumb";
 import ShareSection from "@/components/common/ShareSection";
 import {toast} from "sonner";
 import getColorCodeFromLabel from "@/utils/getColorCodeFromLabel";
-import {CustomerCartAdd} from "@/utils/cart";
+import {CustomerCartAdd} from "@/utils/api/cart";
 import {useCartCount} from "@/store/useCounter";
 import {isSpecialPriceValid} from "@/utils/priceUtils";
 import DiscountRibbon from "./discountRibbon";

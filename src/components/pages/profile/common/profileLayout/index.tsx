@@ -5,7 +5,7 @@ import HeartIcon from "@/public/icons/Heart";
 import LogOutIcon from "@/public/icons/LogOut";
 import UsersIcon from "@/public/icons/Users";
 import {useAuth} from "@/store/useAuth";
-import {logoutCustomer} from "@/utils/authUsers";
+import {logoutCustomer} from "@/utils/api/auth/authUsers";
 import {CustomerInfo} from "@/utils/types/types";
 import Link from "next/link";
 import {useRouter} from "next/navigation";

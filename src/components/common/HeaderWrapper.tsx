@@ -2,7 +2,7 @@
 "use client";
 
 import {useEffect} from "react";
-import {CustomerCartAll} from "@/utils/cart";
+import {CustomerCartAll} from "@/utils/api/cart";
 import {CategoryHome} from "@/utils/types/types";
 import dynamic from "next/dynamic";
 import HeaderSkeleton from "./SkeletonComponent/HeaderSkeleton";

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import {useState} from "react";
 import {toast} from "sonner";
-import {fetchProductLike, fetchProductLikeDelete} from "@/utils/fetchProduct";
+import {fetchProductLike, fetchProductLikeDelete} from "@/utils/api/product/fetchProduct";
 interface ProductCardProps {
  Data: ProductSliderItem[];
  Token: string;

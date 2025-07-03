@@ -1,4 +1,4 @@
-import {CustomerCartAll} from "@/utils/cart";
+import {CustomerCartAll} from "@/utils/api/cart";
 import {getAuthToken} from "@/utils/checkCookies";
 import CheckoutPage from "@/components/pages/onePage";
 

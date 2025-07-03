@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {Button} from "../../ui/button";
 import {CartItem} from "@/utils/types/cart";
-import {CustomerCartDeleted, CustomerCartDeletedAll, CustomerCartMoveWishlist, CustomerCartPUT} from "@/utils/cart";
+import {CustomerCartDeleted, CustomerCartDeletedAll, CustomerCartMoveWishlist, CustomerCartPUT} from "@/utils/api/cart";
 import {toast} from "sonner";
 import {useCartCount} from "@/store/useCounter";
 import {redirect} from "next/navigation";

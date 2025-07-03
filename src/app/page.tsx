@@ -1,6 +1,6 @@
-import {fetchProductAll} from "@/utils/fetchProduct";
+import {fetchProductAll} from "@/utils/api/product/fetchProduct";
 import HomePage from "../components/pages/home";
-import {categories} from "@/utils/fetchhome";
+import {categories} from "@/utils/api/home/fetchhome";
 import {getAuthToken} from "@/utils/checkCookies";
 
 export default async function Home() {

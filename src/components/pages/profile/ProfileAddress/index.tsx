@@ -6,7 +6,7 @@ import {Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/
 import {Label} from "@/components/ui/label";
 import {Textarea} from "@/components/ui/textarea";
 import {toast} from "sonner";
-import {DeletedProfileAddress, ProfileAddressFetch, UpdateProfileAddress} from "@/utils/profile/proFileAddress";
+import {DeletedProfileAddress, ProfileAddressFetch, UpdateProfileAddress} from "@/utils/api/profile/proFileAddress";
 import AddressList from "../common/AddressList";
 import {Address} from "@/utils/types/types";
 import {

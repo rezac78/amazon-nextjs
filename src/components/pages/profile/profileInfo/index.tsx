@@ -10,7 +10,7 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 
 import Image from "next/image";
-import {ProfileCustomerUpdate} from "@/utils/profile/proFileInfo/profile";
+import {ProfileCustomerUpdate} from "@/utils/api/profile/proFileInfo/profile";
 import {toast} from "sonner";
 import {CustomerInfo} from "@/utils/types/types";
 interface ProfileProps {

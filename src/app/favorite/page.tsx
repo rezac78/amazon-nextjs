@@ -1,6 +1,6 @@
 import {getAuthToken} from "@/utils/checkCookies";
 import FavoritePage from "../../components/pages/favorite";
-import {fetchWishlist} from "@/utils/fetchProduct";
+import {fetchWishlist} from "@/utils/api/product/fetchProduct";
 
 export default async function Favorite() {
  const Token = await getAuthToken();

@@ -2,7 +2,7 @@
 
 import {Button} from "@/components/ui/button";
 import StarIcon from "@/public/icons/star";
-import {CommentSendProducts} from "@/utils/fetchProduct";
+import {CommentSendProducts} from "@/utils/api/product/fetchProduct";
 import {Product} from "@/utils/types/types";
 import {useState} from "react";
 

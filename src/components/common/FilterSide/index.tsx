@@ -9,11 +9,11 @@ import ListIcon from "@/public/icons/List";
 import ShoppingBagIcon from "@/public/icons/shopping-bag";
 import ProductCard from "@/components/common/ProductCard";
 import {CategoryAttributeFilter, ProductSliderItem} from "@/utils/types/types";
-import {getProducts} from "@/utils/fetchSearch";
+import {getProducts} from "@/utils/api/search/fetchSearch";
 import {useSearchParams, useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import ProductCardSkeleton from "../SkeletonComponent/ProductCard";
-import {fetchWishlist} from "@/utils/fetchProduct";
+import {fetchWishlist} from "@/utils/api/product/fetchProduct";
 
 interface SearchAndFilterProps {
  data: CategoryAttributeFilter[];

@@ -2,7 +2,7 @@ import "./globals.css";
 import Footer from "../components/common/Footer";
 import MountWrapper from "../components/common/MountWrapper";
 import {Toaster} from "@/components/ui/sonner";
-import {categories} from "@/utils/fetchhome";
+import {categories} from "@/utils/api/home/fetchhome";
 import HeaderWrapper from "@/components/common/HeaderWrapper";
 import {getAuthToken} from "@/utils/checkCookies";
 export const metadata = {

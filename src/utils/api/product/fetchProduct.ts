@@ -3,10 +3,10 @@ import {
  LIST_COMPARE_QUERY,
  REMOVE_ALL_COMPARE_MUTATION,
  REMOVE_FROM_COMPARE_MUTATION,
-} from "./../graphql/productLike/productLike";
-import {PRODUCTS_QUERY} from "../graphql/queries/products";
-import {Product} from "./types/types";
-import {BASE_URL} from "./config";
+} from "../../../graphql/productLike/productLike";
+import {PRODUCTS_QUERY} from "../../../graphql/queries/products";
+import {Product} from "../../types/types";
+import {BASE_URL} from "../../config";
 import {toast} from "sonner";
 import {BASE_URL_API} from "@/config";
 import {GET_PRODUCT_QUERY} from "@/graphql/productId/products";

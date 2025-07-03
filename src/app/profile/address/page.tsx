@@ -1,6 +1,6 @@
 import ProfileAddress from "@/components/pages/profile/ProfileAddress";
 import {getAuthToken} from "@/utils/checkCookies";
-import {ProfileAddressAll} from "@/utils/profile/proFileAddress";
+import {ProfileAddressAll} from "@/utils/api/profile/proFileAddress";
 
 export default async function ProfilePage() {
  const Token = await getAuthToken();

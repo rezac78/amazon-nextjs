@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {toast} from "sonner";
 import Link from "next/link";
-import { forgotPassword } from "@/utils/authUsers";
+import {forgotPassword} from "@/utils/api/auth/authUsers";
 export default function ForgotPasswordPage() {
  const [form, setForm] = useState({
   email: "",

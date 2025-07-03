@@ -2,7 +2,7 @@
 
 import {Button} from "@/components/ui/button";
 import TrashIcon from "@/public/icons/Trash";
-import {removeAllCompareProducts, removeFromCompareProduct} from "@/utils/fetchProduct";
+import {removeAllCompareProducts, removeFromCompareProduct} from "@/utils/api/product/fetchProduct";
 import {Product} from "@/utils/types/types";
 import Image from "next/image";
 import React, {useState} from "react";

@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
-import {loginCustomer} from "@/utils/authUsers";
+import {loginCustomer} from "@/utils/api/auth/authUsers";
 import {useAuth} from "@/store/useAuth";
 import {Button} from "@/components/ui/button";
 export default function LoginPage() {

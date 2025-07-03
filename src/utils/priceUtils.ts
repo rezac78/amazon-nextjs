@@ -1,7 +1,5 @@
 // utils/priceUtils.ts
 import {Product} from "./types/types";
-
-// این تابع بررسی می‌کند آیا قیمت ویژه داخل بازه معتبر هست یا خیر:
 export function isSpecialPriceValid(product: Product): boolean {
  const {specialPrice, specialPriceFrom, specialPriceTo} = product;
 
