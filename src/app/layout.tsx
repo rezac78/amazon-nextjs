@@ -19,7 +19,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
    </head>
    <body className={`font-sansv flex flex-col min-h-dvh`}>
     <HeaderWrapper isLogin={!!token} categorie={categorie} token={token ?? ""} />
-    <main className="flex flex-grow">
+    <main className="flex flex-grow w-full">
      <MountWrapper>{children}</MountWrapper>
     </main>
     <Toaster />

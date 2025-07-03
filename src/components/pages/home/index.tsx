@@ -60,11 +60,9 @@ export default function HomePage({NewProducts, categorie}: HomePageProps) {
  // Static banner images
  const images = ["/pages/home/slide1.webp", "/pages/home/slide2.webp", "/pages/home/slide3.webp"];
  return (
-  <div className="relative mt-6">
-   <section className="w-full mx-auto my-10 px-4 ">
-    {isHydrated ? <Slider images={images} interval={4000} /> : <SwiperSkeleton />}
-   </section>
-   <div className="container ">
+  <div className="relative flex flex-col w-full">
+   <section className="w-full">{isHydrated ? <Slider images={images} interval={4000} /> : <SwiperSkeleton />}</section>
+   <div className="container mx-auto">
     {isHydrated ? <HomeCategoris Data={categorie} useIn="HomeMain" /> : <HomeCategorisMainSkeleton count={6} />}
     {isHydrated ? (
      <ProductSlider title="محصولات جدید" Data={NewProducts} link="/search?new=1&sort=price-desc&limit=12&mode=grid" />

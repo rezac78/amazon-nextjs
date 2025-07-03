@@ -32,7 +32,7 @@ export default function Slider({images, interval = 5000}: SliderProps) {
  }, [current, interval, nextSlide]);
 
  return (
-  <div className="relative w-full overflow-hidden h-64 md:h-96 rounded-xl">
+  <div className="relative w-full overflow-hidden h-[200px] md:h-[400px] ">
    <div className="relative w-full h-full">
     {images.map((img, index) => (
      <div
