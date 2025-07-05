@@ -149,7 +149,6 @@ export default function CartSinglePage({Token}: {Token: string}) {
   }
  };
 
- console.log("product", product.booking);
  return (
   <>
    <BreadcrumbComponent Data={product} />

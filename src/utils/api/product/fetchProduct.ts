@@ -362,7 +362,6 @@ export async function CommentSendProducts(productId: number, token: string, form
    },
    body: formData,
   });
-  console.log(response);
   if (!response.ok) {
    throw new Error(`HTTP Error: ${response.status}`);
   }
