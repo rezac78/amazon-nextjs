@@ -10,7 +10,6 @@ export default function ProductTabs({product, Token}: {product: Product; Token: 
  const [activeTab, setActiveTab] = useState("توضیحات");
  return (
   <div className="w-full mx-auto space-y-6 border border-[#E8E8E8] rounded-12 my-6 min-h-[600px]">
-   {/* Tabs */}
    <div className="flex flex-wrap border-b text-sm font-medium">
     {tabs.map((tab) => (
      <button
@@ -29,9 +28,8 @@ export default function ProductTabs({product, Token}: {product: Product; Token: 
      <CommentsTab product={product} ProductId={product.id} Token={Token} />
     </div>
    )}
-
    {activeTab === "توضیحات" && (
-    <div className="text-gray-600 p-4">
+    <div className="text-gray-600 px-4">
      <div className="space-y-2 text-sm text-gray-700 overflow-auto h-[700px]">
       <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description ?? ""}} />
      </div>

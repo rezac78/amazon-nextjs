@@ -161,7 +161,6 @@ export default function CartSinglePage({Token}: {Token: string}) {
        onLike={handleToggleWishlist}
        isLiked={wishlisted}
        shareURL={product.shareURL ?? ""}
-       //    AddToCompare={handleAddToCompare}
        loadingLike={loadingLike}
       />
       {isSpecialPriceValid(product) && <SpecialOfferBanner product={product} />}
@@ -170,30 +169,32 @@ export default function CartSinglePage({Token}: {Token: string}) {
         <video src={selectedImage} controls autoPlay className="w-full h-full object-contain" />
        ) : (
         <Image src={selectedImage} alt="Main Product" fill className="object-contain" />
-       )}{" "}
-      </div>
-      <div className="flex mt-4 gap-2 overflow-x-auto">
-       {product?.images?.map((img, index) => (
-        <div
-         key={index}
-         className={`relative w-24 h-24 cursor-pointer border-2 rounded-md overflow-hidden ${
-          selectedImage === img.url ? "border-blue-500" : "border-gray-200"
-         }`}
-         onMouseEnter={() => setSelectedImage(img.url ?? "")}
-        >
-         <Image src={img.url ?? ""} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
-        </div>
-       ))}
-       {Array.isArray(product.videos) && product.videos.length > 0 && product.videos[0]?.url && (
-        <div
-         className={`relative w-24 h-24 cursor-pointer border-2 rounded-md overflow-hidden ${
-          selectedImage === product.videos[0].url ? "border-blue-500" : "border-gray-200"
-         }`}
-         onMouseEnter={() => setSelectedImage(product.videos![0].url)}
-        >
-         <video src={product.videos[0].url} muted preload="metadata" className="object-cover w-full h-full" />
-        </div>
        )}
+      </div>
+      <div className="mt-4 overflow-x-auto">
+       <div className="flex gap-2 w-[300px] md:w-max">
+        {product?.images?.map((img, index) => (
+         <div
+          key={index}
+          className={`relative w-20 md:w-24 h-20 md:h-24 shrink-0 cursor-pointer border-2 rounded-md ${
+           selectedImage === img.url ? "border-blue-500" : "border-gray-200"
+          }`}
+          onMouseEnter={() => setSelectedImage(img.url ?? "")}
+         >
+          <Image src={img.url ?? ""} alt={`Thumbnail ${index + 1}`} fill className="object-cover" />
+         </div>
+        ))}
+        {Array.isArray(product.videos) && product.videos.length > 0 && product.videos[0]?.url && (
+         <div
+          className={`relative w-20 md:w-24 h-20 md:h-24 shrink-0 cursor-pointer border-2 rounded-md ${
+           selectedImage === product.videos[0].url ? "border-blue-500" : "border-gray-200"
+          }`}
+          onMouseEnter={() => setSelectedImage(product.videos![0].url)}
+         >
+          <video src={product.videos[0].url} muted preload="metadata" className="object-cover w-full h-full" />
+         </div>
+        )}
+       </div>
       </div>
      </div>
      <div className="space-y-4 text-sm md:text-base ">
