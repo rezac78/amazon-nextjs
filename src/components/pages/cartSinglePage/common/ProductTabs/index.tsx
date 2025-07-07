@@ -2,12 +2,12 @@
 
 import {useState} from "react";
 
-const tabs = ["توضیحات", "نظرات کاربران"];
 import {Product} from "@/utils/types/types";
 import CommentsTab from "../comments";
 
-export default function ProductTabs({product, Token}: {product: Product; Token: string}) {
- const [activeTab, setActiveTab] = useState("توضیحات");
+export default function ProductTabs({product, Token, lang}: {product: Product; Token: string; lang: string}) {
+ const tabs = lang === "fa" ? ["توضیحات", "نظرات کاربران"] : ["Description", "User Reviews"];
+ const [activeTab, setActiveTab] = useState(lang === "fa" ? "توضیحات" : "Description");
  return (
   <div className="w-full mx-auto space-y-6 border border-[#E8E8E8] rounded-12 my-6 min-h-[600px]">
    <div className="flex flex-wrap border-b text-sm font-medium">
@@ -23,12 +23,10 @@ export default function ProductTabs({product, Token}: {product: Product; Token: 
      </button>
     ))}
    </div>
-   {activeTab === "نظرات کاربران" && (
-    <div className="">
-     <CommentsTab product={product} ProductId={product.id} Token={Token} />
-    </div>
+   {activeTab === (lang === "fa" ? "نظرات کاربران" : "User Reviews") && (
+    <CommentsTab product={product} ProductId={product.id} Token={Token} lang={lang} />
    )}
-   {activeTab === "توضیحات" && (
+   {activeTab === (lang === "fa" ? "توضیحات" : "Description") && (
     <div className="text-gray-600 px-4">
      <div className="space-y-2 text-sm text-gray-700 overflow-auto h-[700px]">
       <div className="!leading-[2.5rem] text-justify" dangerouslySetInnerHTML={{__html: product.description ?? ""}} />

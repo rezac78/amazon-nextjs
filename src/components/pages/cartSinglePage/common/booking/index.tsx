@@ -11,6 +11,7 @@ type BookingSectionProps = {
  setSelectedDate: (val: DateObjectType | null) => void;
  selectedSlot: {date: string; slot: string | null} | null;
  setSelectedSlot: (val: {date: string; slot: string | null} | null) => void;
+ lang: string;
 };
 
 export default function BookingSection({
@@ -19,6 +20,7 @@ export default function BookingSection({
  setSelectedDate,
  selectedSlot,
  setSelectedSlot,
+ lang,
 }: BookingSectionProps) {
  if (!Array.isArray(bookings.booking) || bookings.booking.length === 0) return null;
  return (
@@ -34,13 +36,14 @@ export default function BookingSection({
         rel="noopener noreferrer"
         className="text-sm"
        >
-        <strong>مکان:</strong> {booking.location}
+        <strong>{lang === "fa" ? "مکان:" : "Location:"}</strong> {booking.location}
        </a>
       </div>
       <div className="flex items-center gap-2">
        <CalendarDaysIcon className="w-4 h-4 text-blue-600" />
        <span>
-        <strong>مدت زمان اسلات:</strong> {booking.tableSlot?.duration ?? "-"} دقیقه
+        <strong>{lang === "fa" ? "مدت زمان اسلات:" : "Slot Duration:"}</strong> {booking.tableSlot?.duration ?? "-"}{" "}
+        {lang === "fa" ? "دقیقه" : "minutes"}
        </span>
       </div>
 
@@ -57,7 +60,8 @@ export default function BookingSection({
 
       {booking.defaultSlot && (
        <div>
-        <strong>مدت زمان اسلات:</strong> {booking.defaultSlot.duration} دقیقه
+        <strong>{lang === "fa" ? "مدت زمان اسلات:" : "Slot Duration:"}</strong> {booking.defaultSlot.duration}{" "}
+        {lang === "fa" ? "دقیقه" : "minutes"}
        </div>
       )}
      </div>

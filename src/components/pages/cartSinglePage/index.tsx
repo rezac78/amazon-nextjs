@@ -22,7 +22,7 @@ import StarIcon from "@/public/icons/star";
 import ProductTabs from "./common/ProductTabs";
 import TechnicalSpecifications from "./common/technicalSpecifications ";
 
-export default function CartSinglePage({Token}: {Token: string}) {
+export default function CartSinglePage({Token, lang}: {Token: string; lang: string}) {
  const [selectedImage, setSelectedImage] = useState<string>("");
  const [loadingLike, setLoadingLike] = useState<boolean>(false);
  const [product, setProduct] = useState<Product | null>(null);
@@ -153,7 +153,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
  const otherAttributes = product.additionalData?.filter((attr) => attr.code !== "color" && attr.value);
  return (
   <>
-   <BreadcrumbComponent Data={product} />
+   <BreadcrumbComponent Data={product} lang={lang} />
    <div className="container mx-auto p-4 border rounded-12 border-[#E8E8E8]">
     <div className="grid md:grid-cols-2 gap-8 ">
      <div className="relative border border-[#DDDDDD] p-4 rounded-14 ">
@@ -203,14 +203,20 @@ export default function CartSinglePage({Token}: {Token: string}) {
        <StarIcon className="text-[#E4E82E] w-4 h-4" />
        <span className="font-medium text-xs text-[#808080]">{product.averageRating}</span>
        <span className="text-[#808080] font-medium text-xs">
-        {Array.isArray(product.reviews) ? `( از مجموع ${product.reviews.length} نظر کاربران )` : ""}
+        {Array.isArray(product.reviews) && product.reviews.length > 0
+         ? lang === "fa"
+           ? `( از مجموع ${product.reviews.length} نظر کاربران )`
+           : `( Based on ${product.reviews.length} user review${product.reviews.length > 1 ? "s" : ""} )`
+         : ""}
        </span>
       </div>
       <div className="relative border border-[#DDDDDD] px-4 py-8 rounded-12 grid grid-cols-2 h-[480px]">
        {isSpecialPriceValid(product) && <DiscountRibbon Data={product} />}
        <div className="flex flex-col gap-6">
         <div>
-         <h2 className="font-medium text-14px mb-1 text-[#4C4C4C]">انتخاب رنگ</h2>
+         <h2 className="font-medium text-14px mb-1 text-[#4C4C4C]">
+          {`${lang === "fa" ? "انتخاب رنگ" : "Choose Color"}`}
+         </h2>
          <div className="flex gap-2">
           {colorAttributes?.map((colorAttr) => {
            const colorCode = getColorCodeFromLabel(colorAttr.value);
@@ -232,14 +238,16 @@ export default function CartSinglePage({Token}: {Token: string}) {
         </div>
 
         <div>
-         <h2 className="font-medium text-14px mb-1 text-[#4C4C4C]">تعداد سفارش محصول</h2>
+         <h2 className="font-medium text-14px mb-1 text-[#4C4C4C]">{`${
+          lang === "fa" ? "تعداد سفارش محصول" : "Product Order Count"
+         }`}</h2>
          <Select value={selectedQuantity} onValueChange={handleQuantityChange}>
           <SelectTrigger className="">
-           <SelectValue placeholder="تعداد محصول" />
+           <SelectValue placeholder={`${lang === "fa" ? "تعداد محصول" : "Product Count"}`} />
           </SelectTrigger>
           <SelectContent>
            <SelectGroup>
-            <SelectLabel>تعداد محصول</SelectLabel>
+            <SelectLabel>{`${lang === "fa" ? "تعداد محصول" : "Product Count"}`}</SelectLabel>
             {["1", "2", "3", "4", "5"].map((num) => (
              <SelectItem key={num} value={num}>
               {num}
@@ -250,20 +258,28 @@ export default function CartSinglePage({Token}: {Token: string}) {
          </Select>
          {(() => {
           const totalQty = product?.inventories?.reduce((sum, e) => sum + (e.qty ?? 0), 0) || 0;
-
           if (totalQty === 0) {
-           return <p className="text-red-600 text-sm mt-3">متأسفانه این محصول موجود نیست</p>;
+           return (
+            <p className="text-red-600 text-sm mt-3">
+             {lang === "fa" ? "متأسفانه این محصول موجود نیست" : "Unfortunately, this product is out of stock"}
+            </p>
+           );
           }
-
           if (totalQty < 10) {
-           return <p className="text-red-600 text-sm mt-3">فقط {totalQty} عدد از کالا موجود است</p>;
+           return (
+            <p className="text-red-600 text-sm mt-3">
+             {lang === "fa"
+              ? `فقط ${totalQty} عدد از کالا موجود است`
+              : `Only ${totalQty} item${totalQty > 1 ? "s" : ""} left in stock`}
+            </p>
+           );
           }
           return null;
          })()}
         </div>
        </div>
        <div>
-        <h2 className="font-bold mb-1">خصوصیات محصول</h2>
+        <h2 className="font-bold mb-1">{lang === "fa" ? "خصوصیات محصول" : "Product Specifications"}</h2>
         <ul className="list-disc list-inside space-y-1">
          {otherAttributes?.map((attr) => (
           <li key={attr.id}>
@@ -278,7 +294,6 @@ export default function CartSinglePage({Token}: {Token: string}) {
     </div>
     <div className="bg-blue-50 p-4 rounded-12 space-y-2 w-full my-4">
      <div className="flex justify-between">
-      <p className="text-sm">گارانتی ۱۸ ماهه توسعه توان تات (پرهام تک)</p>
       <h1 className="text-xl font-semibold">
        {isSpecialPriceValid(product) ? (
         <div className="flex flex-col">
@@ -300,6 +315,7 @@ export default function CartSinglePage({Token}: {Token: string}) {
       selectedDate={selectedDate}
       setSelectedSlot={setSelectedSlot}
       selectedSlot={selectedSlot}
+      lang={lang}
      />
      <Button
       disabled={
@@ -309,14 +325,24 @@ export default function CartSinglePage({Token}: {Token: string}) {
       className="flex-1 flex items-center gap-2 w-full"
       onClick={handleAddToCart}
      >
-      افزودن به سبد
+      {lang === "fa" ? "افزودن به سبد" : "Add to Cart"}
      </Button>
     </div>
    </div>
-   <ProductTabs product={product} Token={Token} />
-   {relatedProducts.length > 0 && <ProductSlider title="محصولات مرتبط" Data={relatedProducts} />}
-   {upSells.length > 0 && <ProductSlider title="محصولات فروش بالا" Data={upSells} />}
-   {crossSells.length > 0 && <ProductSlider title="محصولات فروش متقابل" Data={crossSells} />}
+   <ProductTabs product={product} Token={Token} lang={lang} />
+   {relatedProducts.length > 0 && (
+    <ProductSlider title={lang === "fa" ? "محصولات مرتبط" : "Related Products"} Data={relatedProducts} lang={lang} />
+   )}
+   {upSells.length > 0 && (
+    <ProductSlider title={lang === "fa" ? "محصولات فروش بالا" : "Top-Selling Products"} Data={upSells} lang={lang} />
+   )}
+   {crossSells.length > 0 && (
+    <ProductSlider
+     title={lang === "fa" ? "محصولات فروش متقابل" : "Cross-Sell Products"}
+     Data={crossSells}
+     lang={lang}
+    />
+   )}
   </>
  );
 }

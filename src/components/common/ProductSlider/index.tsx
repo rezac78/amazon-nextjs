@@ -24,16 +24,17 @@ interface ProductCardProps {
  Data: ProductSliderItem[];
  title: string;
  link?: string;
+ lang: string;
 }
 
-export default React.memo(function ProductSlider({Data, title, link}: ProductCardProps) {
+export default React.memo(function ProductSlider({Data, title, link, lang}: ProductCardProps) {
  return (
   <div className="my-10 border-t-1 border-gray-200 py-10">
    <div className="flex justify-between mb-8">
     <h2 className="text-2xl font-bold text-center">{title}</h2>
     {link && (
      <Link href={link} className={cn(buttonVariants())}>
-      نمایش همه
+      {`${lang === "fa" ? "نمایش همه" : "more"}`}
      </Link>
     )}
    </div>

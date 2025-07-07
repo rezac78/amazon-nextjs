@@ -14,6 +14,7 @@ interface TechnicalSpecificationsProps {
  setSelectedDate: (val: DateObjectType | null) => void;
  selectedSlot: {date: string; slot: string | null} | null;
  setSelectedSlot: Dispatch<SetStateAction<{date: string; slot: string | null} | null>>;
+ lang: string;
 }
 export default function TechnicalSpecifications({
  product,
@@ -23,6 +24,7 @@ export default function TechnicalSpecifications({
  selectedDate,
  setSelectedSlot,
  selectedSlot,
+ lang,
 }: TechnicalSpecificationsProps) {
  return (
   <div className="">
@@ -31,6 +33,7 @@ export default function TechnicalSpecifications({
      product={product}
      selectedDownloadLink={selectedDownloadLink}
      setSelectedDownloadLink={setSelectedDownloadLink}
+     lang={lang}
     />
    )}
    {product.type === "booking" && (
@@ -40,6 +43,7 @@ export default function TechnicalSpecifications({
      selectedDate={selectedDate}
      setSelectedSlot={setSelectedSlot}
      selectedSlot={selectedSlot}
+     lang={lang}
     />
    )}
   </div>

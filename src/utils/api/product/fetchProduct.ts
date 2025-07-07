@@ -74,10 +74,11 @@ export async function fetchProductAll(params: Record<string, string | number>): 
    }, {} as Record<string, string>)
   ).toString();
 
-  const response = await fetch(BASE_URL_API + `v1/products?${queryString}`, {
+  const response = await fetch(BASE_URL_API + `v1/products?${queryString}&locale=en`, {
    method: "GET",
    headers: {
     Accept: "application/json",
+    "Accept-Language": "en",
    },
   });
   if (!response.ok) {

@@ -1,10 +1,10 @@
-"use client"
+"use client";
 import {useEffect, useRef, useState} from "react";
 import HomeCategorisSkeleton from "../SkeletonComponent/homeCategoris";
 import HomeCategoris from ".";
 import {CategoryHome} from "@/utils/types/types";
 
-const HomeCategorisWrapper = ({Data, useIn}: {Data: CategoryHome[]; useIn: string}) => {
+const HomeCategorisWrapper = ({Data, useIn, lang}: {Data: CategoryHome[]; useIn: string; lang: string}) => {
  const [show, setShow] = useState(false);
  const ref = useRef<HTMLDivElement>(null);
 
@@ -29,7 +29,11 @@ const HomeCategorisWrapper = ({Data, useIn}: {Data: CategoryHome[]; useIn: strin
   };
  }, []);
 
- return <div ref={ref}>{show ? <HomeCategoris Data={Data} useIn={useIn} /> : <HomeCategorisSkeleton count={4} />}</div>;
+ return (
+  <div ref={ref}>
+   {show ? <HomeCategoris lang={lang} Data={Data} useIn={useIn} /> : <HomeCategorisSkeleton count={4} />}
+  </div>
+ );
 };
 
 export default HomeCategorisWrapper;

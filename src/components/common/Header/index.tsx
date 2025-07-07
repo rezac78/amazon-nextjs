@@ -13,25 +13,20 @@ import {Button} from "../../ui/button";
 import MenuIcon from "@/public/icons/Menu";
 import SearchIcon from "@/public/icons/Search";
 import ShoppingCartIcon from "@/public/icons/ShoppingCart";
-import {CategoryHome} from "@/utils/types/types";
+import {CategoryHome, Locale} from "@/utils/types/types";
 import {useRouter} from "next/navigation";
 import {useAuth} from "@/store/useAuth";
 import {useCartCount} from "@/store/useCounter";
 import HomeCategorisWrapper from "../homeCategoris/HomeCategorisWrapper";
-// import CompareIcon from "@/public/icons/Compare";
-
-const options = [
- {value: "fa", label: "Fa"},
- {value: "en", label: "En"},
-];
-
 interface HeaderProps {
  categorie: CategoryHome[];
  isLogin: boolean;
+ locale: Locale[];
+ lang: string;
 }
 
-export default function Header({isLogin, categorie}: HeaderProps) {
- const [language, setLanguage] = useState("fa");
+export default function Header({isLogin, categorie, locale, lang}: HeaderProps) {
+ const [language, setLanguage] = useState(lang);
  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
  const [loading, setLoading] = useState(false);
  const [searchText, setSearchText] = useState("");
@@ -39,8 +34,18 @@ export default function Header({isLogin, categorie}: HeaderProps) {
  const {isLoggedIn} = useAuth();
  const cartCount = useCartCount((s) => s.cartCount);
  const changeLanguage = (lang: string) => {
+  if (lang === language) return;
   setLanguage(lang);
+  localStorage.setItem("lang", lang);
+  document.cookie = `lang=${lang}; path=/`;
+  window.location.reload();
  };
+ useEffect(() => {
+  const savedLang = localStorage.getItem("lang");
+  if (savedLang) {
+   setLanguage(savedLang);
+  }
+ }, []);
  const handleSearch = useMemo(() => {
   return () => {
    if (!searchText.trim()) return;
@@ -66,9 +71,9 @@ export default function Header({isLogin, categorie}: HeaderProps) {
       <DropdownMenuContent className="w-40 bg-secondary text-secondary-foreground">
        <DropdownMenuSeparator />
        <DropdownMenuRadioGroup value={language} onValueChange={changeLanguage}>
-        {options.map((option) => (
-         <DropdownMenuRadioItem key={option.value} value={option.value}>
-          {option.label}
+        {locale.map((option) => (
+         <DropdownMenuRadioItem key={option.code} value={option.code}>
+          {option.name}
          </DropdownMenuRadioItem>
         ))}
        </DropdownMenuRadioGroup>
@@ -83,7 +88,7 @@ export default function Header({isLogin, categorie}: HeaderProps) {
       value={searchText}
       onChange={(e) => setSearchText(e.target.value)}
       onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-      placeholder="سرچ در محصولات ..."
+      placeholder={`${lang === "fa" ? "سرچ در محصولات ..." : "search products ..."}`}
       className="w-full px-4 py-2 ltr:rounded-l-md rtl:rounded-r-md bg-white text-black text-sm"
      />
 
@@ -106,22 +111,22 @@ export default function Header({isLogin, categorie}: HeaderProps) {
      </Link> */}
      {isLoggedIn ? (
       <Link href="/profile" className="text-xs">
-       پروفایل
+       {`${lang === "fa" ? "پروفایل" : "profile"}`}
       </Link>
      ) : (
       <Link href="/auth/signin" className="text-xs">
-       ورود/ثبت نام
+       {`${lang === "fa" ? "ورود/ثبت نام" : "login/register"}`}
       </Link>
      )}
      <Link href={"/favorite"} className="relative flex flex-col items-center text-xs">
-      <span className="font-bold">موردعلاقه</span>
+      <span className="font-bold">{`${lang === "fa" ? "موردعلاقه" : "favorite"}`}</span>
      </Link>
      <Link href={"/checkout/cart"} className="relative flex flex-col items-center">
       <ShoppingCartIcon className="w-5 h-5" />
       <span className="absolute top-[-6px] right-[-2px] bg-secondary text-black text-xs w-5 h-5 rounded-full flex items-center justify-center">
        {cartCount}
       </span>
-      <span className="text-sm font-bold ml-1">سبد خرید</span>
+      <span className="text-sm font-bold ml-1">{`${lang === "fa" ? "سبد خرید" : "cart"}`}</span>
      </Link>
     </div>
     <div className="md:hidden">
@@ -135,7 +140,7 @@ export default function Header({isLogin, categorie}: HeaderProps) {
      <div className="flex">
       <input
        type="text"
-       placeholder="سرچ در محصولات ..."
+       placeholder={`${lang === "fa" ? "سرچ در محصولات ..." : "search products ..."}`}
        className="w-full px-4 py-2 ltr:rounded-l-md rtl:rounded-r-md bg-white text-black text-sm"
        onClick={handleSearch}
        onChange={(e) => setSearchText(e.target.value)}
@@ -146,16 +151,24 @@ export default function Header({isLogin, categorie}: HeaderProps) {
       </Button>
      </div>
      <div className="flex flex-col gap-2">
-      <span className="text-xs">ورود/ثبت نام</span>
-      <span className="text-xs font-bold">موردعلاقه</span>
-      <span className="text-xs font-bold">سبد خرید</span>
+      {isLoggedIn ? (
+       <Link href="/profile" className="text-xs">
+        {`${lang === "fa" ? "پروفایل" : "profile"}`}
+       </Link>
+      ) : (
+       <Link href="/auth/signin" className="text-xs">
+        {`${lang === "fa" ? "ورود/ثبت نام" : "login/register"}`}
+       </Link>
+      )}
+      <span className="text-xs font-bold">{`${lang === "fa" ? "موردعلاقه" : "favorite"}`}</span>
+      <span className="text-xs font-bold">{`${lang === "fa" ? "سبد خرید" : "cart"}`}</span>
      </div>
-     <span>دسته بندی :</span>
-     <HomeCategorisWrapper Data={categorie} useIn="HomeHeader" />
+     <span>{`${lang === "fa" ? "دسته بندی :" : "categories :"}`}</span>
+     <HomeCategorisWrapper lang={lang} Data={categorie} useIn="HomeHeader" />
     </div>
    )}
    <div className="hidden md:block">
-    <HomeCategorisWrapper Data={categorie} useIn="HomeHeader" />
+    <HomeCategorisWrapper lang={lang} Data={categorie} useIn="HomeHeader" />
    </div>
   </header>
  );

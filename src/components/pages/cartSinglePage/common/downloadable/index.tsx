@@ -5,10 +5,16 @@ interface DownloadableProps {
   downloadableLinks?: DownloadableLink[];
   downloadableSamples?: DownloadableSample[];
  };
+ lang: string;
  selectedDownloadLink: number | null;
  setSelectedDownloadLink: (id: number) => void;
 }
-export default function Downloadable({product, selectedDownloadLink, setSelectedDownloadLink}: DownloadableProps) {
+export default function Downloadable({
+ product,
+ selectedDownloadLink,
+ setSelectedDownloadLink,
+ lang,
+}: DownloadableProps) {
  const {downloadableLinks = [], downloadableSamples = []} = product;
 
  if (!Array.isArray(downloadableLinks) || downloadableLinks.length === 0) return null;
@@ -34,7 +40,7 @@ export default function Downloadable({product, selectedDownloadLink, setSelected
      </label>
     ))}
    </div>
-   <div className=" mt-4">نمونه :</div>
+   <div className="mt-4">{lang === "fa" ? "نمونه :" : "Sample:"}</div>
    <div className="flex flex-row gap-2">
     {downloadableSamples.length > 0 && (
      <>

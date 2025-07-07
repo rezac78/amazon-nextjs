@@ -8,9 +8,10 @@ import ChevronDownIcon from "@/public/icons/ChevronDown";
 interface HomeCategoriesProps {
  Data: CategoryHome[];
  useIn: string;
+ lang: string;
 }
 
-export default React.memo(function HomeCategoris({Data, useIn}: HomeCategoriesProps) {
+export default React.memo(function HomeCategoris({Data, useIn, lang}: HomeCategoriesProps) {
  const treeData = buildCategoryTree(Data);
  const [openMenu, setOpenMenu] = useState<number | null>(null);
  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -72,7 +73,9 @@ export default React.memo(function HomeCategoris({Data, useIn}: HomeCategoriesPr
     </div>
    ) : useIn === "HomeMain" ? (
     <section className="py-10 px-4">
-     <h2 className="text-xl md:text-2xl font-semibold text-center mb-8">دسته‌بندی محصولات</h2>
+     <h2 className="text-xl md:text-2xl font-semibold text-center mb-8">
+      {`${lang === "fa" ? "دسته‌بندی محصولات" : "Products Categorise"}`}{" "}
+     </h2>
      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-y-6 gap-x-2 justify-items-center">
       {treeData.map((cat, index) => (
        <Link

@@ -16,9 +16,10 @@ interface HomePageProps {
  NewProducts: Product[];
  categorie: CategoryHome[];
  isLogin: boolean;
+ lang: string;
 }
 
-export default function HomePage({NewProducts, categorie}: HomePageProps) {
+export default function HomePage({NewProducts, categorie, lang}: HomePageProps) {
  const isHydrated = useHydration();
  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
  const [hasLoadedFeatured, setHasLoadedFeatured] = useState(false);
@@ -47,18 +48,28 @@ export default function HomePage({NewProducts, categorie}: HomePageProps) {
   <div className="relative flex flex-col w-full">
    <section className="w-full">{isHydrated ? <Slider images={images} interval={4000} /> : <SwiperSkeleton />}</section>
    <div className="container mx-auto">
-    {isHydrated ? <HomeCategoris Data={categorie} useIn="HomeMain" /> : <HomeCategorisMainSkeleton count={6} />}
     {isHydrated ? (
-     <ProductSlider title="محصولات جدید" Data={NewProducts} link="/search?new=1&sort=price-desc&limit=12&mode=grid" />
+     <HomeCategoris Data={categorie} useIn="HomeMain" lang={lang} />
+    ) : (
+     <HomeCategorisMainSkeleton count={6} />
+    )}
+    {isHydrated ? (
+     <ProductSlider
+      title={`${lang === "fa" ? "محصولات جدید" : "new Products"}`}
+      Data={NewProducts}
+      link="/search?new=1&sort=price-desc&limit=12&mode=grid"
+      lang={lang}
+     />
     ) : (
      <SkeletonProducts count={8} />
     )}
     <div ref={featuredRef}>
      {hasLoadedFeatured ? (
       <ProductSlider
-       title="محصولات ویژه"
+       title={`${lang === "fa" ? "محصولات ویژه" : "special Products"}`}
        Data={featuredProducts}
        link="/search?featured=1&sort=price-desc&limit=12&mode=grid"
+       lang={lang}
       />
      ) : (
       <SkeletonProducts count={8} />
@@ -66,7 +77,12 @@ export default function HomePage({NewProducts, categorie}: HomePageProps) {
     </div>
     <div ref={allRef}>
      {hasLoadedAll ? (
-      <ProductSlider title="همه محصولات" Data={allProducts} link="/search?sort=price-desc&limit=12&mode=grid" />
+      <ProductSlider
+       title={`${lang === "fa" ? "همه محصولات" : "all Products"}`}
+       Data={allProducts}
+       link="/search?sort=price-desc&limit=12&mode=grid"
+       lang={lang}
+      />
      ) : (
       <SkeletonProducts count={8} />
      )}

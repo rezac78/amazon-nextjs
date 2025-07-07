@@ -6,7 +6,17 @@ import {CommentSendProducts} from "@/utils/api/product/fetchProduct";
 import {Product} from "@/utils/types/types";
 import {useState} from "react";
 
-export default function CommentsTab({product, ProductId, Token}: {product: Product; ProductId: number; Token: string}) {
+export default function CommentsTab({
+ product,
+ ProductId,
+ Token,
+ lang,
+}: {
+ product: Product;
+ ProductId: number;
+ Token: string;
+ lang: string;
+}) {
  const [rating, setRating] = useState(0);
  const [title, setTitle] = useState("");
  const [comment, setComment] = useState("");
@@ -35,28 +45,29 @@ export default function CommentsTab({product, ProductId, Token}: {product: Produ
     <form className="mb-6" onSubmit={handleSubmit}>
      <input
       type="text"
-      placeholder="عنوان نظر"
+      placeholder={lang === "fa" ? "عنوان نظر" : "Review title"}
       className="w-full p-2 border rounded mb-3 text-sm bg-white border-gray-200 "
       value={title}
       onChange={(e) => setTitle(e.target.value)}
       required
      />
      <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 ">
-      <label className="sr-only">نوشتن کامنت ....</label>
+      <label className="sr-only">{lang === "fa" ? "نوشتن کامنت ...." : "Write a comment..."}</label>
       <textarea
        id="comment"
        value={comment}
        onChange={(e) => setComment(e.target.value)}
        rows={6}
        className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none "
-       placeholder="نوشتن نظر ..."
+       placeholder={lang === "fa" ? "نوشتن نظر ..." : "Write a review..."}
        required
       ></textarea>
      </div>
      <div className="flex items-center gap-2">
       <Button type="submit" className="">
-       ارسال کامنت
+       {lang === "fa" ? "ارسال کامنت" : "Submit Comment"}
       </Button>
+
       <input
        type="file"
        multiple

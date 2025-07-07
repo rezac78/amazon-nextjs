@@ -298,3 +298,11 @@ export interface DownloadableLink {
  created_at: string;
  updated_at: string;
 }
+export interface Locale {
+ id: number;
+ code: string;
+ name: string;
+ logo_path: string | null;
+ created_at: string | null;
+ updated_at: string | null;
+}

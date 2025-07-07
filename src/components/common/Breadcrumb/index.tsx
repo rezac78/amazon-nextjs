@@ -10,17 +10,18 @@ import React from "react";
 import {Product} from "@/utils/types/types";
 interface BreadcrumbComponentProps {
  Data: Product;
+ lang?: string;
 }
-export default function BreadcrumbComponent({Data}: BreadcrumbComponentProps) {
+export default function BreadcrumbComponent({Data, lang}: BreadcrumbComponentProps) {
  const categories = Data.categories ?? [];
 
  return (
   <Breadcrumb className="my-4">
    <BreadcrumbList>
     <BreadcrumbItem>
-     <BreadcrumbLink href="/">خانه</BreadcrumbLink>
+     <BreadcrumbLink href="/"> {`${lang === "fa" ? "خانه" : "home"}`}</BreadcrumbLink>
     </BreadcrumbItem>
-    <BreadcrumbSeparator />
+    <BreadcrumbSeparator lang={lang} />
 
     {categories.map((category, index) => (
      <React.Fragment key={category.id}>

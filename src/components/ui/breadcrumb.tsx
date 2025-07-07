@@ -3,6 +3,7 @@ import {Slot} from "@radix-ui/react-slot";
 import {cn} from "lib/utils";
 import ChevronLeftIcon from "@/public/icons/ChevronLeft";
 import MoreHorizontalIcon from "@/public/icons/MoreHorizontal";
+import ChevronRightIcon from "@/public/icons/ChevronRight";
 
 function Breadcrumb({...props}: React.ComponentProps<"nav">) {
  return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
@@ -49,7 +50,7 @@ function BreadcrumbPage({className, ...props}: React.ComponentProps<"span">) {
  );
 }
 
-function BreadcrumbSeparator({children, className, ...props}: React.ComponentProps<"li">) {
+function BreadcrumbSeparator({children, className, lang, ...props}: React.ComponentProps<"li">) {
  return (
   <li
    data-slot="breadcrumb-separator"
@@ -58,7 +59,7 @@ function BreadcrumbSeparator({children, className, ...props}: React.ComponentPro
    className={cn("[&>svg]:size-3.5", className)}
    {...props}
   >
-   {children ?? <ChevronLeftIcon />}
+   {children ?? (lang === "fa" ? <ChevronLeftIcon /> : <ChevronRightIcon />)}
   </li>
  );
 }
